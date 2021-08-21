@@ -1,4 +1,6 @@
 import React from "react";
+import { API } from "aws-amplify";
+import * as mutations from '../../graphql/mutations';
 import { MDBContainer, MDBRow, MDBTimePicker, MDBCol, MDBStepper, MDBStep, MDBBtn, MDBInput, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDataTable  } from "mdbreact";
 import PlacesAutocomplete, {
   geocodeByAddress,
@@ -9,64 +11,8 @@ import {Helmet} from "react-helmet";
 
 const columns = ["Person Name", "Age", "Company Name", "Country", "City"];
 
-const data = {
-  columns: [
-    {
-      label: 'First Name',
-      clickEvent: () => this.handleRowClick(alert('hello')),
-      field: 'fname',
-      sort: 'asc',
-      width: 150,
-
-    },
-    {
-      label: 'Last Name',
-      field: 'lname',
-      sort: 'asc',
-      width: 270
-    },
-    {
-      label: 'Phone Number',
-      field: 'phone',
-      sort: 'asc',
-      width: 200
-    },
-    {
-      label: 'Email Address',
-      field: 'email',
-      sort: 'asc',
-      width: 100
-    },
-
-    {
-      label: 'Updated',
-      field: 'updated',
-      sort: 'asc'
-    },
-
-  ],
-  rows: [
-    {
-      fname: 'Tiger',
-      lname: 'Nixon',
-      phone: '555-555-5555',
-      email: 'tnixon@mail.com',
-      updated: <MDBBtn color="secondary"  >Close</MDBBtn>
 
 
-    },
-    {
-      fname: 'Tiger',
-      lname: 'Nixon',
-      phone: '555-555-5555',
-      email: 'tnixon@mail.com',
-      updated: <MDBBtn color="secondary" >Close</MDBBtn>
-    },
-    {
-
-    }
-  ]
-}
 
 
 
@@ -95,16 +41,84 @@ this.state = {
   modal: false
 
 }
+this.data = {
+  columns: [
+    {
+      label: 'First Name',
+
+      field: 'fname',
+      sort: 'asc',
+      width: 150,
+
+    },
+    {
+      label: 'Last Name',
+      field: 'lname',
+      sort: 'asc',
+      width: 270
+    },
+    {
+      label: 'Phone Number',
+      field: 'phone',
+      sort: 'asc',
+      width: 200
+    },
+    {
+      label: 'Email Address',
+      field: 'email',
+      sort: 'asc',
+      width: 100
+    },
+    {
+
+      label: 'button',
+      field: 'button'
+    }
+
+
+
+  ],
+  rows: [
+    {
+      fname: 'Tiger',
+      lname: 'Nixon',
+      phone: '555-555-5555',
+      email: 'tnixon@mail.com',
+      clickEvent: (data) => this.handleRowClick(data),
+      button: <MDBBtn color="secondary">Clicked</MDBBtn>
+
+
+    },
+    {
+      fname: 'Tiger',
+      lname: 'Nixon',
+      phone: '555-555-5555',
+      email: 'tnixon@mail.com',
+      button: <MDBBtn color="secondary"   >Clicked</MDBBtn>
+
+
+    },
+    {
+
+    }
+  ]
+}
 
 
 this.handleChange = this.handleChange.bind(this)
   }
+
 
   toggle = () => {
     this.calcDistance();
 
 
   }
+ handleRowClick = (data) =>
+ {
+
+  console.log(data)
+ }
 
   getCheckValue = value => {
     this.setState({ wheelchair: value });
@@ -264,6 +278,23 @@ changeHandler = event => {
   this.setState({ [event.target.name]: event.target.value });
 };
 
+newCustomer = event =>{
+  event.preventDefault();
+
+  const newCustomer = {
+    fname: this.state.fname,
+    lname: this.state.lname,
+    phoneNumber: this.state.phone,
+    emailAddress: this.state.email,
+    address: this.state.address
+
+  };
+
+   API.graphql({ query: mutations.createCustomer, variables: {input: newCustomer}});
+   console.log('Created')
+
+}
+
 render() {
   return (
     <MDBContainer >
@@ -295,8 +326,9 @@ render() {
               <MDBDataTable
       striped
       bordered
+      btn
       small
-      data={data}
+      data={this.data}
     />
        <MDBBtn color="mdb-color" rounded className="float-right" onClick={this.handleNextPrevClick(1)(2)}>next</MDBBtn>
           </MDBCol>)}
@@ -444,11 +476,51 @@ render() {
             <MDBInput icon='user' getValue={this.getLNValue} label="Last Name" className="mt-4" />
             <MDBInput icon='phone' getValue={this.getPhoneValue} label="Phone Number" className="mt-4" />
             <MDBInput icon='envelope-open' getValue={this.getEmailValue} label="Email Address" className="mt-4" />
+            <PlacesAutocomplete
+        value={this.state.address}
+        onChange={this.handleChange}
+
+
+      >
+        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+          <div>
+            <MDBInput icon='address-book'
+              {...getInputProps({
+
+                placeholder: 'Customer Address',
+                className: 'location-search-input',
+              })}
+            />
+            <div className="autocomplete-dropdown-container">
+              {loading && <div>Loading...</div>}
+              {suggestions.map(suggestion => {
+                const className = suggestion.active
+                  ? 'suggestion-item--active'
+                  : 'suggestion-item';
+                // inline style for demonstration purpose
+                const style = suggestion.active
+                  ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                  : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                return (
+                  <div
+                    {...getSuggestionItemProps(suggestion, {
+                      className,
+                      style,
+                    })}
+                  >
+                    <span>{suggestion.description}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </PlacesAutocomplete>
             </div>
         </MDBModalBody>
         <MDBModalFooter>
           <MDBBtn color="secondary" onClick={this.toggle1}>Close</MDBBtn>
-          <MDBBtn color="primary">Save changes</MDBBtn>
+          <MDBBtn color="primary" onClick= {this.newCustomer}>Save changes</MDBBtn>
         </MDBModalFooter>
       </MDBModal>
     </MDBContainer>
