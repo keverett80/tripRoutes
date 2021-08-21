@@ -1,16 +1,24 @@
 {
-  "name": "mdb-react-admin-template",
+  "name": "trip-routes",
   "version": "1.0.0",
-  "description": "MDB - React Admin Dashboard Free",
-  "author": "MDBootstrap <support@mdbootstrap.com>",
+  "description": "Trip Routes",
+  "author": "Five G Services LLC",
   "license": "MIT",
   "dependencies": {
-    "google-map-react": "^1.0.6",
-    "mdbreact": "^4.9.0",
-    "react": "^16.7.0",
-    "react-dom": "^16.7.0",
-    "react-router-dom": "^4.3.1",
-    "react-scripts": "2.1.3"
+    "@aws-amplify/ui-react": "^1.2.9",
+    "@googlemaps/js-api-loader": "^1.12.2",
+    "aws-amplify": "^4.2.3",
+    "chart.js": "^3.5.0",
+    "google-map-react": "^2.1.10",
+    "mdbreact": "git+https://oauth2:jj3BJH1_8y_pz1rmaFyz@git.mdbootstrap.com/mdb/react/re-pro",
+    "react": "17.0.1",
+    "react-chartjs-2": "^3.0.4",
+    "react-dom": "17.0.1",
+    "react-helmet": "^6.1.0",
+    "react-phone-input-2": "^2.14.0",
+    "react-places-autocomplete": "^7.3.0",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "4.0.1"
   },
   "scripts": {
     "start": "react-scripts start",

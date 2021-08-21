@@ -7,19 +7,16 @@ const AdminCardSection1 = () => {
         <MDBCol xl="3" md="6" className="mb-r">
           <MDBCard className="cascading-admin-card">
               <div className="admin-up">
-              <MDBIcon icon="money-bill-alt" className="primary-color"/>
+              <MDBIcon icon="route" className="primary-color"/>
                 <div className="data">
-                  <p>SALES</p>
+                  <p>Total Trips</p>
                   <h4>
-                    <strong>$2000</strong>
+                    <strong>205</strong>
                   </h4>
                 </div>
               </div>
               <MDBCardBody>
-                <div className="progress">
-                  <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="25" className="progress-bar bg-primary" role="progressbar"
-                    style={{width: '25%'}}></div>
-                </div>
+
                 <MDBCardText>Better than last week (25%)</MDBCardText>
               </MDBCardBody>
             </MDBCard>
@@ -27,19 +24,16 @@ const AdminCardSection1 = () => {
         <MDBCol xl="3" md="6" className="mb-r">
           <MDBCard className="cascading-admin-card">
               <div className="admin-up">
-              <MDBIcon icon="chart-line" className="warning-color"/>
+              <MDBIcon icon="address-card" className="success-color"/>
                 <div className="data">
-                  <p>SUBSCRIPTIONS</p>
+                  <p>Total Employees</p>
                   <h4>
-                    <strong>200</strong>
+                    <strong>7</strong>
                   </h4>
                 </div>
               </div>
               <MDBCardBody>
-                <div className="progress">
-                  <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="25" className="progress-bar bg grey" role="progressbar"
-                    style={{width: '25%'}}></div>
-                </div>
+
                 <MDBCardText>Worse than last week (25%)</MDBCardText>
               </MDBCardBody>
             </MDBCard>
@@ -47,19 +41,16 @@ const AdminCardSection1 = () => {
         <MDBCol xl="3" md="6" className="mb-r">
           <MDBCard className="cascading-admin-card">
               <div className="admin-up">
-              <MDBIcon icon="chart-pie" className="light-blue lighten-1"/>
+              <MDBIcon icon="truck" className="bg-dark"/>
                 <div className="data">
-                  <p>TRAFFIC</p>
+                  <p>Total Vehicles</p>
                   <h4>
-                    <strong>20000</strong>
+                    <strong>2</strong>
                   </h4>
                 </div>
               </div>
               <MDBCardBody>
-                <div className="progress">
-                  <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="25" className="progress-bar grey darken-2" role="progressbar"
-                    style={{width: '75%'}}></div>
-                </div>
+
                 <MDBCardText>Worse than last week (75%)</MDBCardText>
               </MDBCardBody>
             </MDBCard>
@@ -67,19 +58,16 @@ const AdminCardSection1 = () => {
         <MDBCol xl="3" md="6" className="mb-r">
           <MDBCard className="cascading-admin-card">
               <div className="admin-up">
-              <MDBIcon icon="chart-bar" className="red accent-2"/>
+              <MDBIcon icon="ban" className="red accent-2"/>
                 <div className="data">
-                  <p>ORGANIC TRAFFIC</p>
+                  <p>Total Canceled Trips</p>
                   <h4>
-                    <strong>2000</strong>
+                    <strong>20</strong>
                   </h4>
                 </div>
               </div>
               <MDBCardBody>
-                <div className="progress">
-                  <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="25" className="progress-bar bg-primary" role="progressbar"
-                    style={{width: '25%'}}></div>
-                </div>
+
                 <MDBCardText>Better than last week (25%)</MDBCardText>
               </MDBCardBody>
             </MDBCard>

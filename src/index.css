@@ -22,7 +22,7 @@ a{
 }
 
 main {
-  background-color: #EDEDEE;
+
 }
 
 .navbar-brand{
@@ -51,7 +51,8 @@ main {
 
 #content{
   margin-left: 270px;
-}    
+  padding-top: 100px !important;
+}
 
 
 .sidebar-fixed .logo-wrapper img{
@@ -196,19 +197,29 @@ main {
   .page-footer{
     margin-left: 0px;
   }
-  
+
   .card.cascading-admin-card {
     margin-top: 2.5rem;
-  } 
+  }
 }
 
-@media (max-width: 576px) { 
+@media (max-width: 576px) {
   .card.cascading-admin-card {
     margin-top: 2.5rem;
   }
 
   #breadcrumb{
     flex-direction: column;
+  }
+}
+@media screen and (min-width: 768px) {
+  body { padding-top: 100px; }
+}
+
+@media(min-width:992px) {
+  .side-nav>li:last-child {
+    position: absolute;
+    bottom: 0;
   }
 }
 

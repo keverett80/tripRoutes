@@ -1,0 +1,64 @@
+#videobackground .gradient {
+    background: rgb(244,201,186);
+    background: -moz-linear-gradient(180deg, rgba(244,201,186,1) 0%, rgba(89,58,47,1) 0%, rgba(89,58,47,1) 17%, rgba(210,190,183,1) 100%);
+    background: -webkit-linear-gradient(180deg, rgba(244,201,186,1) 0%, rgba(89,58,47,1) 0%, rgba(89,58,47,1) 17%, rgba(210,190,183,1) 100%);
+    background: linear-gradient(180deg, rgba(244,201,186,1) 0%, rgba(89,58,47,1) 0%, rgba(89,58,47,1) 17%, rgba(210,190,183,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#f4c9ba",endColorstr="#d2beb7",GradientType=1);
+
+    }
+
+   .gradientBottom {
+      background: #dbcbc4;
+      background: -moz-linear-gradient(180deg, rgba(244,201,186,1) 0%, rgba(89,58,47,1) 0%, rgba(89,58,47,1) 17%, rgba(210,190,183,1) 100%);
+
+
+
+      }
+
+    #videobackground .view video {
+      z-index: -100;
+      top: 50%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-50%);
+      transition: 1s opacity;
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+
+    }
+
+    #videobackground .view {
+
+      min-height: 50vh;
+      padding-bottom: 10px;
+      padding-top: 10px;
+
+
+    }
+    h1 {
+      font-family: 'Dancing Script',  sans-serif;
+      font-size: 80px;
+      margin-bottom: 30px;
+    }
+
+    .typewriter {
+      font-family: 'Open Sans', sans-serif;
+      margin-bottom: 30px;
+      color: white !important;
+    }
+    body {
+
+      text-align: center;
+
+
+    }
+
+    .mybtn{
+      cursor: pointer;
+
+    }
+
+
+
+
