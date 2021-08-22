@@ -1,64 +1,56 @@
-#videobackground .gradient {
-    background: rgb(244,201,186);
-    background: -moz-linear-gradient(180deg, rgba(244,201,186,1) 0%, rgba(89,58,47,1) 0%, rgba(89,58,47,1) 17%, rgba(210,190,183,1) 100%);
-    background: -webkit-linear-gradient(180deg, rgba(244,201,186,1) 0%, rgba(89,58,47,1) 0%, rgba(89,58,47,1) 17%, rgba(210,190,183,1) 100%);
-    background: linear-gradient(180deg, rgba(244,201,186,1) 0%, rgba(89,58,47,1) 0%, rgba(89,58,47,1) 17%, rgba(210,190,183,1) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#f4c9ba",endColorstr="#d2beb7",GradientType=1);
+body{
 
-    }
+  padding-top: 0 !important;
+}
 
-   .gradientBottom {
-      background: #dbcbc4;
-      background: -moz-linear-gradient(180deg, rgba(244,201,186,1) 0%, rgba(89,58,47,1) 0%, rgba(89,58,47,1) 17%, rgba(210,190,183,1) 100%);
+#classicformpage .view {
+  background-image: url('../../assets/transportBG.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  min-height: 100vh;
+}
 
+#classicformpage .gradient {
+  background: -webkit-linear-gradient(
+    45deg,
+    rgba(0, 0, 0, 0.7),
+    rgba(72, 15, 144, 0.4) 100%
+  );
+  background: -webkit-gradient(
+    linear,
+    45deg,
+    from(rgba(0, 0, 0, 0.7), rgba(72, 15, 144, 0.4) 100%)
+  );
+  background: linear-gradient(
+    45deg,
+    rgba(0, 0, 0, 0.7),
 
+  );
+}
 
-      }
+#classicformpage .card {
+  background-color: rgba(126, 123, 215, 0.2);
+}
 
-    #videobackground .view video {
-      z-index: -100;
-      top: 50%;
-      left: 50%;
-      transform: translateX(-50%) translateY(-50%);
-      transition: 1s opacity;
-      min-width: 100%;
-      min-height: 100%;
-      width: auto;
-      height: auto;
+#classicformpage h6 {
+  line-height: 1.7;
+}
 
-    }
+#classicformpage .navbar {
+  transition: background 0.5s ease-in-out, padding 0.5s ease-in-out;
+}
 
-    #videobackground .view {
+#classicformpage .top-nav-collapse {
+  background: #424f95 !important;
+}
 
-      min-height: 50vh;
-      padding-bottom: 10px;
-      padding-top: 10px;
+@media (max-width: 768px) {
+  #classicformpage .navbar:not(.top-nav-collapse) {
+    background: #424f95 !important;
+  }
+}
 
-
-    }
-    h1 {
-      font-family: 'Dancing Script',  sans-serif;
-      font-size: 80px;
-      margin-bottom: 30px;
-    }
-
-    .typewriter {
-      font-family: 'Open Sans', sans-serif;
-      margin-bottom: 30px;
-      color: white !important;
-    }
-    body {
-
-      text-align: center;
-
-
-    }
-
-    .mybtn{
-      cursor: pointer;
-
-    }
-
-
-
-
+#classicformpage label {
+  color: #fff !important;
+}

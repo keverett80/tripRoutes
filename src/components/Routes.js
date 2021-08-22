@@ -14,7 +14,7 @@ class Routes extends React.Component {
   render() {
     return (
       <Switch>
-        <Route path='/' exact component={DashboardPage} />
+        <Route path='/' exact component={AddTrips} />
         <Route path='/addTrips' component={AddTrips} />
         <Route path='/viewTrips' component={ViewTrips} />
         <Route path='/vehicles' component={Vehicles} />

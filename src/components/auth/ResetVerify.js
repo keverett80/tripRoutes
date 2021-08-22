@@ -79,7 +79,7 @@ onChange={this.props.handleFormInput}
               <div className="text-center mb-3">
                 <MDBBtn
                   type="button"
-                  color="brown lighten-1"
+                  color="black lighten-1"
                   rounded
                   className="btn-block z-depth-1a"
                   type="submit"
@@ -100,7 +100,7 @@ or Sign in with:
   rounded
   className="mr-md-3 z-depth-1a"
 >
-  <MDBIcon fab icon="facebook-f" className="brown-text text-center" />
+  <MDBIcon fab icon="facebook-f" className="black-text text-center" />
 </MDBBtn>
 <MDBBtn
   tag="a" floating
@@ -108,7 +108,7 @@ or Sign in with:
   rounded
   className="mr-md-3 z-depth-1a"
 >
-  <MDBIcon fab icon="twitter" className="brown-text" />
+  <MDBIcon fab icon="twitter" className="black-text" />
 </MDBBtn>
 <MDBBtn
 tag="a" floating
@@ -116,7 +116,7 @@ tag="a" floating
   rounded
   className="z-depth-1a"
 >
-  <MDBIcon fab icon="google-plus-g" className="brown-text" />
+  <MDBIcon fab icon="google-plus-g" className="black-text" />
 </MDBBtn>
 </div>
 

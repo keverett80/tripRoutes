@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Auth } from "aws-amplify";
 import { MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput, MDBBtn, MDBIcon, MDBModalFooter } from 'mdbreact';
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
 
 export default class SignIn extends Component {
   handleSignIn = event => {
@@ -33,16 +35,7 @@ export default class SignIn extends Component {
   render() {
 
     return (
-<MDBContainer>
-      <MDBRow>
-        <MDBCol md="6">
-          <MDBCard>
-            <MDBCardBody className="mx-4">
-              <div className="text-center">
-                <h3 className="dark-grey-text mb-5">
-                  <strong>Sign in</strong>
-                </h3>
-              </div>
+<>
               <MDBInput
 
                 group
@@ -79,7 +72,7 @@ export default class SignIn extends Component {
               <div className="text-center mb-3">
                 <MDBBtn
                   type="button"
-                  color="brown lighten-1"
+                  color="black "
                   rounded
                   className="btn-block z-depth-1a"
                   type="submit"
@@ -101,7 +94,7 @@ or Sign in with:
   className="mr-md-3 z-depth-1a"
   onClick={()=> Auth.federatedSignIn({provider: "Facebook"}) }
 >
-  <MDBIcon fab icon="facebook-f" className="brown-text text-center" />
+  <MDBIcon fab icon="facebook-f" className="black-text text-center" />
 </MDBBtn>
 
 <MDBBtn
@@ -111,24 +104,12 @@ tag="a" floating
   className="z-depth-1a"
   onClick={()=> Auth.federatedSignIn({provider: "Google"}) }
 >
-  <MDBIcon fab icon="google-plus-g" className="brown-text" />
+  <MDBIcon fab icon="google-plus-g" className="black-text" />
 </MDBBtn>
 </div>
+</>
 
-            </MDBCardBody>
-            <MDBModalFooter className="mx-5 pt-3 mb-1">
-              <p className="font-small grey-text d-flex justify-content-end">
-                Not a member?
-                <a href="#!" className="blue-text ml-1"  onClick={this.handlePageChange} >
 
-                  Sign Up.
-                </a>
-              </p>
-            </MDBModalFooter>
-          </MDBCard>
-        </MDBCol>
-      </MDBRow>
-    </MDBContainer>
 
 
     );

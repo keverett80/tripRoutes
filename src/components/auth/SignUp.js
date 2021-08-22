@@ -101,7 +101,7 @@ class SignUp extends React.Component  {
         <div className="text-center mb-3">
           <MDBBtn
             type="button"
-            color="brown lighten-1"
+            color="black lighten-1"
             rounded
             className="btn-block z-depth-1a"
             onClick={this.handleSignUp}

@@ -34,5 +34,6 @@ type Trip @model {
   roundtrip:String!
   appointmentTime:String!
   appointmentDate:String!
+  status:String!
 }
 

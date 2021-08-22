@@ -1,7 +1,10 @@
 import React from 'react';
-import { MDBDataTableV5, MDBBtn } from 'mdbreact';
+import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDataTableV5,MDBFormInline, MDBInput } from 'mdbreact';
 import { API,  graphqlOperation } from "aws-amplify";
 import { listTrips } from '../../graphql/queries';
+import * as mutations from '../../graphql/mutations';
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
 
 class ViewTrips extends React.Component {
@@ -10,6 +13,8 @@ class ViewTrips extends React.Component {
 
   this.state = {
     queryData:'',
+    modal: false,
+    radio: '',
     data:{
     columns: [
 
@@ -17,16 +22,13 @@ class ViewTrips extends React.Component {
       {
         label: 'First Name',
         field: 'fname',
-        width: 150,
-        attributes: {
-          'aria-controls': 'DataTable',
-          'aria-label': 'Name',
-        },
+        width: 100,
+
       },
       {
         label: 'Last Name',
         field: 'lname',
-        width: 150,
+        width: 100,
       },
       {
         label: 'Pickup Address',
@@ -36,7 +38,7 @@ class ViewTrips extends React.Component {
       {
         label: 'Destination Address',
         field: 'address2',
-        sort: 'asc',
+
         width: 200,
       },
       {
@@ -64,6 +66,12 @@ class ViewTrips extends React.Component {
         width: 100,
       },
       {
+        label: 'Status',
+        field: 'status',
+
+        width: 100,
+      },
+      {
 
         label: 'Select',
         field: 'button'
@@ -72,9 +80,12 @@ class ViewTrips extends React.Component {
     rows: [
 
     ],
-  }
+  },
+  localData:[]
 
 }
+
+this.handleRowClick = this.handleRowClick.bind(this)
   }
 
 
@@ -93,16 +104,19 @@ class ViewTrips extends React.Component {
 
       console.log(customer.wheelchair)
       myCustomers.push({
+      id: customer.id,
       fname: customer.fname,
       lname: customer.lname,
       address: customer.address,
       address2: customer.address2,
       wheelchair: customer.wheelchair,
       roundtrip: customer.roundtrip,
-      appointmentDate: customer.appointmentDate,
+      appointmentDate: customer.appointmentDate.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
+      year: 'numeric'}),
       appointmentTime: customer.appointmentTime,
-      clickEvent: (data) => this.handleRowClick(data),
-      button: <MDBBtn color='danger' outline rounded>Delete</MDBBtn>
+      status:customer.status,
+      clickEvent: (data) => this.toggle(data),
+      button: <MDBBtn color='danger'  outline rounded>Status</MDBBtn>
 
       });
       console.log(customer.wheelchair)
@@ -112,23 +126,142 @@ class ViewTrips extends React.Component {
   this.forceUpdate();
   }
 
-  handleRowClick  = (data) =>{
 
-    console.log(data)
+  handleRowClick  = () =>{
+if(this.state.radio == "")
+{
+alert("Please make a selection. ")
+return;
+
+}
+    var updateTrip = {
+      id: this.state.localData.id,
+      status: this.state.status
+    };
+
+
+    API.graphql(graphqlOperation( mutations.updateTrip,{input: updateTrip})).then(( )=> {
+      alert('Trip Updated. ')
+      location.reload();
+    })
+
   }
+
+  submit = () => {
+
+    confirmAlert({
+      title: 'Confirm Update',
+      message: 'Are you sure you want to update this? ',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () =>  this.handleRowClick()
+
+        },
+        {
+          label: 'No',
+          onClick:() =>  this.myReturn()
+        }
+      ]
+    });
+  };
+
+ myReturn = () =>
+  {
+    return;
+  }
+
+  toggle = (data) => {
+
+    this.setState({
+      modal: !this.state.modal
+    });
+    this.state.localData = data
+    console.log(this.state.localData)
+  }
+  onClick = nr => () => {
+    this.setState({
+      radio: nr
+    });
+  };
+handleChange = () =>{
+
+  this.setState({
+    status: 'pending'
+  });
+}
+handleChange1 = () =>{
+
+  this.setState({
+    status: 'complete'
+  });
+  }
+
+  handleChange2 = () =>{
+
+    this.setState({
+      status: 'canceled'
+    });
+    }
+
+
   render() {
   return (
-
+<MDBContainer>
     <MDBDataTableV5
     hover entriesOptions={[5, 20, 25]} entries={5} pagesAmount={4}
     searchTop
+   btn
+
     searchBottom={false}
     barReverse
-
-
+    noBottomColumns
+    order={['status', 'asc' ]}
     columns={this.state.data.columns}
     rows={this.state.data.rows}
 />
+
+     <MDBModal isOpen={this.state.modal} toggle={this.toggle}>
+       <div className='text-center'>
+       <MDBModalHeader toggle={this.toggle} >Trip Status</MDBModalHeader>
+       </div>
+       <MDBModalBody>
+       <MDBFormInline>
+        <MDBInput
+          onClick={this.onClick(1)}
+          checked={this.state.radio === 1 ? true : false}
+          label='Pending'
+          type='radio'
+          id='radio1'
+          containerClass='mr-5'
+          onChange={this.handleChange}
+        />
+        <MDBInput
+          onClick={this.onClick(2)}
+          checked={this.state.radio === 2 ? true : false}
+          label='Complete'
+          type='radio'
+          id='radio2'
+          containerClass='mr-5'
+          onChange={this.handleChange1}
+        />
+        <MDBInput
+          onClick={this.onClick(3)}
+          checked={this.state.radio === 3 ? true : false}
+          label='Canceled'
+          type='radio'
+          id='radio3'
+          containerClass='mr-5'
+          onChange={this.handleChange2}
+        />
+      </MDBFormInline>
+       </MDBModalBody>
+       <MDBModalFooter>
+         <MDBBtn rounded color="secondary" outline onClick={this.toggle}>Close</MDBBtn>
+         <MDBBtn color="primary" rounded outline onClick={this.handleRowClick}>Save changes</MDBBtn>
+       </MDBModalFooter>
+     </MDBModal>
+     </MDBContainer>
 
   );
 }

@@ -35,7 +35,7 @@ export default class Verify extends Component {
           onChange={this.props.handleFormInput} />
       </div>
       <div className="text-center">
-        <MDBBtn outline color="brown"  type="submit"
+        <MDBBtn outline color="black"  type="submit"
           value="SUBMIT VERIFICATION"
           onClick={this.handleVerification}>
           Verify

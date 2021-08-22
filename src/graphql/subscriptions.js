@@ -133,6 +133,7 @@ export const onCreateTrip = /* GraphQL */ `
       roundtrip
       appointmentTime
       appointmentDate
+      status
       createdAt
       updatedAt
     }
@@ -150,6 +151,7 @@ export const onUpdateTrip = /* GraphQL */ `
       roundtrip
       appointmentTime
       appointmentDate
+      status
       createdAt
       updatedAt
     }
@@ -167,6 +169,7 @@ export const onDeleteTrip = /* GraphQL */ `
       roundtrip
       appointmentTime
       appointmentDate
+      status
       createdAt
       updatedAt
     }

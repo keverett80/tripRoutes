@@ -49,7 +49,7 @@ export default class ForgotPassword extends Component {
               <div className="text-center mb-3">
                 <MDBBtn
                   type="button"
-                  color="brown lighten-1"
+                  color="black"
                   rounded
                   className="btn-block z-depth-1a"
                   type="submit"

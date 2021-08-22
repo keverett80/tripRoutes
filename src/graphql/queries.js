@@ -114,6 +114,7 @@ export const getTrip = /* GraphQL */ `
       roundtrip
       appointmentTime
       appointmentDate
+      status
       createdAt
       updatedAt
     }
@@ -136,6 +137,7 @@ export const listTrips = /* GraphQL */ `
         roundtrip
         appointmentTime
         appointmentDate
+        status
         createdAt
         updatedAt
       }

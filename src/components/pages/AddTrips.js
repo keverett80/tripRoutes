@@ -16,8 +16,14 @@ import {Helmet} from "react-helmet";
 
 
 
+var today = new Date();
+var dd = String(today.getDate()).padStart(2, '0');
+var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+var yyyy = today.getFullYear();
 
+today = mm + '/' + dd + '/' + yyyy;
 class AddTrips extends React.Component {
+
   constructor(props) {
     super(props)
 this.state = {
@@ -34,13 +40,14 @@ this.state = {
   address2: '',
   duration:'',
   distance: '',
-  wheelchair: '',
-  roundTrip: '',
+  wheelchair: 'No',
+  roundTrip: 'No',
+  status:'pending',
   price: '',
   modal: false,
   queryData: '',
   appointmentTime:'',
-  appointmentDate:'',
+  appointmentDate:today,
   disable: '',
   customers: {
     columns: [
@@ -100,7 +107,7 @@ this.state = {
 this.handleChange = this.handleChange.bind(this)
   }
   async componentDidMount(){
-    const apiData = await API.graphql(graphqlOperation( listCustomers));
+    const apiData = await API.graphql(graphqlOperation( listCustomers))
     this.state.queryData  = apiData.data.listCustomers.items;
 
     var myCustomers = this.state.customers.rows;
@@ -116,7 +123,7 @@ this.handleChange = this.handleChange.bind(this)
         email: customer.emailAddress,
         address: customer.address,
         clickEvent: (data) => this.handleRowClick(data),
-        button: <MDBBtn outline rounded>Clicked</MDBBtn>
+        button: <MDBBtn outline rounded>Select</MDBBtn>
 
       });
       this.forceUpdate();
@@ -156,11 +163,21 @@ this.handleChange = this.handleChange.bind(this)
  }
 
   getCheckValue = value => {
-    this.setState({ wheelchair: value });
+    if(value == true){
+    this.setState({ wheelchair: 'Yes' });
+    }
+    else {
+      this.setState({ wheelchair: 'No' });
+      }
   };
   getCheck2Value = value => {
 
-    this.setState({ roundTrip: value });
+    if(value == true){
+      this.setState({ roundTrip: 'Yes' });
+      }
+      else {
+        this.setState({ roundTrip: 'No' });
+        }
   };
 
 
@@ -332,11 +349,14 @@ newCustomer = event =>{
 
   };
 
-   API.graphql({ query: mutations.createCustomer, variables: {input: newCustomer}});
-  this.state.address = ''
-  alert('Customer Added! ')
- location.reload();
+   API.graphql({ query: mutations.createCustomer, variables: {input: newCustomer}}).then(()=>{
 
+    this.setState({ address:'' });
+   alert('Customer Added! ')
+  location.reload();
+  } );
+
+  this.setState({ address:'' });
 }
 submitTrip = event =>{
   event.preventDefault();
@@ -348,17 +368,19 @@ submitTrip = event =>{
     wheelchair: this.state.wheelchair,
     roundtrip: this.state.roundTrip,
     appointmentTime: this.state.appointmentTime,
-    appointmentDate: this.state.appointmentDate
+    appointmentDate: this.state.appointmentDate.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
+    year: 'numeric'}),
+    status: this.state.status
 
 
   };
 
-  API.graphql({ query: mutations.createTrip, variables: {input: newTrips}});
+  API.graphql({ query: mutations.createTrip, variables: {input: newTrips}}).then(()=>{
   this.state.address = ''
   alert('New Trip Added! ')
- //location.reload();
+ location.reload();
 
-
+} );
 
 
 }
@@ -508,11 +530,14 @@ render() {
             <h2 className="text-center font-weight-bold my-4">Trip Details</h2>
             <div className='text-center red-text'> <MDBInput  label="Wheelchair"  type="checkbox" id="checkbox23" getValue={this.getCheckValue} /></div>
      <div className='text-center red-text'> <MDBInput  label="Round Trip"  type="checkbox" id="checkbox24" getValue={this.getCheck2Value} /></div>
-     <label htmlFor="formGroupExampleInput">Appointment Date</label>
-     <MDBDatePicker id="datePicker"  getValue={this.getPickerDateValue} />
+     <MDBCol md="3">    <label htmlFor="formGroupExampleInput">Appointment Date</label>
+     <MDBDatePicker inline id="datePicker" value={this.state.appointmentDate}  getValue={this.getPickerDateValue} />
+     </MDBCol>
+     <MDBCol md="3">
      <label htmlFor="formGroupExampleInput">Appointment Time</label>
-            <MDBTimePicker id="timePicker"  getValue={this.getPickerValue} />
 
+            <MDBTimePicker id="timePicker"    getValue={this.getPickerValue} />
+            </MDBCol>
 
             <MDBBtn color="mdb-color" rounded className="float-left" onClick={this.handleNextPrevClick(1)(3)}>previous</MDBBtn>
             <MDBBtn color="mdb-color" rounded className="float-right" onClick={this.handleNextPrevClick(1)(5)}>Next</MDBBtn>

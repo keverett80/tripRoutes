@@ -1,190 +1,153 @@
-import React from "react";
-import { BrowserRouter as Router } from "react-router-dom";
+import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import {
+  MDBNavbar,
+  MDBNavbarBrand,
+  MDBNavbarNav,
+  MDBNavItem,
+  MDBNavLink,
+  MDBNavbarToggler,
+  MDBCollapse,
+  MDBMask,
+  MDBRow,
+  MDBCol,
+  MDBIcon,
+  MDBBtn,
+  MDBView,
+  MDBContainer,
+  MDBCard,
+  MDBCardBody,
+  MDBInput,
+  MDBFormInline,
+  MDBAnimation
+} from 'mdbreact';
+import './main.css';
+import Logged from '../../components/pages/login';
 import RoutesLanding from '../../components/RoutesLanding';
 import { withRouter } from "react-router";
-import PropTypes from "prop-types";
-import logo from '../../assets/logo.png';
-import sidenav from '../../assets/sidenav.jpg';
-import Logged from '../../components/pages/login';
-import './main.css';
-
-import { MDBNavbar, MDBNavbarNav, MDBNavItem, MDBNavLink, ToastContainer,  MDBIcon, MDBSideNavItem, MDBSideNavCat, MDBSideNavNav, MDBSideNav } from "mdbreact";
-
+import Login from "../auth/pageLogin"
 
 class Main extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      toggleStateA: false,
-      breakWidth: 1300,
-      windowWidth: 0
-    };
-
-
-  }
-  static propTypes = {
-    match: PropTypes.object.isRequired,
-    location: PropTypes.object.isRequired,
-    history: PropTypes.object.isRequired
+  state = {
+    collapseID: ''
   };
 
+  toggleCollapse = collapseID => () =>
+    this.setState(prevState => ({
+      collapseID: prevState.collapseID !== collapseID ? collapseID : ''
+    }));
+
   componentDidMount() {
-
-
-    this.handleResize();
-    window.addEventListener("resize", this.handleResize);
+    document.querySelector('nav').style.height = '65px';
   }
 
   componentWillUnmount() {
-    window.removeEventListener("resize", this.handleResize);
+    document.querySelector('nav').style.height = 'auto';
   }
 
-  handleResize = () =>
-    this.setState({
-      windowWidth: window.innerWidth
-    });
-
-  handleToggleClickA = () => {
-    this.setState({
-      toggleStateA: !this.state.toggleStateA
-    });
-  };
-
-  goToLogin = () => {
-    location.href='/login'
-   }
-
   render() {
- const { match, location, history } = this.props;
-    const navStyle = {
-      paddingLeft:
-        this.state.windowWidth > this.state.breakWidth ? "210px" : "16px"
-    };
-
-    const mainStyle = {
-      margin: "0 6%",
-      paddingTop: "5.5rem",
-      paddingLeft:
-        this.state.windowWidth > this.state.breakWidth ? "240px" : "0"
-    };
-
-    const specialCaseNavbarStyles = {
-      WebkitBoxOrient: "horizontal",
-      flexDirection: "row"
-    };
-
+    const { collapseID } = this.state;
+    const overlay = (
+      <div
+        id='sidenav-overlay'
+        style={{ backgroundColor: 'transparent' }}
+        onClick={this.toggleCollapse('navbarCollapse')}
+      />
+    );
     return (
-      <div id='videobackground'>
+      <div id='classicformpage'>
+        <Router>
+          <div>
+            <MDBNavbar
+              dark
+              expand='md'
+              scrolling
+              fixed='top'
+              style={{ marginTop: '0px' }}
+            >
+              <MDBContainer>
+                <MDBNavbarBrand>
+                  <strong className='white-text'>Trips and Routes</strong>
+                </MDBNavbarBrand>
+                <MDBNavbarToggler
+                  onClick={this.toggleCollapse('navbarCollapse')}
+                />
+                <MDBCollapse id='navbarCollapse' isOpen={collapseID} navbar>
 
+                  <MDBNavbarNav right>
+                  <MDBNavItem>
 
-      <Router>
+              </MDBNavItem>
+                  </MDBNavbarNav>
+                </MDBCollapse>
+              </MDBContainer>
+            </MDBNavbar>
+            {collapseID && overlay}
+          </div>
+        </Router>
 
-        <div className="fixed-sn grey-skin">
-        <MDBSideNav
-            logo={logo}
-            triggerOpening={this.state.toggleStateA}
-            breakWidth={this.state.breakWidth}
-            bg={sidenav}
-            mask="strong"
-            fixed
-            className='side-nav'
-            href='/'
-
+        <MDBView>
+          <MDBMask className='d-flex justify-content-center align-items-center gradient' />
+          <MDBContainer
+            style={{ height: '100%', width: '100%', paddingTop: '10rem' }}
+            className='mt-5  d-flex justify-content-center align-items-center'
           >
-            <li>
-              <ul className="social">
-                <li>
-                  <a href="#!">
-                    <MDBIcon fab icon="facebook-f" />
-                  </a>
-                </li>
-                <li>
-                  <a href="#!">
-                    <MDBIcon fab icon="pinterest" />
-                  </a>
-                </li>
-                <li>
-                  <a href="#!">
-                    <MDBIcon fab icon="google-plus-g" />
-                  </a>
-                </li>
-                <li>
-                  <a href="#!">
-                    <MDBIcon fab icon="twitter" />
-                  </a>
-                </li>
-              </ul>
-            </li>
+            <MDBRow>
+              <MDBAnimation
+                type='fadeInLeft'
+                delay='.3s'
+                className='white-text text-center text-md-left col-md-6 mt-xl-5 mb-5'
+              >
+                <h1 className='h1-responsive font-weight-bold'>
+                  Management Portal
+                </h1>
+                <hr className='hr-light' />
+                <h6 className='mb-4'>
+                The worlds best in class Transportation portal for trips and routes, for all types of businesses that use transportation.
+                </h6>
 
-            <MDBSideNavNav>
+              </MDBAnimation>
 
-              <MDBSideNavItem href='#'>
+             <MDBCol md='6' xl='5' className='mb-4'>
+                <MDBAnimation type='fadeInRight' delay='.3s'>
+                  <MDBCard id='classic-card'>
+                    <MDBCardBody className='white-text'>
+                      <h3 className='text-center'>
+                        <MDBIcon icon='user' /> Login:
+                      </h3>
+                      <hr className='hr-light' />
+                    <Login/>
 
-                <MDBIcon  icon='tshirt' className='fa-fw me-3' />
-                Shop </MDBSideNavItem>
+                    </MDBCardBody>
+                  </MDBCard>
+                </MDBAnimation>
+              </MDBCol>
+            </MDBRow>
+          </MDBContainer>
+        </MDBView>
 
+        <MDBContainer>
+          <MDBRow className='py-5'>
+            <MDBCol md='12' className='text-center'>
+            <div className="pt-4 footer">
+            <MDBIcon fab icon="facebook" className="mr-3"/>
+                <MDBIcon fab icon="twitter" className="mr-3"/>
+                <MDBIcon fab icon="youtube" className="mr-3"/>
+                <MDBIcon fab icon="google-plus" className="mr-3"/>
+                <MDBIcon fab icon="dribbble" className="mr-3"/>
+                <MDBIcon fab icon="pinterest" className="mr-3"/>
 
-
-
-                <ul id="logout_sidebar_button" >
-                  <li> <hr/> </li>
-          <li>&copy; {new Date().getFullYear()} Five G Services</li>
-      </ul>
-
-
-            </MDBSideNavNav>
-
-          </MDBSideNav>
-          <div className="grey-skin">
-          <MDBNavbar style={navStyle} className="color-nav"   double expand="md" fixed="top" scrolling>
-
-
-
-            <MDBNavbarNav left>
+                <p className="footer-copyright mb-0 py-3 text-center">
+                &copy; {new Date().getFullYear()} Copyright: <a href="#"> Five G Services</a>
+            </p>
 
 
-              <MDBNavItem>
-                <div
-                  onClick={this.handleToggleClickA}
-                  key="sideNavToggleA"
-                  style={{
-                    lineHeight: "32px",
-                    marginRight: "1em",
-                    verticalAlign: "middle"
-                  }}
-                >
-                  <MDBIcon icon="bars" color="white" size="2x" />
-                </div>
-              </MDBNavItem>
-              <MDBNavItem className="d-none d-md-inline" style={{ paddingTop: 5 }}>
-
-              </MDBNavItem>
-            </MDBNavbarNav>
-
-            <MDBNavbarNav right style={specialCaseNavbarStyles}>
+            </div>
 
 
-
-              <MDBNavItem>
-                <MDBNavLink to="/login" onClick={this.goToLogin} >
-                   <MDBIcon icon="user" className="d-inline-inline" />{" "}
-                   Login/Register
-                </MDBNavLink>
-              </MDBNavItem>
-
-
-            </MDBNavbarNav>
-
-          </MDBNavbar>
-
-
-
-
-        </div>
-        </div>
-      </Router>
-
-
+            </MDBCol>
+          </MDBRow>
+        </MDBContainer>
       </div>
     );
   }

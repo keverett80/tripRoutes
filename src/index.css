@@ -1,3 +1,10 @@
+:root {
+  --amplify-primary-color: #50648E;
+  --amplify-primary-tint: #50648E;
+  --amplify-primary-shade: #50648E;
+}
+
+
 body{
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -21,9 +28,6 @@ a{
   background-color: #e9ecef !;
 }
 
-main {
-
-}
 
 .navbar-brand{
   margin-left: 15px;
