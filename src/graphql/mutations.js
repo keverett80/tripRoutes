@@ -8,7 +8,8 @@ export const createCustomer = /* GraphQL */ `
   ) {
     createCustomer(input: $input, condition: $condition) {
       id
-      name
+      fname
+      lname
       address
       phoneNumber
       emailAddress
@@ -24,7 +25,8 @@ export const updateCustomer = /* GraphQL */ `
   ) {
     updateCustomer(input: $input, condition: $condition) {
       id
-      name
+      fname
+      lname
       address
       phoneNumber
       emailAddress
@@ -40,7 +42,8 @@ export const deleteCustomer = /* GraphQL */ `
   ) {
     deleteCustomer(input: $input, condition: $condition) {
       id
-      name
+      fname
+      lname
       address
       phoneNumber
       emailAddress
@@ -49,12 +52,12 @@ export const deleteCustomer = /* GraphQL */ `
     }
   }
 `;
-export const createEmployees = /* GraphQL */ `
-  mutation CreateEmployees(
-    $input: CreateEmployeesInput!
-    $condition: ModelEmployeesConditionInput
+export const createEmployee = /* GraphQL */ `
+  mutation CreateEmployee(
+    $input: CreateEmployeeInput!
+    $condition: ModelEmployeeConditionInput
   ) {
-    createEmployees(input: $input, condition: $condition) {
+    createEmployee(input: $input, condition: $condition) {
       id
       firstName
       lastName
@@ -65,12 +68,12 @@ export const createEmployees = /* GraphQL */ `
     }
   }
 `;
-export const updateEmployees = /* GraphQL */ `
-  mutation UpdateEmployees(
-    $input: UpdateEmployeesInput!
-    $condition: ModelEmployeesConditionInput
+export const updateEmployee = /* GraphQL */ `
+  mutation UpdateEmployee(
+    $input: UpdateEmployeeInput!
+    $condition: ModelEmployeeConditionInput
   ) {
-    updateEmployees(input: $input, condition: $condition) {
+    updateEmployee(input: $input, condition: $condition) {
       id
       firstName
       lastName
@@ -81,12 +84,12 @@ export const updateEmployees = /* GraphQL */ `
     }
   }
 `;
-export const deleteEmployees = /* GraphQL */ `
-  mutation DeleteEmployees(
-    $input: DeleteEmployeesInput!
-    $condition: ModelEmployeesConditionInput
+export const deleteEmployee = /* GraphQL */ `
+  mutation DeleteEmployee(
+    $input: DeleteEmployeeInput!
+    $condition: ModelEmployeeConditionInput
   ) {
-    deleteEmployees(input: $input, condition: $condition) {
+    deleteEmployee(input: $input, condition: $condition) {
       id
       firstName
       lastName
@@ -97,12 +100,12 @@ export const deleteEmployees = /* GraphQL */ `
     }
   }
 `;
-export const createVehicles = /* GraphQL */ `
-  mutation CreateVehicles(
-    $input: CreateVehiclesInput!
-    $condition: ModelVehiclesConditionInput
+export const createVehicle = /* GraphQL */ `
+  mutation CreateVehicle(
+    $input: CreateVehicleInput!
+    $condition: ModelVehicleConditionInput
   ) {
-    createVehicles(input: $input, condition: $condition) {
+    createVehicle(input: $input, condition: $condition) {
       id
       make
       model
@@ -113,12 +116,12 @@ export const createVehicles = /* GraphQL */ `
     }
   }
 `;
-export const updateVehicles = /* GraphQL */ `
-  mutation UpdateVehicles(
-    $input: UpdateVehiclesInput!
-    $condition: ModelVehiclesConditionInput
+export const updateVehicle = /* GraphQL */ `
+  mutation UpdateVehicle(
+    $input: UpdateVehicleInput!
+    $condition: ModelVehicleConditionInput
   ) {
-    updateVehicles(input: $input, condition: $condition) {
+    updateVehicle(input: $input, condition: $condition) {
       id
       make
       model
@@ -129,17 +132,77 @@ export const updateVehicles = /* GraphQL */ `
     }
   }
 `;
-export const deleteVehicles = /* GraphQL */ `
-  mutation DeleteVehicles(
-    $input: DeleteVehiclesInput!
-    $condition: ModelVehiclesConditionInput
+export const deleteVehicle = /* GraphQL */ `
+  mutation DeleteVehicle(
+    $input: DeleteVehicleInput!
+    $condition: ModelVehicleConditionInput
   ) {
-    deleteVehicles(input: $input, condition: $condition) {
+    deleteVehicle(input: $input, condition: $condition) {
       id
       make
       model
       color
       tagNumber
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createTrip = /* GraphQL */ `
+  mutation CreateTrip(
+    $input: CreateTripInput!
+    $condition: ModelTripConditionInput
+  ) {
+    createTrip(input: $input, condition: $condition) {
+      id
+      fname
+      lname
+      address
+      address2
+      wheelchair
+      roundtrip
+      appointmentTime
+      appointmentDate
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateTrip = /* GraphQL */ `
+  mutation UpdateTrip(
+    $input: UpdateTripInput!
+    $condition: ModelTripConditionInput
+  ) {
+    updateTrip(input: $input, condition: $condition) {
+      id
+      fname
+      lname
+      address
+      address2
+      wheelchair
+      roundtrip
+      appointmentTime
+      appointmentDate
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteTrip = /* GraphQL */ `
+  mutation DeleteTrip(
+    $input: DeleteTripInput!
+    $condition: ModelTripConditionInput
+  ) {
+    deleteTrip(input: $input, condition: $condition) {
+      id
+      fname
+      lname
+      address
+      address2
+      wheelchair
+      roundtrip
+      appointmentTime
+      appointmentDate
       createdAt
       updatedAt
     }

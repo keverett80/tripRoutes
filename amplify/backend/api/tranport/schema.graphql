@@ -7,7 +7,7 @@ type Customer @model {
   emailAddress: String
 }
 
-type Employees @model {
+type Employee @model {
   id: ID!
   firstName: String!
   lastName: String!
@@ -16,10 +16,23 @@ type Employees @model {
 }
 
 
-type Vehicles @model {
+type Vehicle @model {
   id: ID!
   make: String!
   model: String!
   color: String!
   tagNumber: String
 }
+
+type Trip @model {
+  id: ID!
+  fname: String!
+  lname: String!
+  address: String!
+  address2: String!
+  wheelchair: String!
+  roundtrip:String!
+  appointmentTime:String!
+  appointmentDate:String!
+}
+

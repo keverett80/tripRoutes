@@ -5,7 +5,8 @@ export const onCreateCustomer = /* GraphQL */ `
   subscription OnCreateCustomer {
     onCreateCustomer {
       id
-      name
+      fname
+      lname
       address
       phoneNumber
       emailAddress
@@ -18,7 +19,8 @@ export const onUpdateCustomer = /* GraphQL */ `
   subscription OnUpdateCustomer {
     onUpdateCustomer {
       id
-      name
+      fname
+      lname
       address
       phoneNumber
       emailAddress
@@ -31,7 +33,8 @@ export const onDeleteCustomer = /* GraphQL */ `
   subscription OnDeleteCustomer {
     onDeleteCustomer {
       id
-      name
+      fname
+      lname
       address
       phoneNumber
       emailAddress
@@ -40,9 +43,9 @@ export const onDeleteCustomer = /* GraphQL */ `
     }
   }
 `;
-export const onCreateEmployees = /* GraphQL */ `
-  subscription OnCreateEmployees {
-    onCreateEmployees {
+export const onCreateEmployee = /* GraphQL */ `
+  subscription OnCreateEmployee {
+    onCreateEmployee {
       id
       firstName
       lastName
@@ -53,9 +56,9 @@ export const onCreateEmployees = /* GraphQL */ `
     }
   }
 `;
-export const onUpdateEmployees = /* GraphQL */ `
-  subscription OnUpdateEmployees {
-    onUpdateEmployees {
+export const onUpdateEmployee = /* GraphQL */ `
+  subscription OnUpdateEmployee {
+    onUpdateEmployee {
       id
       firstName
       lastName
@@ -66,9 +69,9 @@ export const onUpdateEmployees = /* GraphQL */ `
     }
   }
 `;
-export const onDeleteEmployees = /* GraphQL */ `
-  subscription OnDeleteEmployees {
-    onDeleteEmployees {
+export const onDeleteEmployee = /* GraphQL */ `
+  subscription OnDeleteEmployee {
+    onDeleteEmployee {
       id
       firstName
       lastName
@@ -79,9 +82,9 @@ export const onDeleteEmployees = /* GraphQL */ `
     }
   }
 `;
-export const onCreateVehicles = /* GraphQL */ `
-  subscription OnCreateVehicles {
-    onCreateVehicles {
+export const onCreateVehicle = /* GraphQL */ `
+  subscription OnCreateVehicle {
+    onCreateVehicle {
       id
       make
       model
@@ -92,9 +95,9 @@ export const onCreateVehicles = /* GraphQL */ `
     }
   }
 `;
-export const onUpdateVehicles = /* GraphQL */ `
-  subscription OnUpdateVehicles {
-    onUpdateVehicles {
+export const onUpdateVehicle = /* GraphQL */ `
+  subscription OnUpdateVehicle {
+    onUpdateVehicle {
       id
       make
       model
@@ -105,14 +108,65 @@ export const onUpdateVehicles = /* GraphQL */ `
     }
   }
 `;
-export const onDeleteVehicles = /* GraphQL */ `
-  subscription OnDeleteVehicles {
-    onDeleteVehicles {
+export const onDeleteVehicle = /* GraphQL */ `
+  subscription OnDeleteVehicle {
+    onDeleteVehicle {
       id
       make
       model
       color
       tagNumber
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateTrip = /* GraphQL */ `
+  subscription OnCreateTrip {
+    onCreateTrip {
+      id
+      fname
+      lname
+      address
+      address2
+      wheelchair
+      roundtrip
+      appointmentTime
+      appointmentDate
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateTrip = /* GraphQL */ `
+  subscription OnUpdateTrip {
+    onUpdateTrip {
+      id
+      fname
+      lname
+      address
+      address2
+      wheelchair
+      roundtrip
+      appointmentTime
+      appointmentDate
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteTrip = /* GraphQL */ `
+  subscription OnDeleteTrip {
+    onDeleteTrip {
+      id
+      fname
+      lname
+      address
+      address2
+      wheelchair
+      roundtrip
+      appointmentTime
+      appointmentDate
       createdAt
       updatedAt
     }

@@ -5,7 +5,8 @@ export const getCustomer = /* GraphQL */ `
   query GetCustomer($id: ID!) {
     getCustomer(id: $id) {
       id
-      name
+      fname
+      lname
       address
       phoneNumber
       emailAddress
@@ -23,7 +24,8 @@ export const listCustomers = /* GraphQL */ `
     listCustomers(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        name
+        fname
+        lname
         address
         phoneNumber
         emailAddress
@@ -34,9 +36,9 @@ export const listCustomers = /* GraphQL */ `
     }
   }
 `;
-export const getEmployees = /* GraphQL */ `
-  query GetEmployees($id: ID!) {
-    getEmployees(id: $id) {
+export const getEmployee = /* GraphQL */ `
+  query GetEmployee($id: ID!) {
+    getEmployee(id: $id) {
       id
       firstName
       lastName
@@ -47,13 +49,13 @@ export const getEmployees = /* GraphQL */ `
     }
   }
 `;
-export const listEmployeess = /* GraphQL */ `
-  query ListEmployeess(
-    $filter: ModelEmployeesFilterInput
+export const listEmployees = /* GraphQL */ `
+  query ListEmployees(
+    $filter: ModelEmployeeFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listEmployeess(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listEmployees(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
         firstName
@@ -67,9 +69,9 @@ export const listEmployeess = /* GraphQL */ `
     }
   }
 `;
-export const getVehicles = /* GraphQL */ `
-  query GetVehicles($id: ID!) {
-    getVehicles(id: $id) {
+export const getVehicle = /* GraphQL */ `
+  query GetVehicle($id: ID!) {
+    getVehicle(id: $id) {
       id
       make
       model
@@ -80,19 +82,60 @@ export const getVehicles = /* GraphQL */ `
     }
   }
 `;
-export const listVehicless = /* GraphQL */ `
-  query ListVehicless(
-    $filter: ModelVehiclesFilterInput
+export const listVehicles = /* GraphQL */ `
+  query ListVehicles(
+    $filter: ModelVehicleFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listVehicless(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listVehicles(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
         make
         model
         color
         tagNumber
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getTrip = /* GraphQL */ `
+  query GetTrip($id: ID!) {
+    getTrip(id: $id) {
+      id
+      fname
+      lname
+      address
+      address2
+      wheelchair
+      roundtrip
+      appointmentTime
+      appointmentDate
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listTrips = /* GraphQL */ `
+  query ListTrips(
+    $filter: ModelTripFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listTrips(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        fname
+        lname
+        address
+        address2
+        wheelchair
+        roundtrip
+        appointmentTime
+        appointmentDate
         createdAt
         updatedAt
       }

@@ -1,15 +1,14 @@
 import React from "react";
-import { API } from "aws-amplify";
+import { API,  graphqlOperation } from "aws-amplify";
 import * as mutations from '../../graphql/mutations';
-import { MDBContainer, MDBRow, MDBTimePicker, MDBCol, MDBStepper, MDBStep, MDBBtn, MDBInput, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDataTable  } from "mdbreact";
-import PlacesAutocomplete, {
-  geocodeByAddress,
-  getLatLng,
-} from 'react-places-autocomplete';
+import { listCustomers } from '../../graphql/queries';
+import { MDBContainer, MDBRow, MDBTimePicker, MDBCol, MDBStepper, MDBStep, MDBBtn, MDBInput, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDataTableV5,MDBIcon, MDBDatePicker  } from "mdbreact";
+import PlacesAutocomplete from 'react-places-autocomplete';
 import {Helmet} from "react-helmet";
 
 
-const columns = ["Person Name", "Age", "Company Name", "Country", "City"];
+
+
 
 
 
@@ -38,75 +37,106 @@ this.state = {
   wheelchair: '',
   roundTrip: '',
   price: '',
-  modal: false
+  modal: false,
+  queryData: '',
+  appointmentTime:'',
+  appointmentDate:'',
+  disable: '',
+  customers: {
+    columns: [
+      {
+        label: 'First Name',
+        field: 'fname',
+        sort: 'asc',
+        width: 150,
+      },
+      {
+        label: 'Last Name',
+        field: 'lname',
+        sort: 'asc',
+        width: 150,
+      },
+      {
+        label: 'Email',
+        field: 'email',
+        sort: 'asc',
+        width: 150,
+      },
+      {
+        label: 'Phone',
+        field: 'phone',
+        sort: 'asc',
+        width: 150,
+      },
 
-}
-this.data = {
-  columns: [
     {
-      label: 'First Name',
-
-      field: 'fname',
+      label: 'Address',
+      field: 'address',
       sort: 'asc',
       width: 150,
-
-    },
-    {
-      label: 'Last Name',
-      field: 'lname',
-      sort: 'asc',
-      width: 270
-    },
-    {
-      label: 'Phone Number',
-      field: 'phone',
-      sort: 'asc',
-      width: 200
-    },
-    {
-      label: 'Email Address',
-      field: 'email',
-      sort: 'asc',
-      width: 100
     },
     {
 
-      label: 'button',
+      label: 'Select',
       field: 'button'
     }
 
 
-
   ],
-  rows: [
-    {
-      fname: 'Tiger',
-      lname: 'Nixon',
-      phone: '555-555-5555',
-      email: 'tnixon@mail.com',
-      clickEvent: (data) => this.handleRowClick(data),
-      button: <MDBBtn color="secondary">Clicked</MDBBtn>
+  rows:[]
 
 
-    },
-    {
-      fname: 'Tiger',
-      lname: 'Nixon',
-      phone: '555-555-5555',
-      email: 'tnixon@mail.com',
-      button: <MDBBtn color="secondary"   >Clicked</MDBBtn>
 
 
-    },
-    {
 
-    }
-  ]
+
+
 }
+
+}
+
 
 
 this.handleChange = this.handleChange.bind(this)
   }
+  async componentDidMount(){
+    const apiData = await API.graphql(graphqlOperation( listCustomers));
+    this.state.queryData  = apiData.data.listCustomers.items;
+
+    var myCustomers = this.state.customers.rows;
+    this.state.queryData.map((customer) => {
+
+      console.log(customer.address)
+      myCustomers.push({
+
+        id: customer.id,
+        fname: customer.fname,
+        lname: customer.lname,
+        phone: customer.phoneNumber,
+        email: customer.emailAddress,
+        address: customer.address,
+        clickEvent: (data) => this.handleRowClick(data),
+        button: <MDBBtn outline rounded>Clicked</MDBBtn>
+
+      });
+      this.forceUpdate();
+  })
+  this.state.customers.rows = myCustomers;
+  console.log(this.state.customers)
+  this.forceUpdate();
+
+
+    }
+
+
+
+
+
+
+
+
+
+
 
 
   toggle = () => {
@@ -116,6 +146,11 @@ this.handleChange = this.handleChange.bind(this)
   }
  handleRowClick = (data) =>
  {
+   this.state.fname = data.fname;
+   this.state.lname = data.lname;
+   this.state.phone = data.phone;
+   this.state.email = data.email;
+   this.state.address = data.address;
 
   console.log(data)
  }
@@ -128,11 +163,13 @@ this.handleChange = this.handleChange.bind(this)
     this.setState({ roundTrip: value });
   };
 
-  getPickerValue = value => {
-    console.log(value);
 
+  getPickerValue = value => {
+    this.setState({ appointmentTime: value });
+    console.log(value);
   };
-  getPicker2Value = value => {
+  getPickerDateValue = value => {
+    this.setState({ appointmentDate: value });
     console.log(value);
   };
   getFNValue = value => {
@@ -156,11 +193,16 @@ this.handleChange = this.handleChange.bind(this)
 
   };
 handleChange = address => {
+
+
+
   this.setState({ address });
 
 
 };
 handleChange2 = address2 => {
+
+
   this.setState({ address2 });
 
 };
@@ -291,13 +333,41 @@ newCustomer = event =>{
   };
 
    API.graphql({ query: mutations.createCustomer, variables: {input: newCustomer}});
-   console.log('Created')
+  this.state.address = ''
+  alert('Customer Added! ')
+ location.reload();
+
+}
+submitTrip = event =>{
+  event.preventDefault();
+  const newTrips = {
+    fname: this.state.fname,
+    lname: this.state.lname,
+    address: this.state.address,
+    address2: this.state.address2,
+    wheelchair: this.state.wheelchair,
+    roundtrip: this.state.roundTrip,
+    appointmentTime: this.state.appointmentTime,
+    appointmentDate: this.state.appointmentDate
+
+
+  };
+
+  API.graphql({ query: mutations.createTrip, variables: {input: newTrips}});
+  this.state.address = ''
+  alert('New Trip Added! ')
+ //location.reload();
+
+
+
 
 }
 
 render() {
   return (
     <MDBContainer >
+
+
         <div className="application">
             <Helmet>
             <script
@@ -315,7 +385,7 @@ render() {
         <MDBStep icon="check" stepName="Finish" onClick={this.swapFormActive(1)(4)}></MDBStep>
       </MDBStepper>
 
-      <form role="form" action="" method="post">
+
         <div className='text-left'>
         <MDBRow>
           {this.state.formActivePanel1 == 1 &&
@@ -323,14 +393,18 @@ render() {
             <h3 className="font-weight-bold pl-0 my-4 text-center">
               <strong>Customer Information</strong></h3>
              <div className="text-center"> <MDBBtn onClick={this.toggle1}>Add Customer</MDBBtn></div>
-              <MDBDataTable
-      striped
-      bordered
-      btn
-      small
-      data={this.data}
+              <MDBDataTableV5
+      hover entriesOptions={[5, 20, 25]} entries={5} pagesAmount={4}
+      searchTop searchBottom={false}
+      barReverse
+
+      onClick={this.handleNextPrevClick(1)(2)}
+      columns={this.state.customers.columns}
+      rows={this.state.customers.rows}
+
+
     />
-       <MDBBtn color="mdb-color" rounded className="float-right" onClick={this.handleNextPrevClick(1)(2)}>next</MDBBtn>
+
           </MDBCol>)}
 
           {this.state.formActivePanel1 == 2 &&
@@ -378,7 +452,7 @@ render() {
       </PlacesAutocomplete>
 
             <MDBBtn color="mdb-color" rounded className="float-left" onClick={this.handleNextPrevClick(1)(1)}>previous</MDBBtn>
-            <MDBBtn color="mdb-color" rounded className="float-right" onClick={this.handleNextPrevClick(1)(3)}>next</MDBBtn>
+            <MDBBtn disabled={this.state.disable} color="mdb-color" rounded className="float-right" onClick={this.handleNextPrevClick(1)(3)}>next</MDBBtn>
           </MDBCol>)}
 
           {this.state.formActivePanel1 == 3 &&
@@ -434,9 +508,11 @@ render() {
             <h2 className="text-center font-weight-bold my-4">Trip Details</h2>
             <div className='text-center red-text'> <MDBInput  label="Wheelchair"  type="checkbox" id="checkbox23" getValue={this.getCheckValue} /></div>
      <div className='text-center red-text'> <MDBInput  label="Round Trip"  type="checkbox" id="checkbox24" getValue={this.getCheck2Value} /></div>
+     <label htmlFor="formGroupExampleInput">Appointment Date</label>
+     <MDBDatePicker id="datePicker"  getValue={this.getPickerDateValue} />
+     <label htmlFor="formGroupExampleInput">Appointment Time</label>
+            <MDBTimePicker id="timePicker"  getValue={this.getPickerValue} />
 
-            <MDBTimePicker id="timePicker" label="Appointment Time" getValue={this.getPickerValue} />
-            <MDBTimePicker id="timePicker" label="Pickup Time" getValue={this.getPicker2Value} />
 
             <MDBBtn color="mdb-color" rounded className="float-left" onClick={this.handleNextPrevClick(1)(3)}>previous</MDBBtn>
             <MDBBtn color="mdb-color" rounded className="float-right" onClick={this.handleNextPrevClick(1)(5)}>Next</MDBBtn>
@@ -448,11 +524,11 @@ render() {
             <h2 className="text-center font-weight-bold my-4">Trip Summary</h2>
             <div className="text-center"><MDBBtn color="primary" rounded  onClick={this.toggle}><MDBIcon icon="info" /> Trip Details</MDBBtn></div>
             <MDBBtn color="mdb-color" rounded className="float-left" onClick={this.handleNextPrevClick(1)(4)}>previous</MDBBtn>
-            <MDBBtn color="success" rounded className="float-right" onClick={this.calcDistance}>submit</MDBBtn>
+            <MDBBtn color="success" rounded className="float-right" onClick={this.submitTrip}>submit</MDBBtn>
           </MDBCol>)}
         </MDBRow>
         </div>
-      </form>
+
 
       <MDBModal isOpen={this.state.modal} toggle={this.toggle}>
 
