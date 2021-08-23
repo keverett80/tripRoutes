@@ -62,17 +62,11 @@ export default class SignIn extends Component {
                 validate
                 containerClass="mb-0"
               />
-              <p className="font-small blue-text d-flex justify-content-end pb-3">
-                Forgot
-                <a href="#!" className="blue-text ml-1"  onClick={this.handlePageReset}>
 
-                  Password?
-                </a>
-              </p>
               <div className="text-center mb-3">
                 <MDBBtn
                   type="button"
-                  color="black "
+                  color="white "
                   rounded
                   className="btn-block z-depth-1a"
                   type="submit"
@@ -84,29 +78,9 @@ export default class SignIn extends Component {
               </div>
               <p className="font-small dark-grey-text text-right d-flex justify-content-center mb-3 pt-2">
 
-or Sign in with:
-</p>
-<div className="row my-3 d-flex justify-content-center">
-<MDBBtn
-   tag="a" floating
-  color="white"
-  rounded
-  className="mr-md-3 z-depth-1a"
-  onClick={()=> Auth.federatedSignIn({provider: "Facebook"}) }
->
-  <MDBIcon fab icon="facebook-f" className="black-text text-center" />
-</MDBBtn>
 
-<MDBBtn
-tag="a" floating
-  color="white"
-  rounded
-  className="z-depth-1a"
-  onClick={()=> Auth.federatedSignIn({provider: "Google"}) }
->
-  <MDBIcon fab icon="google-plus-g" className="black-text" />
-</MDBBtn>
-</div>
+</p>
+
 </>
 
 

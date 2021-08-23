@@ -21,10 +21,7 @@ export default class ResetVerify extends Component {
   render() {
 
     return (
-<MDBContainer>
-      <MDBRow>
-        <MDBCol md="6">
-          <MDBCard>
+<>
             <MDBCardBody className="mx-4">
               <div className="text-center">
                 <h3 className="dark-grey-text mb-5">
@@ -130,11 +127,8 @@ tag="a" floating
                 </a>
               </p>
             </MDBModalFooter>
-          </MDBCard>
-        </MDBCol>
-      </MDBRow>
-    </MDBContainer>
 
+</>
 
     );
   }

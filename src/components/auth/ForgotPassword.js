@@ -22,16 +22,7 @@ export default class ForgotPassword extends Component {
   render() {
 
     return (
-<MDBContainer>
-      <MDBRow>
-        <MDBCol md="6">
-          <MDBCard>
-            <MDBCardBody className="mx-4">
-              <div className="text-center">
-                <h3 className="dark-grey-text mb-5">
-                  <strong>Reset Password</strong>
-                </h3>
-              </div>
+<>
               <MDBInput
 
                 group
@@ -49,7 +40,7 @@ export default class ForgotPassword extends Component {
               <div className="text-center mb-3">
                 <MDBBtn
                   type="button"
-                  color="black"
+                  color="white"
                   rounded
                   className="btn-block z-depth-1a"
                   type="submit"
@@ -62,7 +53,7 @@ export default class ForgotPassword extends Component {
 
 
 
-            </MDBCardBody>
+
             <MDBModalFooter className="mx-5 pt-3 mb-1">
               <p className="font-small blue-text d-flex justify-content-end">
                 Back to
@@ -73,10 +64,7 @@ export default class ForgotPassword extends Component {
               </p>
             </MDBModalFooter>
 
-          </MDBCard>
-        </MDBCol>
-      </MDBRow>
-    </MDBContainer>
+      </>
 
 
     );
