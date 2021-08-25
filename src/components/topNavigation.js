@@ -84,9 +84,9 @@ class TopNavigation extends React.Component {
                 name="Company Info"
                 id="contact-me-cat"
                 icon="building"
-              >
-                <MDBSideNavItem href='/drivers'>Drivers</MDBSideNavItem>
-                <MDBSideNavItem href='/vehicles'>Vehicles</MDBSideNavItem>
+              ><MDBSideNavItem href='/driversAssign'>Assign Drivers</MDBSideNavItem>
+                <MDBSideNavItem href='/drivers'>Add Drivers</MDBSideNavItem>
+                <MDBSideNavItem href='/vehicles'>Add Vehicles</MDBSideNavItem>
               </MDBSideNavCat>
             </MDBSideNavNav>
           </MDBSideNav>

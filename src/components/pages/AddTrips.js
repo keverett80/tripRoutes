@@ -2,7 +2,7 @@ import React from "react";
 import { API,  graphqlOperation } from "aws-amplify";
 import * as mutations from '../../graphql/mutations';
 import { listCustomers } from '../../graphql/queries';
-import { MDBContainer, MDBRow, MDBTimePicker, MDBCol, MDBStepper, MDBStep, MDBBtn, MDBInput, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDataTableV5,MDBIcon, MDBDatePicker  } from "mdbreact";
+import { MDBContainer, MDBRow, MDBTimePicker, MDBCol, MDBStepper, MDBStep, MDBBtn, MDBInput, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDataTableV5,MDBIcon, MDBDatePicker, MDBSelect  } from "mdbreact";
 import PlacesAutocomplete from 'react-places-autocomplete';
 import {Helmet} from "react-helmet";
 
@@ -40,15 +40,38 @@ this.state = {
   address2: '',
   duration:'',
   distance: '',
-  wheelchair: 'No',
-  roundTrip: 'No',
+  wheelchair: '',
+  roundTrip: '',
   status:'pending',
   price: '',
   modal: false,
   queryData: '',
   appointmentTime:'',
   appointmentDate:today,
-  disable: '',
+
+  optionsTrip: [
+      {
+        text: "One way",
+        value: "One way"
+      },
+      {
+        text: "Roundtrip",
+        value: "Roundtrip"
+      },
+
+    ],
+
+      optionsPatient: [
+      {
+        text: "Wheelchair",
+        value: "Wheelchair"
+      },
+      {
+        text: "Ambulatory",
+        value: "Ambulatory"
+      },
+
+    ],
   customers: {
     columns: [
       {
@@ -163,21 +186,19 @@ this.handleChange = this.handleChange.bind(this)
  }
 
   getCheckValue = value => {
-    if(value == true){
-    this.setState({ wheelchair: 'Yes' });
-    }
-    else {
-      this.setState({ wheelchair: 'No' });
-      }
+
+    this.setState({ wheelchair: value[0] });
+
+
+
   };
   getCheck2Value = value => {
 
-    if(value == true){
-      this.setState({ roundTrip: 'Yes' });
-      }
-      else {
-        this.setState({ roundTrip: 'No' });
-        }
+
+      this.setState({ roundTrip: value[0] });
+
+
+
   };
 
 
@@ -230,8 +251,7 @@ toggle1 = () => {
 }
 calcPrice = ()=>{
 
-
-  if(this.state.wheelchair == true && this.state.roundTrip == true)
+  if(this.state.wheelchair == 'Wheelchair' && this.state.roundTrip == 'Roundtrip')
 {
 
 this.state.price = (this.state.distance * 2) * 2 + 60
@@ -239,7 +259,7 @@ this.setState({
   modal: !this.state.modal
 });
 }
-else if(this.state.wheelchair == false && this.state.roundTrip == false){
+else if(this.state.wheelchair == 'Ambulatory' && this.state.roundTrip == 'One way'){
 
 this.state.price = (this.state.distance * 2) + 15
 this.setState({
@@ -248,14 +268,14 @@ this.setState({
 
 
 }
-else if(this.state.wheelchair == true && this.state.roundTrip == false){
+else if(this.state.wheelchair == 'Wheelchair' && this.state.roundTrip == 'One way'){
 
 this.state.price = (this.state.distance * 2) + 30
 this.setState({
   modal: !this.state.modal
 });
 }
-else if(this.state.wheelchair == false && this.state.roundTrip == true){
+else if(this.state.wheelchair == 'Ambulatory' && this.state.roundTrip == 'Roundtrip'){
 this.state.price = (this.state.distance * 2) * 2 + 30
 this.setState({
   modal: !this.state.modal
@@ -271,6 +291,7 @@ this.setState({
    calcDistance =()=> {
      if(this.state.address == '' || this.state.address2 == '' || this.state.address == null || this.state.address2 == null)
      {
+       alert('Please add a to and from destination. ')
        return;
      }
 
@@ -360,6 +381,7 @@ newCustomer = event =>{
 }
 submitTrip = event =>{
   event.preventDefault();
+
   const newTrips = {
     fname: this.state.fname,
     lname: this.state.lname,
@@ -370,7 +392,9 @@ submitTrip = event =>{
     appointmentTime: this.state.appointmentTime,
     appointmentDate: this.state.appointmentDate.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
     year: 'numeric'}),
-    status: this.state.status
+    status: this.state.status,
+    phoneNumber: this.state.phone,
+    cost: this.state.price
 
 
   };
@@ -474,7 +498,7 @@ render() {
       </PlacesAutocomplete>
 
             <MDBBtn color="mdb-color" rounded className="float-left" onClick={this.handleNextPrevClick(1)(1)}>previous</MDBBtn>
-            <MDBBtn disabled={this.state.disable} color="mdb-color" rounded className="float-right" onClick={this.handleNextPrevClick(1)(3)}>next</MDBBtn>
+            <MDBBtn color="mdb-color" rounded className="float-right" onClick={this.handleNextPrevClick(1)(3)}>next</MDBBtn>
           </MDBCol>)}
 
           {this.state.formActivePanel1 == 3 &&
@@ -528,16 +552,28 @@ render() {
           (<MDBCol md="12">
 
             <h2 className="text-center font-weight-bold my-4">Trip Details</h2>
-            <div className='text-center red-text'> <MDBInput  label="Wheelchair"  type="checkbox" id="checkbox23" getValue={this.getCheckValue} /></div>
-     <div className='text-center red-text'> <MDBInput  label="Round Trip"  type="checkbox" id="checkbox24" getValue={this.getCheck2Value} /></div>
-     <MDBCol md="3">    <label htmlFor="formGroupExampleInput">Appointment Date</label>
-     <MDBDatePicker inline id="datePicker" value={this.state.appointmentDate}  getValue={this.getPickerDateValue} />
-     </MDBCol>
-     <MDBCol md="3">
-     <label htmlFor="formGroupExampleInput">Appointment Time</label>
+            <div className='text-center red-text'>  <label htmlFor="formGroupExampleInput">Appointment Date</label>
+     <MDBDatePicker inline id="datePicker" value={this.state.appointmentDate}  getValue={this.getPickerDateValue} /></div>
+      <MDBSelect
+          options={this.state.optionsTrip}
+          selected="Choose trip type"
+          label="Trip type "
+           value={this.state.roundTrip} getValue={this.getCheck2Value}
+        />
 
-            <MDBTimePicker id="timePicker"    getValue={this.getPickerValue} />
-            </MDBCol>
+          <MDBSelect
+          options={this.state.optionsPatient}
+          selected="Choose patient type"
+          label="Patien Type "
+          value={this.state.wheelchair} getValue={this.getCheckValue}
+        />
+
+
+
+
+
+            <MDBInput label='Appointment Time' type='time' id="timePicker" value={this.state.appointmentTime}    getValue={this.getPickerValue} />
+
 
             <MDBBtn color="mdb-color" rounded className="float-left" onClick={this.handleNextPrevClick(1)(3)}>previous</MDBBtn>
             <MDBBtn color="mdb-color" rounded className="float-right" onClick={this.handleNextPrevClick(1)(5)}>Next</MDBBtn>

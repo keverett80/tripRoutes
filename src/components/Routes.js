@@ -9,6 +9,7 @@ import AddTrips from './pages/AddTrips';
 import ViewTrips from './pages/ViewTrips';
 import Vehicles from './pages/Vehicles';
 import Drivers from './pages/Drivers';
+import DriversAssign from './pages/addDriver';
 
 class Routes extends React.Component {
   render() {
@@ -19,6 +20,7 @@ class Routes extends React.Component {
         <Route path='/viewTrips' component={ViewTrips} />
         <Route path='/vehicles' component={Vehicles} />
         <Route path='/drivers' component={Drivers} />
+        <Route path='/driversAssign' component={DriversAssign} />
         <Route path='/404' component={NotFoundPage} />
       </Switch>
     );

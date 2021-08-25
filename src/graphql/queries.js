@@ -110,11 +110,14 @@ export const getTrip = /* GraphQL */ `
       lname
       address
       address2
+      phoneNumber
       wheelchair
       roundtrip
       appointmentTime
       appointmentDate
       status
+      cost
+      driver
       createdAt
       updatedAt
     }
@@ -133,11 +136,14 @@ export const listTrips = /* GraphQL */ `
         lname
         address
         address2
+        phoneNumber
         wheelchair
         roundtrip
         appointmentTime
         appointmentDate
         status
+        cost
+        driver
         createdAt
         updatedAt
       }

@@ -1,20 +1,23 @@
 import React from 'react';
-import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDataTableV5,MDBFormInline, MDBInput } from 'mdbreact';
+import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDataTableV5,MDBFormInline, MDBInput, MDBSelect } from 'mdbreact';
 import { API,  graphqlOperation } from "aws-amplify";
-import { listTrips } from '../../graphql/queries';
+import { listTrips, listEmployees } from '../../graphql/queries';
 import * as mutations from '../../graphql/mutations';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
 
-class ViewTrips extends React.Component {
+class AddDriver extends React.Component {
   constructor(props) {
     super(props)
 
   this.state = {
+    driver:'',
     queryData:'',
+    queryEmployee:'',
     modal: false,
     radio: '',
+    employee:[],
     data:{
     columns: [
 
@@ -71,7 +74,7 @@ class ViewTrips extends React.Component {
 
         width: 100,
       },
-           {
+         {
         label: 'Assigned Driver',
         field: 'driver',
 
@@ -88,6 +91,7 @@ class ViewTrips extends React.Component {
     ],
   },
   localData:[]
+
 
 }
 
@@ -123,32 +127,63 @@ this.handleRowClick = this.handleRowClick.bind(this)
       appointmentTime: customer.appointmentTime,
       status:customer.status,
       clickEvent: (data) => this.toggle(data),
-      button: <MDBBtn color='danger'  outline rounded>Status</MDBBtn>
+      button: <MDBBtn color='success'  outline rounded>Assign Employee</MDBBtn>
 
       });
       console.log(customer.wheelchair)
       this.forceUpdate();
   })
   this.state.data.rows = myCustomers;
+  this.getEmployee();
   this.forceUpdate();
+
+  }
+
+  getEmployee = () =>{
+
+var myThis = this;
+
+
+  const apiData =  API.graphql(graphqlOperation(listEmployees)).then(function(results)
+  {
+    myThis.state.queryEmployee = results.data.listEmployees.items;
+
+    var myEmployee= myThis.state.employee;
+    console.log(myThis.state.queryEmployee)
+
+    myThis.state.queryEmployee.map((customer) => {
+
+      console.log(customer.emailAddress)
+      myEmployee.push({
+      text: customer.firstName + ' ' + customer.lastName ,
+      value: customer.emailAddress,
+
+
+
+
+      });
+
+      myThis.forceUpdate();
+  })
+  myThis.state.employee= myEmployee;
+  myThis.forceUpdate();
+  })
+
   }
 
 
-  handleRowClick  = () =>{
-if(this.state.radio == "")
-{
-alert("Please make a selection. ")
-return;
 
-}
+
+  handleRowClick  = () =>{
+
     var updateTrip = {
       id: this.state.localData.id,
-      status: this.state.status
+      driver: this.state.driver[0]
     };
 
 
     API.graphql(graphqlOperation( mutations.updateTrip,{input: updateTrip})).then(( )=> {
-      alert('Trip Updated. ')
+      alert('Driver Added. ')
       location.reload();
     })
 
@@ -179,6 +214,8 @@ return;
   }
 
   toggle = (data) => {
+
+    console.log(this.state.employee[0].emailAddress)
 
     this.setState({
       modal: !this.state.modal
@@ -211,6 +248,13 @@ handleChange1 = () =>{
     });
     }
 
+    handleAssign = value => {
+
+
+  this.setState({ driver: value});
+
+};
+
 
   render() {
   return (
@@ -230,36 +274,15 @@ handleChange1 = () =>{
 
      <MDBModal isOpen={this.state.modal} toggle={this.toggle}>
        <div className='text-center'>
-       <MDBModalHeader toggle={this.toggle} >Trip Status</MDBModalHeader>
+       <MDBModalHeader toggle={this.toggle} >Assign Employee</MDBModalHeader>
        </div>
        <MDBModalBody>
        <MDBFormInline>
-        <MDBInput
-          onClick={this.onClick(1)}
-          checked={this.state.radio === 1 ? true : false}
-          label='Pending'
-          type='radio'
-          id='radio1'
-          containerClass='mr-5'
-          onChange={this.handleChange}
-        />
-        <MDBInput
-          onClick={this.onClick(2)}
-          checked={this.state.radio === 2 ? true : false}
-          label='Complete'
-          type='radio'
-          id='radio2'
-          containerClass='mr-5'
-          onChange={this.handleChange1}
-        />
-        <MDBInput
-          onClick={this.onClick(3)}
-          checked={this.state.radio === 3 ? true : false}
-          label='Canceled'
-          type='radio'
-          id='radio3'
-          containerClass='mr-5'
-          onChange={this.handleChange2}
+        <MDBSelect
+          options={this.state.employee}
+          selected="Assign Employee"
+          label="Employee"
+          getValue={this.handleAssign}
         />
       </MDBFormInline>
        </MDBModalBody>
@@ -274,4 +297,4 @@ handleChange1 = () =>{
 }
   }
 
-export default ViewTrips;
+export default AddDriver;

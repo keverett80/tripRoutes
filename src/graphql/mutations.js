@@ -159,11 +159,14 @@ export const createTrip = /* GraphQL */ `
       lname
       address
       address2
+      phoneNumber
       wheelchair
       roundtrip
       appointmentTime
       appointmentDate
       status
+      cost
+      driver
       createdAt
       updatedAt
     }
@@ -180,11 +183,14 @@ export const updateTrip = /* GraphQL */ `
       lname
       address
       address2
+      phoneNumber
       wheelchair
       roundtrip
       appointmentTime
       appointmentDate
       status
+      cost
+      driver
       createdAt
       updatedAt
     }
@@ -201,11 +207,14 @@ export const deleteTrip = /* GraphQL */ `
       lname
       address
       address2
+      phoneNumber
       wheelchair
       roundtrip
       appointmentTime
       appointmentDate
       status
+      cost
+      driver
       createdAt
       updatedAt
     }
