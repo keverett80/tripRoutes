@@ -103,12 +103,12 @@ this.handleRowClick = this.handleRowClick.bind(this)
     const apiData = await API.graphql(graphqlOperation(listTrips));
     this.state.queryData = apiData.data.listTrips.items;
 
-    var myCustomers = this.state.data.rows;
+    var myCustomers = [];
     console.log(this.state.queryData)
 
     this.state.queryData.map((customer) => {
 
-      console.log(customer.wheelchair)
+
       myCustomers.push({
       id: customer.id,
       fname: customer.fname,
@@ -126,11 +126,14 @@ this.handleRowClick = this.handleRowClick.bind(this)
       button: <MDBBtn color='danger'  outline rounded>Status</MDBBtn>
 
       });
-      console.log(customer.wheelchair)
-      this.forceUpdate();
+
   })
-  this.state.data.rows = myCustomers;
-  this.forceUpdate();
+  this.setState({
+    data: {
+      ...this.state.data, // merge with the original `state.items`
+      rows: this.state.data.rows.concat(myCustomers)
+    }
+  });
   }
 
 
@@ -218,14 +221,15 @@ handleChange1 = () =>{
     <MDBDataTableV5
     hover entriesOptions={[5, 20, 25]} entries={5} pagesAmount={4}
     searchTop
+    searching={true}
    btn
+   proSelect
 
     searchBottom={false}
     barReverse
     noBottomColumns
     order={['status', 'asc' ]}
-    columns={this.state.data.columns}
-    rows={this.state.data.rows}
+   data={this.state.data}
 />
 
      <MDBModal isOpen={this.state.modal} toggle={this.toggle}>

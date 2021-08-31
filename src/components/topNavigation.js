@@ -76,7 +76,9 @@ class TopNavigation extends React.Component {
               <MDBSideNavLink to="/addTrips" topLevel>
                 <MDBIcon icon="plus" className="mr-2" />Add Trips</MDBSideNavLink>
                 <MDBSideNavLink to="/viewTrips" topLevel>
-                <MDBIcon icon="eye" className="mr-2" />View Trips</MDBSideNavLink>
+                <MDBIcon icon="eye" className="mr-2" />Trip Status</MDBSideNavLink>
+                <MDBSideNavLink to="/driversAssign" topLevel>
+                <MDBIcon icon="plus-circle" className="mr-2" />Assign Drivers</MDBSideNavLink>
 
 
 
@@ -84,9 +86,10 @@ class TopNavigation extends React.Component {
                 name="Company Info"
                 id="contact-me-cat"
                 icon="building"
-              ><MDBSideNavItem href='/driversAssign'>Assign Drivers</MDBSideNavItem>
+              >
                 <MDBSideNavItem href='/drivers'>Add Drivers</MDBSideNavItem>
                 <MDBSideNavItem href='/vehicles'>Add Vehicles</MDBSideNavItem>
+                <MDBSideNavItem href='/brokers'>Add Brokers</MDBSideNavItem>
               </MDBSideNavCat>
             </MDBSideNavNav>
           </MDBSideNav>

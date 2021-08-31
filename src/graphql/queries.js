@@ -151,3 +151,38 @@ export const listTrips = /* GraphQL */ `
     }
   }
 `;
+export const getBroker = /* GraphQL */ `
+  query GetBroker($id: ID!) {
+    getBroker(id: $id) {
+      id
+      name
+      phone
+      email
+      wcRate
+      ambRate
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listBrokers = /* GraphQL */ `
+  query ListBrokers(
+    $filter: ModelBrokerFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listBrokers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        phone
+        email
+        wcRate
+        ambRate
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;

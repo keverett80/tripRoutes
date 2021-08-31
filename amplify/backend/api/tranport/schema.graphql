@@ -41,3 +41,14 @@ type Trip @model {
 
 }
 
+type Broker @model {
+  id: ID!
+  name: String!
+  phone: String!
+  email: String!
+  wcRate: String
+  ambRate: String
+}
+
+
+

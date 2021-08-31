@@ -184,3 +184,45 @@ export const onDeleteTrip = /* GraphQL */ `
     }
   }
 `;
+export const onCreateBroker = /* GraphQL */ `
+  subscription OnCreateBroker {
+    onCreateBroker {
+      id
+      name
+      phone
+      email
+      wcRate
+      ambRate
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateBroker = /* GraphQL */ `
+  subscription OnUpdateBroker {
+    onUpdateBroker {
+      id
+      name
+      phone
+      email
+      wcRate
+      ambRate
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteBroker = /* GraphQL */ `
+  subscription OnDeleteBroker {
+    onDeleteBroker {
+      id
+      name
+      phone
+      email
+      wcRate
+      ambRate
+      createdAt
+      updatedAt
+    }
+  }
+`;

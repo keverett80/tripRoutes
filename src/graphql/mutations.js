@@ -220,3 +220,54 @@ export const deleteTrip = /* GraphQL */ `
     }
   }
 `;
+export const createBroker = /* GraphQL */ `
+  mutation CreateBroker(
+    $input: CreateBrokerInput!
+    $condition: ModelBrokerConditionInput
+  ) {
+    createBroker(input: $input, condition: $condition) {
+      id
+      name
+      phone
+      email
+      wcRate
+      ambRate
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateBroker = /* GraphQL */ `
+  mutation UpdateBroker(
+    $input: UpdateBrokerInput!
+    $condition: ModelBrokerConditionInput
+  ) {
+    updateBroker(input: $input, condition: $condition) {
+      id
+      name
+      phone
+      email
+      wcRate
+      ambRate
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteBroker = /* GraphQL */ `
+  mutation DeleteBroker(
+    $input: DeleteBrokerInput!
+    $condition: ModelBrokerConditionInput
+  ) {
+    deleteBroker(input: $input, condition: $condition) {
+      id
+      name
+      phone
+      email
+      wcRate
+      ambRate
+      createdAt
+      updatedAt
+    }
+  }
+`;

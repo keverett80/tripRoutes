@@ -133,7 +133,7 @@ this.handleChange = this.handleChange.bind(this)
     const apiData = await API.graphql(graphqlOperation( listCustomers))
     this.state.queryData  = apiData.data.listCustomers.items;
 
-    var myCustomers = this.state.customers.rows;
+    var myCustomers = [];
     this.state.queryData.map((customer) => {
 
       console.log(customer.address)
@@ -149,11 +149,15 @@ this.handleChange = this.handleChange.bind(this)
         button: <MDBBtn outline rounded>Select</MDBBtn>
 
       });
-      this.forceUpdate();
+
   })
-  this.state.customers.rows = myCustomers;
-  console.log(this.state.customers)
-  this.forceUpdate();
+  this.setState({
+    customers: {
+      ...this.state.customers, // merge with the original `state.items`
+      rows: this.state.customers.rows.concat(myCustomers)
+    }
+  });
+
 
 
     }
@@ -379,6 +383,7 @@ newCustomer = event =>{
 
   this.setState({ address:'' });
 }
+
 submitTrip = event =>{
   event.preventDefault();
 
@@ -394,7 +399,47 @@ submitTrip = event =>{
     year: 'numeric'}),
     status: this.state.status,
     phoneNumber: this.state.phone,
-    cost: this.state.price
+    cost: this.state.price,
+    driver: ''
+
+
+  };
+
+  API.graphql({ query: mutations.createTrip, variables: {input: newTrips}}).then(()=>{
+
+    if(this.state.roundTrip =='Roundtrip')
+    {
+ this.submitTripRound();
+
+    }
+    else{
+  this.state.address = ''
+  alert('New Trip Added! ')
+ location.reload();
+    }
+
+} );
+
+}
+
+
+submitTripRound = () =>{
+
+
+  const newTrips = {
+    fname: this.state.fname,
+    lname: this.state.lname,
+    address: this.state.address2,
+    address2: this.state.address,
+    wheelchair: this.state.wheelchair,
+    roundtrip: this.state.roundTrip,
+    appointmentTime: '23:57' ,
+    appointmentDate: this.state.appointmentDate.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
+    year: 'numeric'}),
+    status: this.state.status,
+    phoneNumber: this.state.phone,
+    cost: this.state.price,
+    driver: ''
 
 
   };
@@ -407,7 +452,13 @@ submitTrip = event =>{
 } );
 
 
+
+
+
+
+
 }
+
 
 render() {
   return (
@@ -445,8 +496,7 @@ render() {
       barReverse
 
       onClick={this.handleNextPrevClick(1)(2)}
-      columns={this.state.customers.columns}
-      rows={this.state.customers.rows}
+   data={this.state.customers}
 
 
     />
