@@ -100,6 +100,8 @@ this.handleRowClick = this.handleRowClick.bind(this)
 
   async componentDidMount(){
 
+
+
     const apiData = await API.graphql(graphqlOperation(listTrips));
     this.state.queryData = apiData.data.listTrips.items;
 

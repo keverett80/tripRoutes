@@ -21,7 +21,13 @@ class Vehicles extends React.Component {
     data:{
     columns: [
 
+      {
+        label: 'ID',
+        field: 'id',
+        sort: 'asc',
+        width: 100,
 
+      },
 
       {
         label: 'Make',
@@ -69,7 +75,7 @@ class Vehicles extends React.Component {
     const apiData = await API.graphql(graphqlOperation(listVehicles));
     this.state.queryData = apiData.data.listVehicles.items;
 
-    var myVehicles = this.state.data.rows;
+    var myVehicles = [];
     console.log(this.state.queryData)
 
     this.state.queryData.map((customer) => {
@@ -83,11 +89,15 @@ class Vehicles extends React.Component {
       tag: customer.tagNumber,
 
       });
-      this.forceUpdate();
+
 
   })
-  this.state.data.rows = myVehicles;
-  this.forceUpdate();
+  this.setState({
+    data: {
+      ...this.state.data, // merge with the original `state.items`
+      rows: this.state.data.rows.concat(myVehicles)
+    }
+  });
 
   }
 
@@ -188,9 +198,7 @@ return;
     searchBottom={false}
     barReverse
     noBottomColumns
-
-    columns={this.state.data.columns}
-    rows={this.state.data.rows}
+data={this.state.data}
 />
 
      <MDBModal isOpen={this.state.modal} toggle={this.toggle}>

@@ -21,6 +21,13 @@ class AddDriver extends React.Component {
     data:{
     columns: [
 
+      {
+        label: 'ID',
+        field: 'id',
+        width: 100,
+
+      },
+
 
       {
         label: 'First Name',
@@ -103,8 +110,13 @@ this.handleRowClick = this.handleRowClick.bind(this)
 
 
   async componentDidMount(){
+    let filter = {
+      status: {
+          eq: 'pending' // filter priority = 1
+      }
+  };
 
-    const apiData = await API.graphql(graphqlOperation(listTrips));
+    const apiData = await API.graphql(graphqlOperation(listTrips,{filter:filter}));
     this.state.queryData = apiData.data.listTrips.items;
 
     var myCustomers = this.state.data.rows;

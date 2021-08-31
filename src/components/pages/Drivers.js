@@ -22,6 +22,13 @@ class Drivers extends React.Component {
     columns: [
 
 
+      {
+        label: 'ID',
+        field: 'id',
+        sort: 'asc',
+        width: 100,
+
+      },
 
       {
         label: 'Employee First Name',
@@ -68,7 +75,7 @@ class Drivers extends React.Component {
     const apiData = await API.graphql(graphqlOperation(listEmployees));
     this.state.queryData = apiData.data.listEmployees.items;
 
-    var myEmployee = this.state.data.rows;
+    var myEmployee = [];
     console.log(this.state.queryData)
 
     this.state.queryData.map((customer) => {
@@ -82,11 +89,15 @@ class Drivers extends React.Component {
       email: customer.emailAddress,
 
       });
-      this.forceUpdate();
+
 
   })
-  this.state.data.rows = myEmployee;
-  this.forceUpdate();
+  this.setState({
+    data: {
+      ...this.state.data, // merge with the original `state.items`
+      rows: this.state.data.rows.concat(myEmployee)
+    }
+  });
 
   }
 
@@ -187,9 +198,7 @@ return;
     searchBottom={false}
     barReverse
     noBottomColumns
-
-    columns={this.state.data.columns}
-    rows={this.state.data.rows}
+data={this.state.data}
 />
 
      <MDBModal isOpen={this.state.modal} toggle={this.toggle}>

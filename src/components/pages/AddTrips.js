@@ -75,6 +75,12 @@ this.state = {
   customers: {
     columns: [
       {
+        label: 'ID',
+        field: 'id',
+        sort: 'asc',
+        width: 150,
+      },
+      {
         label: 'First Name',
         field: 'fname',
         sort: 'asc',
