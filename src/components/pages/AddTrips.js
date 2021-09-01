@@ -27,6 +27,7 @@ class AddTrips extends React.Component {
   constructor(props) {
     super(props)
 this.state = {
+  notes: '',
   broker:[],
   brokers:'',
   formActivePanel1: 1,
@@ -253,6 +254,11 @@ this.handleChange = this.handleChange.bind(this)
     this.setState({fname: value});
 
   };
+
+  getNotesValue = value =>{
+    this.setState({notes: value});
+
+  }
   getLNValue = value => {
     //console.log(value);
     this.setState({lname: value});
@@ -435,7 +441,8 @@ submitTrip = event =>{
     phoneNumber: this.state.phone,
     cost: this.state.price,
     driver: '',
-    broker: this.state.brokers[0]
+    broker: this.state.brokers[0],
+    notes: this.state.notes,
 
 
   };
@@ -482,7 +489,8 @@ submitTripRound = () =>{
     phoneNumber: this.state.phone,
     cost: this.state.price,
     driver: '',
-    broker: this.state.brokers[0]
+    broker: this.state.brokers[0],
+    notes: this.state.notes,
 
 
   };
@@ -673,6 +681,7 @@ render() {
           label="Select Broker"
           getValue={this.handleAssign}
         />
+        <MDBInput type="textarea" getValue={this.getNotesValue} label="Trip Notes" background />
 
 
 

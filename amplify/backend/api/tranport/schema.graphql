@@ -39,6 +39,7 @@ type Trip @model {
   cost: String
   driver:String
   broker:String
+  notes: String
 
 }
 
