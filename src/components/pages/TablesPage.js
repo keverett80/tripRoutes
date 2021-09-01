@@ -3,7 +3,7 @@ import { MDBRow, MDBCol, MDBView, MDBCard, MDBCardBody, MDBTable, MDBTableHead, 
 
 const TablesPage =  () => {
   return (
-    <>
+    <div>
       <MDBRow>
       <MDBCol md="12">
         <MDBCard className="mt-5">
@@ -141,7 +141,7 @@ const TablesPage =  () => {
         </MDBCard>
       </MDBCol>
     </MDBRow>
-    </>
+    </div>
   )
 }
 

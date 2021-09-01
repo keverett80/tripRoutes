@@ -155,7 +155,7 @@ const brokerDetails = {
 
 API.graphql({ query: mutations.deleteBroker, variables: {input: brokerDetails}}).then(()=>{
 alert('Broker Deleted. ')
-location.reload();
+ window.location.reload();
 });
 }
   addBroker  = () =>{
@@ -178,7 +178,7 @@ return;
 
     API.graphql(graphqlOperation( mutations.createBroker,{input: addBroker})).then(( )=> {
       alert('Broker has beed added. ')
-      location.reload();
+       window.location.reload();
     })
 
   }

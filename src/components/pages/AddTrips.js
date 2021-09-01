@@ -13,7 +13,7 @@ import {Helmet} from "react-helmet";
 
 
 
-
+const google = window.google
 
 
 var today = new Date();
@@ -412,7 +412,7 @@ newCustomer = event =>{
 
     this.setState({ address:'' });
    alert('Customer Added! ')
-  location.reload();
+   window.location.reload();
   } );
 
   this.setState({ address:'' });
@@ -450,7 +450,7 @@ submitTrip = event =>{
     else{
   this.state.address = ''
   alert('New Trip Added! ')
- location.reload();
+  window.location.reload();
     }
 
 } );
@@ -490,7 +490,7 @@ submitTripRound = () =>{
   API.graphql({ query: mutations.createTrip, variables: {input: newTrips}}).then(()=>{
   this.state.address = ''
   alert('New Trip Added! ')
- location.reload();
+  window.location.reload();
 
 } );
 

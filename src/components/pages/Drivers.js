@@ -133,7 +133,7 @@ class Drivers extends React.Component {
 
  API.graphql({ query: mutations.deleteEmployee, variables: {input: employeeDetails}}).then(()=>{
     alert('Employee Deleted. ')
-    location.reload();
+     window.location.reload();
  });
 
     }
@@ -158,7 +158,7 @@ return;
 
     API.graphql(graphqlOperation( mutations.createEmployee,{input: addEmployee})).then(( )=> {
       alert('Employee has beed added. ')
-      location.reload();
+       window.location.reload();
     })
 
   }

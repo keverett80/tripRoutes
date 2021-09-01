@@ -134,7 +134,7 @@ class Vehicles extends React.Component {
 
    API.graphql({ query: mutations.deleteVehicle, variables: {input: vehicleDetails}}).then(()=>{
     alert('Vehicle Deleted. ')
-    location.reload();
+     window.location.reload();
   });
     }
 
@@ -156,7 +156,7 @@ return;
 
     API.graphql(graphqlOperation( mutations.createVehicle,{input: addVehicle})).then(( )=> {
       alert('Vehicle has beed added. ')
-      location.reload();
+       window.location.reload();
     })
 
   }

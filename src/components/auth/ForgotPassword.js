@@ -22,7 +22,7 @@ export default class ForgotPassword extends Component {
   render() {
 
     return (
-<>
+<div>
               <MDBInput
 
                 group
@@ -64,7 +64,7 @@ export default class ForgotPassword extends Component {
               </p>
             </MDBModalFooter>
 
-      </>
+      </div>
 
 
     );

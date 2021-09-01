@@ -11,7 +11,7 @@ export default class SignIn extends Component {
     // You can pass an object which has the username, password and validationData which is sent to a PreAuthentication Lambda trigger
     Auth.signIn({ username, password })
       .then(user => console.log(user))
-      .then(() => location.href='/')
+      .then(() => window.location.href='/')
       .catch(err => console.log(err));
   };
 
@@ -35,7 +35,7 @@ export default class SignIn extends Component {
   render() {
 
     return (
-<>
+<div>
               <MDBInput
 
                 group
@@ -81,7 +81,7 @@ export default class SignIn extends Component {
 
 </p>
 
-</>
+</div>
 
 
 

@@ -196,7 +196,7 @@ var myThis = this;
 
     API.graphql(graphqlOperation( mutations.updateTrip,{input: updateTrip})).then(( )=> {
       alert('Driver Added. ')
-      location.reload();
+       window.location.reload();
     })
 
   }

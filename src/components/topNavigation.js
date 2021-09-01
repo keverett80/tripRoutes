@@ -45,7 +45,7 @@ class TopNavigation extends React.Component {
     {
 
       localStorage.clear();
-      location.href = "/";
+      window.location.href = "/";
 
     }
 }
@@ -79,6 +79,11 @@ class TopNavigation extends React.Component {
                 <MDBIcon icon="eye" className="mr-2" />Trip Status</MDBSideNavLink>
                 <MDBSideNavLink to="/driversAssign" topLevel>
                 <MDBIcon icon="plus-circle" className="mr-2" />Assign Drivers</MDBSideNavLink>
+                 <MDBSideNavLink to="/editCustomer" topLevel>
+                <MDBIcon icon="pen" className="mr-2" />Edit Customers</MDBSideNavLink>
+                <MDBSideNavLink to="/calendar" topLevel>
+                <MDBIcon icon="calendar" className="mr-2" />Calendar</MDBSideNavLink>
+
 
 
 
@@ -90,6 +95,7 @@ class TopNavigation extends React.Component {
                 <MDBSideNavItem href='/drivers'>Add Drivers</MDBSideNavItem>
                 <MDBSideNavItem href='/vehicles'>Add Vehicles</MDBSideNavItem>
                 <MDBSideNavItem href='/brokers'>Add Brokers</MDBSideNavItem>
+                <MDBSideNavItem href='/links'>Business Links</MDBSideNavItem>
               </MDBSideNavCat>
             </MDBSideNavNav>
           </MDBSideNav>
