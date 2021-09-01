@@ -168,6 +168,7 @@ export const createTrip = /* GraphQL */ `
       cost
       driver
       broker
+      notes
       createdAt
       updatedAt
     }
@@ -193,6 +194,7 @@ export const updateTrip = /* GraphQL */ `
       cost
       driver
       broker
+      notes
       createdAt
       updatedAt
     }
@@ -218,6 +220,7 @@ export const deleteTrip = /* GraphQL */ `
       cost
       driver
       broker
+      notes
       createdAt
       updatedAt
     }

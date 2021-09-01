@@ -119,6 +119,7 @@ export const getTrip = /* GraphQL */ `
       cost
       driver
       broker
+      notes
       createdAt
       updatedAt
     }
@@ -146,6 +147,7 @@ export const listTrips = /* GraphQL */ `
         cost
         driver
         broker
+        notes
         createdAt
         updatedAt
       }
