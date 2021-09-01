@@ -35,7 +35,7 @@ class Calendars extends Component {
 console.log(customer)
       myCustomers.push({
 
-      title: customer.fname + ' ' + customer.lname + '/n' +  customer.appointmentTime,
+      title: customer.fname + ' ' + customer.lname + ' ' +  customer.appointmentTime,
 
       start: new Date(customer.appointmentDate.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
       year: 'numeric'})),
