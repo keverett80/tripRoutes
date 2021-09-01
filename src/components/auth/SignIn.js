@@ -19,7 +19,7 @@ export default class SignIn extends Component {
     event.preventDefault();
 
  const user = Auth.currentAuthenticatedUser()
- console.log('user:' , user)
+ //console.log('user:' , user)
   };
 
   handlePageChange = event => {

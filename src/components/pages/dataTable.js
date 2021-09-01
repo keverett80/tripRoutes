@@ -7,7 +7,7 @@ export default function Basic() {
   function myRows(){
 
 
-    console.log(rows)
+    //console.log(rows)
   }
   const [datatable, setDatatable] = React.useState({
     columns: [

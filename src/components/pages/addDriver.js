@@ -120,11 +120,11 @@ this.handleRowClick = this.handleRowClick.bind(this)
     this.state.queryData = apiData.data.listTrips.items;
 
     var myCustomers = this.state.data.rows;
-    console.log(this.state.queryData)
+    //console.log(this.state.queryData)
 
     this.state.queryData.map((customer) => {
 
-      console.log(customer.wheelchair)
+      //console.log(customer.wheelchair)
       myCustomers.push({
       id: customer.id,
       fname: customer.fname,
@@ -142,7 +142,7 @@ this.handleRowClick = this.handleRowClick.bind(this)
       button: <MDBBtn color='success'  outline rounded>Assign Employee</MDBBtn>
 
       });
-      console.log(customer.wheelchair)
+      //console.log(customer.wheelchair)
       this.forceUpdate();
   })
   this.state.data.rows = myCustomers;
@@ -161,11 +161,11 @@ var myThis = this;
     myThis.state.queryEmployee = results.data.listEmployees.items;
 
     var myEmployee= myThis.state.employee;
-    console.log(myThis.state.queryEmployee)
+    //console.log(myThis.state.queryEmployee)
 
     myThis.state.queryEmployee.map((customer) => {
 
-      console.log(customer.emailAddress)
+      //console.log(customer.emailAddress)
       myEmployee.push({
       text: customer.firstName + ' ' + customer.lastName ,
       value: customer.emailAddress,
@@ -227,13 +227,13 @@ var myThis = this;
 
   toggle = (data) => {
 
-    console.log(this.state.employee[0].emailAddress)
+    //console.log(this.state.employee[0].emailAddress)
 
     this.setState({
       modal: !this.state.modal
     });
     this.state.localData = data
-    console.log(this.state.localData)
+    //console.log(this.state.localData)
   }
   onClick = nr => () => {
     this.setState({

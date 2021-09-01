@@ -5,13 +5,14 @@ import { listEmployees } from '../../graphql/queries';
 import * as mutations from '../../graphql/mutations';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
-
+import $ from "jquery";
 
 class Drivers extends React.Component {
   constructor(props) {
     super(props)
 
   this.state = {
+    myId:'',
     queryData:'',
     modal: false,
     fname:'',
@@ -52,7 +53,13 @@ class Drivers extends React.Component {
         field: 'phone',
 
         width: 100,
-      }
+      },
+      {
+        label: 'Button ',
+        field: 'myButton',
+
+        width: 100,
+      },
 
     ],
     rows: [
@@ -76,7 +83,7 @@ class Drivers extends React.Component {
     this.state.queryData = apiData.data.listEmployees.items;
 
     var myEmployee = [];
-    console.log(this.state.queryData)
+    //console.log(this.state.queryData)
 
     this.state.queryData.map((customer) => {
 
@@ -87,6 +94,7 @@ class Drivers extends React.Component {
       lname: customer.lastName,
       phone: customer.phoneNumber,
       email: customer.emailAddress,
+      myButton: <MDBBtn rounded outline color='danger' onClick={this.getCellValue}>Delete</MDBBtn>
 
       });
 
@@ -101,6 +109,35 @@ class Drivers extends React.Component {
 
   }
 
+  getCellValue =()=>{
+
+    var myThis = this;
+        $("body").on("click", "tr", function () {
+
+
+
+          myThis.setState({ myId: $(this).children().eq(0).text()});
+
+
+
+          myThis.submit();
+        });
+
+    }
+    deleteEmployee  = () =>{
+
+
+    const employeeDetails = {
+      id: this.state.myId,
+    };
+
+ API.graphql({ query: mutations.deleteEmployee, variables: {input: employeeDetails}}).then(()=>{
+    alert('Employee Deleted. ')
+    location.reload();
+ });
+
+    }
+
 
   addEmployee  = () =>{
 if(this.state.fname == "" || this.state.lname == '' || this.state.phone == '' ||this.state.email == '')
@@ -114,7 +151,8 @@ return;
       firstName: this.state.fname,
       lastName: this.state.lname,
       emailAddress: this.state.email,
-      phoneNumber: this.state.phone
+      phoneNumber: this.state.phone,
+
     };
 
 
@@ -133,7 +171,7 @@ return;
       buttons: [
         {
           label: 'Yes',
-          onClick: () =>  this.handleRowClick()
+          onClick: () =>  this.deleteEmployee()
 
         },
         {
@@ -158,22 +196,22 @@ return;
   }
 
   getFNValue = value => {
-    console.log(value);
+    //console.log(value);
     this.setState({fname: value});
 
   };
   getLNValue = value => {
-    console.log(value);
+    //console.log(value);
     this.setState({lname: value});
 
   };
   getPhoneValue = value => {
-    console.log(value);
+    //console.log(value);
     this.setState({phone: value});
 
   };
   getEmailValue = value => {
-    console.log(value);
+    //console.log(value);
     this.setState({email:value});
 
   };

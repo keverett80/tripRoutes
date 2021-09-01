@@ -5,6 +5,7 @@ import { listEmployees, listVehicles } from '../../graphql/queries';
 import * as mutations from '../../graphql/mutations';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+import $ from "jquery";
 
 
 class Vehicles extends React.Component {
@@ -12,6 +13,7 @@ class Vehicles extends React.Component {
     super(props)
 
   this.state = {
+    myId:'',
     queryData:'',
     modal: false,
     make:'',
@@ -51,7 +53,14 @@ class Vehicles extends React.Component {
         label: 'Color',
         field: 'color',
         width: 100,
-      }
+      },
+      {
+        label: 'Button ',
+        field: 'myButton',
+
+        width: 100,
+      },
+
 
 
     ],
@@ -76,7 +85,7 @@ class Vehicles extends React.Component {
     this.state.queryData = apiData.data.listVehicles.items;
 
     var myVehicles = [];
-    console.log(this.state.queryData)
+    //console.log(this.state.queryData)
 
     this.state.queryData.map((customer) => {
 
@@ -87,6 +96,7 @@ class Vehicles extends React.Component {
       model: customer.model,
       color: customer.color,
       tag: customer.tagNumber,
+      myButton: <MDBBtn rounded outline color='danger' onClick={this.getCellValue}>Delete</MDBBtn>
 
       });
 
@@ -100,7 +110,33 @@ class Vehicles extends React.Component {
   });
 
   }
+  getCellValue =()=>{
 
+    var myThis = this;
+        $("body").on("click", "tr", function () {
+
+
+
+          myThis.setState({ myId: $(this).children().eq(0).text()});
+
+
+
+          myThis.submit();
+        });
+
+    }
+    deleteVehicle  = () =>{
+
+
+    const vehicleDetails = {
+      id: this.state.myId,
+    };
+
+   API.graphql({ query: mutations.deleteVehicle, variables: {input: vehicleDetails}}).then(()=>{
+    alert('Vehicle Deleted. ')
+    location.reload();
+  });
+    }
 
   addVehicle  = () =>{
 if(this.state.make == "" || this.state.model == '' || this.state.color == '' ||this.state.tag == '')
@@ -133,7 +169,7 @@ return;
       buttons: [
         {
           label: 'Yes',
-          onClick: () =>  this.handleRowClick()
+          onClick: () =>  this.deleteVehicle()
 
         },
         {
@@ -158,22 +194,22 @@ return;
   }
 
   getMakeValue = value => {
-    console.log(value);
+    //console.log(value);
     this.setState({make: value});
 
   };
   getModelValue = value => {
-    console.log(value);
+    //console.log(value);
     this.setState({model: value});
 
   };
   getColorValue = value => {
-    console.log(value);
+    //console.log(value);
     this.setState({color: value});
 
   };
   getTagValue = value => {
-    console.log(value);
+    //console.log(value);
     this.setState({tag:value});
 
   };

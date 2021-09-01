@@ -37,14 +37,14 @@ export default function TableAction() {
         ...row,
         contact: (
           <>
-            <MDBBtn outline size='sm' floating className='call-btn' onClick={() => console.log(`call ${row.phone}`)}>
+            <MDBBtn outline size='sm' floating className='call-btn' onClick={() => //console.log(`call ${row.phone}`)}>
               <MDBIcon icon='phone' />
             </MDBBtn>
             <MDBBtn
               size='sm'
               floating
               className='message-btn ms-2'
-              onClick={() => console.log(`send a message to ${row.email}`)}
+              onClick={() => //console.log(`send a message to ${row.email}`)}
             >
               <MDBIcon icon='envelope' />
             </MDBBtn>

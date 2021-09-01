@@ -1,7 +1,7 @@
 import React from "react";
 import { API,  graphqlOperation } from "aws-amplify";
 import * as mutations from '../../graphql/mutations';
-import { listCustomers } from '../../graphql/queries';
+import { listBrokers, listCustomers } from '../../graphql/queries';
 import { MDBContainer, MDBRow, MDBTimePicker, MDBCol, MDBStepper, MDBStep, MDBBtn, MDBInput, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDataTableV5,MDBIcon, MDBDatePicker, MDBSelect  } from "mdbreact";
 import PlacesAutocomplete from 'react-places-autocomplete';
 import {Helmet} from "react-helmet";
@@ -27,6 +27,8 @@ class AddTrips extends React.Component {
   constructor(props) {
     super(props)
 this.state = {
+  broker:[],
+  brokers:'',
   formActivePanel1: 1,
   formActivePanel1Changed: false,
   fname: '',
@@ -140,9 +142,10 @@ this.handleChange = this.handleChange.bind(this)
     this.state.queryData  = apiData.data.listCustomers.items;
 
     var myCustomers = [];
+    this.getBroker();
     this.state.queryData.map((customer) => {
 
-      console.log(customer.address)
+      //console.log(customer.address)
       myCustomers.push({
 
         id: customer.id,
@@ -171,6 +174,31 @@ this.handleChange = this.handleChange.bind(this)
 
 
 
+    getBroker = () =>{
+
+      var myThis = this;
+      var myEmployee= [];
+
+       API.graphql(graphqlOperation(listBrokers)).then(function(results)
+        {
+
+
+          results.data.listBrokers.items.map((customer) => {
+
+            //console.log(customer.emailAddress)
+            myEmployee.push({
+            text: customer.name,
+            value: customer.name,
+
+            });
+
+
+        })
+
+
+        })
+       this.setState({broker: myEmployee});
+        }
 
 
 
@@ -192,7 +220,7 @@ this.handleChange = this.handleChange.bind(this)
    this.state.email = data.email;
    this.state.address = data.address;
 
-  console.log(data)
+  //console.log(data)
  }
 
   getCheckValue = value => {
@@ -214,29 +242,29 @@ this.handleChange = this.handleChange.bind(this)
 
   getPickerValue = value => {
     this.setState({ appointmentTime: value });
-    console.log(value);
+    //console.log(value);
   };
   getPickerDateValue = value => {
     this.setState({ appointmentDate: value });
-    console.log(value);
+    //console.log(value);
   };
   getFNValue = value => {
-    console.log(value);
+    //console.log(value);
     this.setState({fname: value});
 
   };
   getLNValue = value => {
-    console.log(value);
+    //console.log(value);
     this.setState({lname: value});
 
   };
   getPhoneValue = value => {
-    console.log(value);
+    //console.log(value);
     this.setState({phone: value});
 
   };
   getEmailValue = value => {
-    console.log(value);
+    //console.log(value);
     this.setState({email:value});
 
   };
@@ -316,7 +344,7 @@ this.setState({
        avoidHighways: false,
        avoidTolls: false
    }, function (response, status) {
-     console.log(Math.round(parseInt(response.rows[0].elements[0].distance.text)/1.609 * 100)/100)
+     //console.log(Math.round(parseInt(response.rows[0].elements[0].distance.text)/1.609 * 100)/100)
 
      if (status == google.maps.DistanceMatrixStatus.OK && response.rows[0].elements[0].status != "ZERO_RESULTS") {
       mythis.state.distance = Math.round(parseInt(response.rows[0].elements[0].distance.text)/1.609 * 100)/100;
@@ -406,7 +434,8 @@ submitTrip = event =>{
     status: this.state.status,
     phoneNumber: this.state.phone,
     cost: this.state.price,
-    driver: ''
+    driver: '',
+    broker: this.state.brokers[0]
 
 
   };
@@ -427,6 +456,13 @@ submitTrip = event =>{
 } );
 
 }
+handleAssign = value => {
+
+
+  this.setState({ brokers: value});
+
+
+};
 
 
 submitTripRound = () =>{
@@ -445,7 +481,8 @@ submitTripRound = () =>{
     status: this.state.status,
     phoneNumber: this.state.phone,
     cost: this.state.price,
-    driver: ''
+    driver: '',
+    broker: this.state.brokers[0]
 
 
   };
@@ -620,7 +657,7 @@ render() {
           <MDBSelect
           options={this.state.optionsPatient}
           selected="Choose patient type"
-          label="Patien Type "
+          label="Patient Type "
           value={this.state.wheelchair} getValue={this.getCheckValue}
         />
 
@@ -629,6 +666,14 @@ render() {
 
 
             <MDBInput label='Appointment Time' type='time' id="timePicker" value={this.state.appointmentTime}    getValue={this.getPickerValue} />
+
+        <MDBSelect
+          options={this.state.broker}
+          selected="Choose your option"
+          label="Select Broker"
+          getValue={this.handleAssign}
+        />
+
 
 
             <MDBBtn color="mdb-color" rounded className="float-left" onClick={this.handleNextPrevClick(1)(3)}>previous</MDBBtn>

@@ -21,7 +21,7 @@ class TopNavigation extends React.Component {
 
 
       Auth.currentUserInfo().then((userInfo) => {
-      console.log(userInfo)
+      //console.log(userInfo)
       this.setState({
         user: userInfo.attributes.email
       });

@@ -14,6 +14,7 @@ class Broker extends React.Component {
     super(props)
 
   this.state = {
+    myId:'',
     queryData:'',
     modal: false,
     name:'',
@@ -97,7 +98,7 @@ class Broker extends React.Component {
     this.state.queryData = apiData.data.listBrokers.items;
 
     let myBroker = [];
-    console.log(this.state.queryData)
+    //console.log(this.state.queryData)
 
     this.state.queryData.map((customer) => {
 
@@ -113,7 +114,7 @@ class Broker extends React.Component {
       email: customer.email,
       ambRate: customer.ambRate,
       wcRate: customer.wcRate,
-      myButton: <MDBBtn onClick={this.getCellValue}>Button</MDBBtn>
+      myButton: <MDBBtn rounded outline color='danger' onClick={this.getCellValue}>Delete</MDBBtn>
 
       });
 
@@ -131,19 +132,31 @@ class Broker extends React.Component {
   }
 
 getCellValue =()=>{
-  var myThis = this;
 
+var myThis = this;
     $("body").on("click", "tr", function () {
 
 
 
-      console.log($(this).children().eq(0).text());
+      myThis.setState({ myId: $(this).children().eq(0).text()});
 
 
 
-      //myThis.deleteSupervisor();
+      myThis.submit();
     });
 
+}
+deleteBroker  = () =>{
+
+
+const brokerDetails = {
+  id: this.state.myId,
+};
+
+API.graphql({ query: mutations.deleteBroker, variables: {input: brokerDetails}}).then(()=>{
+alert('Broker Deleted. ')
+location.reload();
+});
 }
   addBroker  = () =>{
 if(this.state.name == "" || this.state.phone == '' ||this.state.email == '')
@@ -173,12 +186,12 @@ return;
   submit = () => {
 
     confirmAlert({
-      title: 'Confirm Update',
-      message: 'Are you sure you want to update this? ',
+      title: 'Confirm Delete',
+      message: 'Are you sure you want to delete this? ',
       buttons: [
         {
           label: 'Yes',
-          onClick: () =>  this.handleRowClick()
+          onClick: () =>  this.deleteBroker()
 
         },
         {
@@ -203,28 +216,28 @@ return;
   }
 
   getNameValue = value => {
-    console.log(value);
+    //console.log(value);
     this.setState({name: value});
 
   };
 
   getPhoneValue = value => {
-    console.log(value);
+    //console.log(value);
     this.setState({phone: value});
 
   };
   getEmailValue = value => {
-    console.log(value);
+    //console.log(value);
     this.setState({email:value});
 
   };
   getAMBValue = value => {
-    console.log(value);
+    //console.log(value);
     this.setState({ambRate: value});
 
   };
   getWCValue = value => {
-    console.log(value);
+    //console.log(value);
     this.setState({wcRate: value});
 
   };

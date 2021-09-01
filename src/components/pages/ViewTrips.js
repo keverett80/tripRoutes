@@ -106,7 +106,7 @@ this.handleRowClick = this.handleRowClick.bind(this)
     this.state.queryData = apiData.data.listTrips.items;
 
     var myCustomers = [];
-    console.log(this.state.queryData)
+    //console.log(this.state.queryData)
 
     this.state.queryData.map((customer) => {
 
@@ -189,7 +189,7 @@ return;
       modal: !this.state.modal
     });
     this.state.localData = data
-    console.log(this.state.localData)
+    //console.log(this.state.localData)
   }
   onClick = nr => () => {
     this.setState({
