@@ -482,7 +482,7 @@ submitTripRound = () =>{
     address2: this.state.address,
     wheelchair: this.state.wheelchair,
     roundtrip: this.state.roundTrip,
-    appointmentTime: '23:57' ,
+    appointmentTime: 'Will Call' ,
     appointmentDate: this.state.appointmentDate.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
     year: 'numeric'}),
     status: this.state.status,
@@ -653,8 +653,7 @@ render() {
           (<MDBCol md="12">
 
             <h2 className="text-center font-weight-bold my-4">Trip Details</h2>
-            <div className='text-center red-text'>  <label htmlFor="formGroupExampleInput">Appointment Date</label>
-     <MDBDatePicker inline id="datePicker" value={this.state.appointmentDate}  getValue={this.getPickerDateValue} /></div>
+
       <MDBSelect
           options={this.state.optionsTrip}
           selected="Choose trip type"
@@ -669,9 +668,10 @@ render() {
           value={this.state.wheelchair} getValue={this.getCheckValue}
         />
 
+<div className='text-center red-text'>  <label htmlFor="formGroupExampleInput">Appointment Date</label>
 
-
-
+<MDBDatePicker inline id="datePicker" value={this.state.appointmentDate}  getValue={this.getPickerDateValue} />
+</div>
 
             <MDBInput label='Appointment Time' type='time' id="timePicker" value={this.state.appointmentTime}    getValue={this.getPickerValue} />
 

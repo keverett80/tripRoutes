@@ -17,7 +17,7 @@ class AddDriver extends React.Component {
     queryEmployee:'',
     modal: false,
     radio: '',
-    employee:[],
+    employee:[{text: 'No Driver', value: ''}],
     data:{
     columns: [
 
@@ -52,9 +52,15 @@ class AddDriver extends React.Component {
         width: 200,
       },
       {
+        label: 'Phone Number',
+        field: 'phone',
+
+        width: 100,
+      },
+      {
         label: 'Wheelchair',
         field: 'wheelchair',
-        sort: 'disabled',
+
         width: 100,
       },
       {
@@ -131,6 +137,7 @@ this.handleRowClick = this.handleRowClick.bind(this)
       lname: customer.lname,
       address: customer.address,
       address2: customer.address2,
+      phone: customer.phoneNumber,
       wheelchair: customer.wheelchair,
       roundtrip: customer.roundtrip,
       driver: customer.driver,
@@ -195,7 +202,7 @@ var myThis = this;
 
 
     API.graphql(graphqlOperation( mutations.updateTrip,{input: updateTrip})).then(( )=> {
-      alert('Driver Added. ')
+      alert('Updated. ')
        window.location.reload();
     })
 

@@ -18,6 +18,13 @@ class ViewTrips extends React.Component {
     data:{
     columns: [
 
+      {
+        label: 'ID',
+        field: 'id',
+        width: 100,
+
+      },
+
 
       {
         label: 'First Name',
@@ -40,6 +47,12 @@ class ViewTrips extends React.Component {
         field: 'address2',
 
         width: 200,
+      },
+      {
+        label: 'Phone Number',
+        field: 'phone',
+
+        width: 100,
       },
       {
         label: 'Wheelchair',
@@ -117,6 +130,7 @@ this.handleRowClick = this.handleRowClick.bind(this)
       lname: customer.lname,
       address: customer.address,
       address2: customer.address2,
+      phone: customer.phoneNumber,
       wheelchair: customer.wheelchair,
       roundtrip: customer.roundtrip,
       driver: customer.driver,
@@ -221,14 +235,19 @@ handleChange1 = () =>{
   return (
 <MDBContainer>
     <MDBDataTableV5
-    hover entriesOptions={[5, 20, 25]} entries={5} pagesAmount={4}
-    searchTop
-    searching={true}
-   btn
-   proSelect
 
+    hover entriesOptions={[5, 20, 25]}
+    entries={50}
+    pagesAmount={4}
+    pagingTop
+    searchTop
     searchBottom={false}
-    barReverse
+    scrollX scrollY
+   exportToCSV
+   proSelect
+   maxHeight='600px'
+
+
     noBottomColumns
     order={['status', 'asc' ]}
    data={this.state.data}
