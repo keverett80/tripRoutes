@@ -1,7 +1,7 @@
 import React from "react";
 import { API,  graphqlOperation } from "aws-amplify";
 import * as mutations from '../../graphql/mutations';
-import { listBrokers, listCustomers } from '../../graphql/queries';
+import { listBrokers, listCustomers, listTrips } from '../../graphql/queries';
 import { MDBContainer, MDBRow, MDBTimePicker, MDBCol, MDBStepper, MDBStep, MDBBtn, MDBInput, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDataTableV5,MDBIcon, MDBDatePicker, MDBSelect  } from "mdbreact";
 import PlacesAutocomplete from 'react-places-autocomplete';
 import {Helmet} from "react-helmet";
@@ -22,11 +22,12 @@ var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
 var yyyy = today.getFullYear();
 
 today = mm + '/' + dd + '/' + yyyy;
-class AddTrips extends React.Component {
+class EditTrips extends React.Component {
 
   constructor(props) {
     super(props)
 this.state = {
+  dataId:'',
   notes: '',
   broker:[],
   brokers:'',
@@ -50,7 +51,7 @@ this.state = {
   modal: false,
   queryData: '',
   appointmentTime:'',
-  appointmentDate:today,
+  appointmentDate:'',
 
   optionsTrip: [
       {
@@ -96,14 +97,14 @@ this.state = {
         width: 150,
       },
       {
-        label: 'Email',
-        field: 'email',
+        label: 'Appointment Time',
+        field: 'appointmentTime',
         sort: 'asc',
         width: 150,
       },
       {
-        label: 'Phone',
-        field: 'phone',
+        label: 'Appointment Date',
+        field: 'appointmentDate',
         sort: 'asc',
         width: 150,
       },
@@ -139,12 +140,12 @@ this.state = {
 this.handleChange = this.handleChange.bind(this)
   }
   async componentDidMount(){
-    const apiData = await API.graphql(graphqlOperation( listCustomers))
-    this.state.queryData  = apiData.data.listCustomers.items;
+    const apiData = await API.graphql(graphqlOperation( listTrips))
+    this.state.queryData  = apiData.data.listTrips.items;
 
     var myCustomers = [];
     this.getBroker();
-    this.state.queryData.map((customer) => {
+    this.state.queryData.sort(this.sortByDate).filter(trip => trip.status.includes('pending')).map((customer) => {
 
       //console.log(customer.address)
       myCustomers.push({
@@ -152,9 +153,18 @@ this.handleChange = this.handleChange.bind(this)
         id: customer.id,
         fname: customer.fname,
         lname: customer.lname,
-        phone: customer.phoneNumber,
-        email: customer.emailAddress,
         address: customer.address,
+        address2: customer.address2,
+        wheelchair: customer.wheelchair,
+        roundtrip: customer.roundtrip,
+        driver: customer.driver,
+        appointmentDate: customer.appointmentDate.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
+        year: 'numeric'}),
+        appointmentTime: customer.appointmentTime,
+        status:customer.status,
+        phone: customer.phoneNumber,
+        broker: customer.broker,
+        notes: customer.notes,
         clickEvent: (data) => this.handleRowClick(data),
         button: <MDBBtn outline rounded>Select</MDBBtn>
 
@@ -173,7 +183,15 @@ this.handleChange = this.handleChange.bind(this)
     }
 
 
-
+   sortByDate = (b, a)=> {
+      if (a.appointmentDate < b.appointmentDate) {
+          return 1;
+      }
+      if (a.appointmentDate > b.appointmentDate) {
+          return -1;
+      }
+      return 0;
+  }
 
     getBroker = () =>{
 
@@ -215,11 +233,23 @@ this.handleChange = this.handleChange.bind(this)
   }
  handleRowClick = (data) =>
  {
+  this.state.dataId = data.id
    this.state.fname = data.fname;
    this.state.lname = data.lname;
    this.state.phone = data.phone;
    this.state.email = data.email;
    this.state.address = data.address;
+   this.state.address2 = data.address2;
+   this.state.wheelchair =  data.wheelchair
+   this.state.roundTrip =  data.roundtrip
+   this.state.driver =  data.driver
+   this.state.appointmentDate =  new Date(data.appointmentDate)
+
+   this.state.appointmentTime = data.appointmentTime
+   this.state.status =  data.status
+   this.state.phone = data.phone
+   this.state.brokers = data.broker
+   this.state.notes = data.notes
 
   //console.log(data)
  }
@@ -410,32 +440,16 @@ formatPhoneNumber = (phoneNumberString) => {
   return null;
 }
 
-newCustomer = event =>{
-  event.preventDefault();
 
-  const newCustomer = {
-    fname: this.state.fname,
-    lname: this.state.lname,
-    phoneNumber: this.formatPhoneNumber(this.state.phone),
-    emailAddress: this.state.email,
-    address: this.state.address
-
-  };
-
-   API.graphql({ query: mutations.createCustomer, variables: {input: newCustomer}}).then(()=>{
-
-    this.setState({ address:'' });
-   alert('Customer Added! ')
-   window.location.reload();
-  } );
-
-  this.setState({ address:'' });
-}
 
 submitTrip = event =>{
   event.preventDefault();
 
+
+
+
   const newTrips = {
+    id: this.state.dataId,
     fname: this.state.fname,
     lname: this.state.lname,
     address: this.state.address,
@@ -448,25 +462,20 @@ submitTrip = event =>{
     status: this.state.status,
     phoneNumber: this.state.phone,
     cost: this.state.price,
-    driver: '',
-    broker: this.state.brokers[0],
+    driver: this.state.driver,
+    broker: this.state.brokers,
     notes: this.state.notes,
 
 
   };
 
-  API.graphql({ query: mutations.createTrip, variables: {input: newTrips}}).then(()=>{
+  API.graphql({ query: mutations.updateTrip, variables: {input: newTrips}}).then(()=>{
 
-    if(this.state.roundTrip =='Roundtrip')
-    {
- this.submitTripRound();
 
-    }
-    else{
   this.state.address = ''
-  alert('New Trip Added! ')
+  alert('Trip Updated! ')
   window.location.reload();
-    }
+
 
 } );
 
@@ -474,49 +483,13 @@ submitTrip = event =>{
 handleAssign = value => {
 
 
-  this.setState({ brokers: value});
+  this.setState({ brokers: value[0]});
 
 
 };
 
 
-submitTripRound = () =>{
 
-
-  const newTrips = {
-    fname: this.state.fname,
-    lname: this.state.lname,
-    address: this.state.address2,
-    address2: this.state.address,
-    wheelchair: this.state.wheelchair,
-    roundtrip: this.state.roundTrip,
-    appointmentTime: 'Will Call' ,
-    appointmentDate: this.state.appointmentDate.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
-    year: 'numeric'}),
-    status: this.state.status,
-    phoneNumber: this.state.phone,
-    cost: this.state.price,
-    driver: '',
-    broker: this.state.brokers[0],
-    notes: this.state.notes,
-
-
-  };
-
-  API.graphql({ query: mutations.createTrip, variables: {input: newTrips}}).then(()=>{
-  this.state.address = ''
-  alert('New Trip Added! ')
-  window.location.reload();
-
-} );
-
-
-
-
-
-
-
-}
 
 
 render() {
@@ -547,8 +520,8 @@ render() {
           {this.state.formActivePanel1 == 1 &&
           (<MDBCol md="12">
             <h3 className="font-weight-bold pl-0 my-4 text-center">
-              <strong>Customer Information</strong></h3>
-             <div className="text-center"> <MDBBtn onClick={this.toggle1}>Add Customer</MDBBtn></div>
+              <strong>Edit Trips</strong></h3>
+
               <MDBDataTableV5
       hover entriesOptions={[5, 20, 25]} entries={5} pagesAmount={4}
       searchTop searchBottom={false}
@@ -664,32 +637,34 @@ render() {
 
       <MDBSelect
           options={this.state.optionsTrip}
-          selected="Choose trip type"
-          label="Trip type "
-           value={this.state.roundTrip} getValue={this.getCheck2Value}
+          selected={this.state.roundTrip}
+           value={this.state.roundTrip}
+           getValue={this.getCheck2Value}
         />
 
           <MDBSelect
           options={this.state.optionsPatient}
-          selected="Choose patient type"
-          label="Patient Type "
-          value={this.state.wheelchair} getValue={this.getCheckValue}
+          selected={this.state.wheelchair}
+          value={this.state.wheelchair}
+          getValue={this.getCheckValue}
         />
 
 <div className='text-center red-text'>  <label htmlFor="formGroupExampleInput">Appointment Date</label>
 
-<MDBDatePicker inline id="datePicker" value={this.state.appointmentDate}  getValue={this.getPickerDateValue} />
+<MDBDatePicker  id="datePicker" value={this.state.appointmentDate}  getValue={this.getPickerDateValue} />
 </div>
 
-            <MDBInput label='Appointment Time' type='time' id="timePicker" value={this.state.appointmentTime}    getValue={this.getPickerValue} />
+            <MDBInput label='Appointment Time'  id="timePicker" value={this.state.appointmentTime}    getValue={this.getPickerValue} />
 
         <MDBSelect
           options={this.state.broker}
-          selected="Choose your option"
-          label="Select Broker"
+            value={this.state.broker}
+            selected={this.state.brokers}
+
+
           getValue={this.handleAssign}
         />
-        <MDBInput type="textarea" getValue={this.getNotesValue} label="Trip Notes" background />
+        <MDBInput type="textarea"  value={this.state.notes} getValue={this.getNotesValue} label="Trip Notes" background />
 
 
 
@@ -709,78 +684,10 @@ render() {
         </div>
 
 
-      <MDBModal isOpen={this.state.modal} toggle={this.toggle}>
 
-        <MDBModalBody>
-        <h4 className="my-4">Details:<div className='red-text'> {this.state.address}</div></h4>
-            <h4 className="my-4 ">Destination Address:<div className='red-text'> {this.state.address2}</div></h4>
-            <h4 className="my-4">Est Time: <div className='red-text'>{this.state.duration}</div></h4>
-            <h4 className="my-4">Est Miles: <div className='red-text'>{this.state.distance}</div></h4>
-            <h4 className="my-4">Est Cost: <div className='red-text'>${this.state.price}</div></h4>
-        </MDBModalBody>
-        <MDBModalFooter>
-          <MDBBtn rounded color="primary" onClick={this.toggle}>Close</MDBBtn>
-
-        </MDBModalFooter>
-      </MDBModal>
-
-      <MDBModal isOpen={this.state.modal1} toggle={this.toggle1}>
-        <MDBModalHeader toggle={this.toggle1}>New Customer</MDBModalHeader>
-        <MDBModalBody><div className="text-left">
-        <MDBInput icon='user' getValue={this.getFNValue} label="First Name" className="mt-4" autoFocus={this.calculateAutofocus(1)} />
-            <MDBInput icon='user' getValue={this.getLNValue} label="Last Name" className="mt-4" />
-            <MDBInput icon='phone' getValue={this.getPhoneValue} label="Phone Number" className="mt-4" />
-            <MDBInput icon='envelope-open' getValue={this.getEmailValue} label="Email Address" className="mt-4" />
-            <PlacesAutocomplete
-        value={this.state.address}
-        onChange={this.handleChange}
-
-
-      >
-        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-          <div>
-            <MDBInput icon='address-book'
-              {...getInputProps({
-
-                placeholder: 'Customer Address',
-                className: 'location-search-input',
-              })}
-            />
-            <div className="autocomplete-dropdown-container">
-              {loading && <div>Loading...</div>}
-              {suggestions.map(suggestion => {
-                const className = suggestion.active
-                  ? 'suggestion-item--active'
-                  : 'suggestion-item';
-                // inline style for demonstration purpose
-                const style = suggestion.active
-                  ? { backgroundColor: '#fafafa', cursor: 'pointer' }
-                  : { backgroundColor: '#ffffff', cursor: 'pointer' };
-                return (
-                  <div
-                    {...getSuggestionItemProps(suggestion, {
-                      className,
-                      style,
-                    })}
-                  >
-                    <span>{suggestion.description}</span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-      </PlacesAutocomplete>
-            </div>
-        </MDBModalBody>
-        <MDBModalFooter>
-          <MDBBtn color="secondary" onClick={this.toggle1}>Close</MDBBtn>
-          <MDBBtn color="primary" onClick= {this.newCustomer}>Save changes</MDBBtn>
-        </MDBModalFooter>
-      </MDBModal>
     </MDBContainer>
     );
   };
 }
 
-export default AddTrips;
+export default EditTrips;

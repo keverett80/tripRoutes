@@ -14,6 +14,7 @@ import Broker from './pages/addBrokers';
 import EditCustomer from './pages/editCustomer';
 import Links from './pages/links';
 import Calendars from './pages/calendar';
+import EditTrips from './pages/editTrips';
 class Routes extends React.Component {
   render() {
     return (
@@ -27,6 +28,7 @@ class Routes extends React.Component {
         <Route path='/editCustomer' component={EditCustomer} />
         <Route path='/links' component={Links} />
         <Route path='/calendar' component={Calendars} />
+        <Route path='/editTrips' component={EditTrips} />
         <Route path='/driversAssign' component={DriversAssign} />
         <Route path='/404' component={NotFoundPage} />
       </Switch>

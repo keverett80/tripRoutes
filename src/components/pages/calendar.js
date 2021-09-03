@@ -18,6 +18,15 @@ class Calendars extends Component {
 
     ]
   };
+ sortByTime =(b, a) => {
+    if (a.appointmentTime < b.appointmentTime) {
+        return 1;
+    }
+    if (a.appointmentTime > b.appointmentTime) {
+        return -1;
+    }
+    return 0;
+  }
 
 
   async componentDidMount(){
@@ -30,9 +39,9 @@ class Calendars extends Component {
     var myCustomers = [];
     //console.log(this.state.queryData)
 
-    apiData.data.listTrips.items.map((customer) => {
+    apiData.data.listTrips.items.sort(this.sortByTime).filter(trip => trip.status.includes('pending')).map((customer) => {
 
-
+if(customer.appointmentTime !== 'Will Call'){
 if(customer.wheelchair == 'Wheelchair')
       {
 
@@ -63,6 +72,7 @@ if(customer.wheelchair == 'Wheelchair')
 
       });
     }
+  }
 
   })
   this.setState({

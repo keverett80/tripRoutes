@@ -81,6 +81,9 @@ class TopNavigation extends React.Component {
                 <MDBIcon icon="plus-circle" className="mr-2" />Assign Drivers</MDBSideNavLink>
                  <MDBSideNavLink to="/editCustomer" topLevel>
                 <MDBIcon icon="pen" className="mr-2" />Edit Customers</MDBSideNavLink>
+                <MDBSideNavLink to="/editTrips" topLevel>
+                <MDBIcon icon="pen" className="mr-2" />Edit Trips</MDBSideNavLink>
+
                 <MDBSideNavLink to="/calendar" topLevel>
                 <MDBIcon icon="calendar" className="mr-2" />Calendar</MDBSideNavLink>
 

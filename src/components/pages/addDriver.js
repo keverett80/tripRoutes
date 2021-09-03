@@ -125,7 +125,7 @@ this.handleRowClick = this.handleRowClick.bind(this)
     const apiData = await API.graphql(graphqlOperation(listTrips,{filter:filter}));
     this.state.queryData = apiData.data.listTrips.items;
 
-    var myCustomers = this.state.data.rows;
+    var myCustomers = [];
     //console.log(this.state.queryData)
 
     this.state.queryData.map((customer) => {
@@ -150,12 +150,15 @@ this.handleRowClick = this.handleRowClick.bind(this)
 
       });
       //console.log(customer.wheelchair)
-      this.forceUpdate();
-  })
-  this.state.data.rows = myCustomers;
-  this.getEmployee();
-  this.forceUpdate();
 
+  })
+  this.setState({
+    data: {
+      ...this.state.data, // merge with the original `state.items`
+      rows: this.state.data.rows.concat(myCustomers)
+    }
+  });
+  this.getEmployee();
   }
 
   getEmployee = () =>{
@@ -163,29 +166,27 @@ this.handleRowClick = this.handleRowClick.bind(this)
 var myThis = this;
 
 
-  const apiData =  API.graphql(graphqlOperation(listEmployees)).then(function(results)
+API.graphql(graphqlOperation(listEmployees)).then(function(results)
   {
-    myThis.state.queryEmployee = results.data.listEmployees.items;
 
-    var myEmployee= myThis.state.employee;
-    //console.log(myThis.state.queryEmployee)
+    var myEmployee= [];
 
-    myThis.state.queryEmployee.map((customer) => {
 
-      //console.log(customer.emailAddress)
+    results.data.listEmployees.items.map((customer) => {
+
       myEmployee.push({
       text: customer.firstName + ' ' + customer.lastName ,
       value: customer.emailAddress,
 
-
-
-
       });
 
-      myThis.forceUpdate();
+
   })
-  myThis.state.employee= myEmployee;
-  myThis.forceUpdate();
+ // myThis.state.employee= myEmployee;
+  myThis.setState({
+employee: myEmployee
+
+  });
   })
 
   }
@@ -287,8 +288,8 @@ handleChange1 = () =>{
     barReverse
     noBottomColumns
     order={['status', 'asc' ]}
-    columns={this.state.data.columns}
-    rows={this.state.data.rows}
+
+    data={this.state.data}
 />
 
      <MDBModal isOpen={this.state.modal} toggle={this.toggle}>
