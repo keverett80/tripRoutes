@@ -13,7 +13,7 @@ import {Helmet} from "react-helmet";
 
 
 
-const google = window.google
+//const google = window.google
 
 
 var today = new Date();
@@ -682,6 +682,22 @@ render() {
           </MDBCol>)}
         </MDBRow>
         </div>
+
+
+        <MDBModal isOpen={this.state.modal} toggle={this.toggle}>
+
+<MDBModalBody>
+<h4 className="my-4">Details:<div className='red-text'> {this.state.address}</div></h4>
+    <h4 className="my-4 ">Destination Address:<div className='red-text'> {this.state.address2}</div></h4>
+    <h4 className="my-4">Est Time: <div className='red-text'>{this.state.duration}</div></h4>
+    <h4 className="my-4">Est Miles: <div className='red-text'>{this.state.distance}</div></h4>
+    <h4 className="my-4">Est Cost: <div className='red-text'>${this.state.price}</div></h4>
+</MDBModalBody>
+<MDBModalFooter>
+  <MDBBtn rounded color="primary" onClick={this.toggle}>Close</MDBBtn>
+
+</MDBModalFooter>
+</MDBModal>
 
 
 

@@ -13,7 +13,7 @@ import {Helmet} from "react-helmet";
 
 
 
-const google = window.google
+//const google = window.google
 
 
 var today = new Date();
