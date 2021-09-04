@@ -73,28 +73,36 @@ class TopNavigation extends React.Component {
 
             <MDBSideNavNav>
 
-              <MDBSideNavLink to="/addTrips" topLevel>
-                <MDBIcon icon="plus" className="mr-2" />Add Trips</MDBSideNavLink>
-                <MDBSideNavLink to="/viewTrips" topLevel>
-                <MDBIcon icon="eye" className="mr-2" />Trip Status</MDBSideNavLink>
-                <MDBSideNavLink to="/driversAssign" topLevel>
-                <MDBIcon icon="plus-circle" className="mr-2" />Assign Drivers</MDBSideNavLink>
-                 <MDBSideNavLink to="/editCustomer" topLevel>
-                <MDBIcon icon="pen" className="mr-2" />Edit Customers</MDBSideNavLink>
-                <MDBSideNavLink to="/editTrips" topLevel>
-                <MDBIcon icon="pen" className="mr-2" />Edit Trips</MDBSideNavLink>
+            <MDBSideNavCat
+                name="Trips"
+                id="contact-me-cat"
+                icon="car"
+              >
+                <MDBSideNavItem href='/addTrips'>Add Trips</MDBSideNavItem>
+                <MDBSideNavItem href='/driversAssign'>Assign Drivers</MDBSideNavItem>
+                <MDBSideNavItem href='/viewTrips'>Trip Status</MDBSideNavItem>
 
-                <MDBSideNavLink to="/calendar" topLevel>
-                <MDBIcon icon="calendar" className="mr-2" />Calendar</MDBSideNavLink>
+              </MDBSideNavCat>
+
+              <MDBSideNavCat
+                name="Edits"
+                id="contact-me-cat"
+                icon="pen"
+              >
+                <MDBSideNavItem href='/editCustomer'>Edit Customers</MDBSideNavItem>
+                <MDBSideNavItem href='/editTrips'>Edit Trips</MDBSideNavItem>
 
 
+              </MDBSideNavCat>
 
 
               <MDBSideNavCat
-                name="Company Info"
+                name="Five G Info"
                 id="contact-me-cat"
                 icon="building"
               >
+                <MDBSideNavItem href='/calendar'>Calendar</MDBSideNavItem>
+                <MDBSideNavItem href='/invoice'>Invoice</MDBSideNavItem>
                 <MDBSideNavItem href='/drivers'>Add Drivers</MDBSideNavItem>
                 <MDBSideNavItem href='/vehicles'>Add Vehicles</MDBSideNavItem>
                 <MDBSideNavItem href='/brokers'>Add Brokers</MDBSideNavItem>

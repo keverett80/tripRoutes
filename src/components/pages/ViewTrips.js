@@ -25,6 +25,23 @@ class ViewTrips extends React.Component {
 
       },
 
+      {
+
+        label: 'Select',
+        field: 'button'
+      },
+      {
+        label: 'Assigned Driver',
+        field: 'driver',
+
+        width: 100,
+      },
+      {
+        label: 'Status',
+        field: 'status',
+
+        width: 100,
+      },
 
       {
         label: 'First Name',
@@ -78,23 +95,8 @@ class ViewTrips extends React.Component {
         sort: 'disabled',
         width: 100,
       },
-      {
-        label: 'Status',
-        field: 'status',
 
-        width: 100,
-      },
-           {
-        label: 'Assigned Driver',
-        field: 'driver',
 
-        width: 100,
-      },
-      {
-
-        label: 'Select',
-        field: 'button'
-      }
     ],
     rows: [
 
@@ -237,20 +239,22 @@ handleChange1 = () =>{
     <MDBDataTableV5
 
     hover entriesOptions={[5, 20, 25]}
-    entries={50}
+    entries={10}
     pagesAmount={4}
     pagingTop
     searchTop
     searchBottom={false}
-    scrollX scrollY
+
    exportToCSV
-   proSelect
-   maxHeight='600px'
+
+
 
 
     noBottomColumns
     order={['status', 'asc' ]}
    data={this.state.data}
+
+
 />
 
      <MDBModal isOpen={this.state.modal} toggle={this.toggle}>

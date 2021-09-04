@@ -15,11 +15,13 @@ import EditCustomer from './pages/editCustomer';
 import Links from './pages/links';
 import Calendars from './pages/calendar';
 import EditTrips from './pages/editTrips';
+import Invoice from './pages/invoice';
+
 class Routes extends React.Component {
   render() {
     return (
       <Switch>
-        <Route path='/' exact component={AddTrips} />
+        <Route path='/' exact component={Calendars} />
         <Route path='/addTrips' component={AddTrips} />
         <Route path='/viewTrips' component={ViewTrips} />
         <Route path='/vehicles' component={Vehicles} />
@@ -30,7 +32,8 @@ class Routes extends React.Component {
         <Route path='/calendar' component={Calendars} />
         <Route path='/editTrips' component={EditTrips} />
         <Route path='/driversAssign' component={DriversAssign} />
-        <Route path='/404' component={NotFoundPage} />
+        <Route path='/invoice' component={Invoice} />
+        <Route path='/dashboard' component={DashboardPage} />
       </Switch>
     );
   }
