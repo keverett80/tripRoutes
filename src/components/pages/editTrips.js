@@ -140,7 +140,7 @@ this.state = {
 this.handleChange = this.handleChange.bind(this)
   }
   async componentDidMount(){
-    const apiData = await API.graphql(graphqlOperation( listTrips))
+    const apiData = await API.graphql(graphqlOperation( listTrips, { limit: 1000 }))
     this.state.queryData  = apiData.data.listTrips.items;
 
     var myCustomers = [];
@@ -469,7 +469,7 @@ submitTrip = event =>{
 
   };
 
-  API.graphql({ query: mutations.updateTrip, variables: {input: newTrips}}).then(()=>{
+  API.graphql({ query: mutations.updateTrip, variables: {input: newTrips , limit: 1000 }}).then(()=>{
 
 
   this.state.address = ''

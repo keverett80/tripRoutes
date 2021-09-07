@@ -33,7 +33,7 @@ class Calendars extends Component {
 
 
 
-    const apiData = await API.graphql(graphqlOperation(listTrips));
+    const apiData = await API.graphql(graphqlOperation(listTrips, { limit: 1000 }));
 
 
     var myCustomers = [];

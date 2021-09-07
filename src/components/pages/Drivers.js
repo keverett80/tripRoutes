@@ -156,7 +156,7 @@ return;
     };
 
 
-    API.graphql(graphqlOperation( mutations.createEmployee,{input: addEmployee})).then(( )=> {
+    API.graphql(graphqlOperation( mutations.createEmployee,{input: addEmployee , limit: 1000 })).then(( )=> {
       alert('Employee has beed added. ')
        window.location.reload();
     })

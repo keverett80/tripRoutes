@@ -16,6 +16,7 @@ import Links from './pages/links';
 import Calendars from './pages/calendar';
 import EditTrips from './pages/editTrips';
 import Invoice from './pages/invoice';
+import ImportTrips from './pages/import';
 
 class Routes extends React.Component {
   render() {
@@ -33,7 +34,7 @@ class Routes extends React.Component {
         <Route path='/editTrips' component={EditTrips} />
         <Route path='/driversAssign' component={DriversAssign} />
         <Route path='/invoice' component={Invoice} />
-        <Route path='/dashboard' component={DashboardPage} />
+        <Route path='/import' component={ImportTrips} />
       </Switch>
     );
   }

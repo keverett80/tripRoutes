@@ -117,7 +117,7 @@ this.handleRowClick = this.handleRowClick.bind(this)
 
 
 
-    const apiData = await API.graphql(graphqlOperation(listTrips));
+    const apiData = await API.graphql(graphqlOperation(listTrips, { limit: 1000 }));
     this.state.queryData = apiData.data.listTrips.items;
 
     var myCustomers = [];
@@ -168,7 +168,7 @@ return;
     };
 
 
-    API.graphql(graphqlOperation( mutations.updateTrip,{input: updateTrip})).then(( )=> {
+    API.graphql(graphqlOperation( mutations.updateTrip,{input: updateTrip, limit: 1000 })).then(( )=> {
       alert('Trip Updated. ')
        window.location.reload();
     })
