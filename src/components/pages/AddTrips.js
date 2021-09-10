@@ -140,11 +140,11 @@ this.handleChange = this.handleChange.bind(this)
   }
   async componentDidMount(){
     const apiData = await API.graphql(graphqlOperation( listCustomers))
-    this.state.queryData  = apiData.data.listCustomers.items;
+
 
     var myCustomers = [];
     this.getBroker();
-    this.state.queryData.map((customer) => {
+    apiData.data.listCustomers.items.sort(this.sortByTime).map((customer) => {
 
       //console.log(customer.address)
       myCustomers.push({
@@ -172,7 +172,15 @@ this.handleChange = this.handleChange.bind(this)
 
     }
 
-
+    sortByTime =(b, a) => {
+      if (a.createdAt > b.createdAt) {
+          return 1;
+      }
+      if (a.createdAt < b.createdAt) {
+          return -1;
+      }
+      return 0;
+    }
 
 
     getBroker = () =>{

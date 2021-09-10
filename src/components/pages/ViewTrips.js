@@ -11,6 +11,8 @@ class ViewTrips extends React.Component {
   constructor(props) {
     super(props)
 
+    this.forceUpdateHandler = this.forceUpdateHandler.bind(this);
+
   this.state = {
     queryData:'',
     modal: false,
@@ -118,12 +120,12 @@ this.handleRowClick = this.handleRowClick.bind(this)
 
 
     const apiData = await API.graphql(graphqlOperation(listTrips, { limit: 1000 }));
-    this.state.queryData = apiData.data.listTrips.items;
+
 
     var myCustomers = [];
     //console.log(this.state.queryData)
 
-    this.state.queryData.map((customer) => {
+    apiData.data.listTrips.items.sort(this.sortByTime).sort(this.sortByDate).map((customer) => {
 
 
       myCustomers.push({
@@ -162,6 +164,7 @@ alert("Please make a selection. ")
 return;
 
 }
+
     var updateTrip = {
       id: this.state.localData.id,
       status: this.state.status
@@ -169,11 +172,22 @@ return;
 
 
     API.graphql(graphqlOperation( mutations.updateTrip,{input: updateTrip, limit: 1000 })).then(( )=> {
-      alert('Trip Updated. ')
-       window.location.reload();
+      //alert('Trip Updated. ')
+       this.setState({modal: false})
+    this.setState({data: this.state.data})
+       this.forceUpdateHandler();
     })
 
   }
+
+  shouldComponentUpdate(nextProps, nextState) {
+  return this.state.data != nextState.data;
+}
+   forceUpdateHandler(){
+
+
+    this.forceUpdate();
+  };
 
   submit = () => {
 
@@ -233,10 +247,33 @@ handleChange1 = () =>{
     }
 
 
+sortByTime =(b, a) => {
+  if (a.appointmentTime < b.appointmentTime) {
+      return 1;
+  }
+  if (a.appointmentTime > b.appointmentTime) {
+      return -1;
+  }
+  return 0;
+}
+
+sortByDate =(b, a) => {
+  if (a.appointmentDate < b.appointmentDate) {
+      return 1;
+  }
+  if (a.appointmentDate > b.appointmentDate) {
+      return -1;
+  }
+  return 0;
+}
+
+
+
   render() {
   return (
 <MDBContainer>
     <MDBDataTableV5
+     onPageChange={ value => console.log(value) }
 
     hover entriesOptions={[5, 20, 25]}
     entries={10}

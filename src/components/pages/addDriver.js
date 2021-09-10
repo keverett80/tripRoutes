@@ -12,6 +12,7 @@ class AddDriver extends React.Component {
     super(props)
 
   this.state = {
+
     driver:'',
     queryData:'',
     queryEmployee:'',
@@ -129,7 +130,7 @@ this.handleRowClick = this.handleRowClick.bind(this)
     var myCustomers = [];
     //console.log(this.state.queryData)
 
-    this.state.queryData.map((customer) => {
+    this.state.queryData.sort(this.sortByTime).sort(this.sortByDate).map((customer) => {
 
       //console.log(customer.wheelchair)
       myCustomers.push({
@@ -204,8 +205,8 @@ employee: myEmployee
 
 
     API.graphql(graphqlOperation( mutations.updateTrip,{input: updateTrip})).then(( )=> {
-      alert('Updated. ')
-       window.location.reload();
+  alert('Updated. ')
+     //  window.location.reload();
     })
 
   }
@@ -275,6 +276,26 @@ handleChange1 = () =>{
   this.setState({ driver: value});
 
 };
+
+sortByTime =(b, a) => {
+  if (a.appointmentTime < b.appointmentTime) {
+      return 1;
+  }
+  if (a.appointmentTime > b.appointmentTime) {
+      return -1;
+  }
+  return 0;
+}
+
+sortByDate =(b, a) => {
+  if (a.appointmentDate < b.appointmentDate) {
+      return 1;
+  }
+  if (a.appointmentDate > b.appointmentDate) {
+      return -1;
+  }
+  return 0;
+}
 
 
   render() {
