@@ -35,6 +35,7 @@ class Routes extends React.Component {
         <Route path='/driversAssign' component={DriversAssign} />
         <Route path='/invoice' component={Invoice} />
         <Route path='/import' component={ImportTrips} />
+        <Route path='/dash' component={DashboardPage} />
       </Switch>
     );
   }

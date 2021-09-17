@@ -1,22 +1,38 @@
 import React from 'react';
-import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDataTableV5,MDBFormInline, MDBInput } from 'mdbreact';
+import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDataTableV5,MDBFormInline, MDBInput, MDBRow, MDBCol } from 'mdbreact';
 import { API,  graphqlOperation } from "aws-amplify";
 import { listTrips } from '../../graphql/queries';
 import * as mutations from '../../graphql/mutations';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
+const getDaysArray = function(start, end) {
+  for(var arr=[],dt=new Date(start); dt<=end; dt.setDate(dt.getDate()+1)){
+      arr.push(new Date(dt));
+  }
+  return arr;
+};
 
+var today = new Date();
+var dd = String(today.getDate()).padStart(2, '0');
+var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+var yyyy = today.getFullYear();
+
+today = mm + '/' + dd + '/' + yyyy;
 class ViewTrips extends React.Component {
   constructor(props) {
     super(props)
 
-    this.forceUpdateHandler = this.forceUpdateHandler.bind(this);
+
 
   this.state = {
     queryData:'',
     modal: false,
     radio: '',
+    startDate: new Date(),
+    endDate: new Date(),
     data:{
     columns: [
 
@@ -111,11 +127,16 @@ class ViewTrips extends React.Component {
 this.handleRowClick = this.handleRowClick.bind(this)
   }
 
-
-
-
-
   async componentDidMount(){
+
+    this.getData();
+  }
+
+
+
+
+
+ getData = async() =>{
 
 
 
@@ -175,19 +196,13 @@ return;
       //alert('Trip Updated. ')
        this.setState({modal: false})
     this.setState({data: this.state.data})
-       this.forceUpdateHandler();
+    alert('Updated');
+    location.reload()
     })
 
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-  return this.state.data != nextState.data;
-}
-   forceUpdateHandler(){
 
-
-    this.forceUpdate();
-  };
 
   submit = () => {
 
@@ -266,19 +281,62 @@ sortByDate =(b, a) => {
   }
   return 0;
 }
+setStartDate = (value) => {
+  this.setState({
+    startDate: value
+  });
+
+
+
+}
+setEndDate = (value) => {
+  this.setState({
+    endDate: value
+  });
+
+  var result =this.state.data.rows.filter(a => {
+    var date = new Date(a.appointmentDate);
+    return (date >= this.state.startDate && date <= this.state.endDate);
+  });
+  console.log(result)
+
+}
+
 
 
 
   render() {
   return (
 <MDBContainer>
+  <MDBRow className='text-center'>
+  <MDBCol>
+
+</MDBCol>
+  <MDBCol>
+
+</MDBCol>
+
+<MDBCol>
+<DatePicker placeholderText='Start Date' selected={this.state.startDate} onChange={(date) => this.setStartDate(date)} />
+</MDBCol>
+
+<MDBCol>
+<DatePicker placeholderText='End Date' selected={this.state.endDate} onChange={(date) => this.setEndDate(date)} />
+</MDBCol>
+<MDBCol>
+
+</MDBCol>
+<MDBCol>
+
+</MDBCol>
+</MDBRow>
     <MDBDataTableV5
      onPageChange={ value => console.log(value) }
 
     hover entriesOptions={[5, 20, 25]}
     entries={10}
     pagesAmount={4}
-    pagingTop
+
     searchTop
     searchBottom={false}
 

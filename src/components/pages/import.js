@@ -68,11 +68,13 @@ class ImportTrips extends React.Component {
         broker: 'Access2Care',
         notes:data[i].data[7] ? data[i].data[7]: '',
       };
+      try {
+      await API.graphql({ query: mutations.createTrip, variables: {input: tripData, limit: 1000 }})
 
-      await API.graphql({ query: mutations.createTrip, variables: {input: tripData }})
+    } catch (error) {
+      console.error('Failed Adding Data: ' + [i], error);
 
-
-
+    }
 
     }
 

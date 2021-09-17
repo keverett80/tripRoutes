@@ -22,6 +22,7 @@
     "react-big-calendar": "^0.35.0",
     "react-chartjs-2": "^3.0.4",
     "react-confirm-alert": "^2.7.0",
+    "react-datepicker": "^4.2.1",
     "react-dom": "17.0.1",
     "react-helmet": "^6.1.0",
     "react-papaparse": "^3.17.2",

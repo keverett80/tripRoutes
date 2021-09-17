@@ -108,6 +108,7 @@ class TopNavigation extends React.Component {
                 <MDBSideNavItem href='/vehicles'>Add Vehicles</MDBSideNavItem>
                 <MDBSideNavItem href='/brokers'>Add Brokers</MDBSideNavItem>
                 <MDBSideNavItem href='/links'>Business Links</MDBSideNavItem>
+                <MDBSideNavItem href='/dash'>Dashboards</MDBSideNavItem>
               </MDBSideNavCat>
             </MDBSideNavNav>
           </MDBSideNav>
