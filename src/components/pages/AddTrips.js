@@ -2,7 +2,7 @@ import React from "react";
 import { API,  graphqlOperation } from "aws-amplify";
 import * as mutations from '../../graphql/mutations';
 import { listBrokers, listCustomers } from '../../graphql/queries';
-import { MDBContainer, MDBRow, MDBTimePicker, MDBCol, MDBStepper, MDBStep, MDBBtn, MDBInput, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDataTableV5,MDBIcon, MDBDatePicker, MDBSelect  } from "mdbreact";
+import { MDBContainer, MDBRow, MDBTimePicker, MDBCol, MDBStepper, MDBStep, MDBBtn, MDBInput, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDataTableV5,MDBIcon, MDBDatePicker, MDBSelect, MDBTable, MDBTableBody, MDBTableHead  } from "mdbreact";
 import PlacesAutocomplete from 'react-places-autocomplete';
 import {Helmet} from "react-helmet";
 
@@ -27,6 +27,7 @@ class AddTrips extends React.Component {
   constructor(props) {
     super(props)
 this.state = {
+  weekends:'',
   notes: '',
   broker:[],
   brokers:'',
@@ -235,7 +236,9 @@ this.handleChange = this.handleChange.bind(this)
   getCheckValue = value => {
 
     this.setState({ wheelchair: value[0] });
-
+this.setState({
+  price: 0
+});
 
 
   };
@@ -243,6 +246,22 @@ this.handleChange = this.handleChange.bind(this)
 
 
       this.setState({ roundTrip: value[0] });
+      this.setState({
+  price: 0
+});
+
+
+
+
+  };
+
+    getCheck3Value = value => {
+
+this.setState({ weekends: value });
+this.setState({
+  price: 0
+});
+
 
 
 
@@ -338,6 +357,43 @@ this.setState({
  }
 
 
+ calcPrice2 = ()=>{
+
+  if(this.state.wheelchair == 'Wheelchair' && this.state.roundTrip == 'Roundtrip')
+{
+
+this.state.price = (this.state.distance * 3) * 2 + 60
+this.setState({
+  modal: !this.state.modal
+});
+}
+else if(this.state.wheelchair == 'Ambulatory' && this.state.roundTrip == 'One way'){
+
+this.state.price = (this.state.distance * 3) + 15
+this.setState({
+  modal: !this.state.modal
+});
+
+
+}
+else if(this.state.wheelchair == 'Wheelchair' && this.state.roundTrip == 'One way'){
+
+this.state.price = (this.state.distance * 3) + 30
+this.setState({
+  modal: !this.state.modal
+});
+}
+else if(this.state.wheelchair == 'Ambulatory' && this.state.roundTrip == 'Roundtrip'){
+this.state.price = (this.state.distance * 3) * 2 + 30
+this.setState({
+  modal: !this.state.modal
+});
+
+}
+
+ }
+
+
 
 
    calcDistance =()=> {
@@ -363,7 +419,13 @@ this.setState({
      if (status == google.maps.DistanceMatrixStatus.OK && response.rows[0].elements[0].status != "ZERO_RESULTS") {
       mythis.state.distance = Math.round(parseInt(response.rows[0].elements[0].distance.text)/1.609 * 100)/100;
       mythis.state.duration = response.rows[0].elements[0].duration.text;
-      mythis.calcPrice();
+      if(mythis.state.weekends == true)
+      {
+      mythis.calcPrice2();
+      }else{
+
+         mythis.calcPrice();
+      }
 
         } else {
                     alert("Unable to find the distance via road.");
@@ -442,6 +504,14 @@ newCustomer = event =>{
 
 submitTrip = event =>{
   event.preventDefault();
+  if(this.state.price === '' || this.state.price === null || this.state.price === 0)
+  {
+ alert('Please calculate total. ')
+
+ return;
+
+
+  }
 
   const newTrips = {
     fname: this.state.fname,
@@ -455,10 +525,12 @@ submitTrip = event =>{
     year: 'numeric'}),
     status: this.state.status,
     phoneNumber: this.state.phone,
-    cost: this.state.price,
+    cost: Math.round(this.state.price * 100)/100,
     driver: '',
     broker: this.state.brokers[0],
     notes: this.state.notes,
+    distance: (this.state.roundTrip === 'Roundtrip') ? this.state.distance * 2 : this.state.distance,
+    trip: '1',
 
 
   };
@@ -503,10 +575,12 @@ submitTripRound = () =>{
     year: 'numeric'}),
     status: this.state.status,
     phoneNumber: this.state.phone,
-    cost: this.state.price,
+    cost: Math.round(this.state.price * 100)/100,
     driver: '',
     broker: this.state.brokers[0],
     notes: this.state.notes,
+    distance: (this.state.roundTrip === 'Roundtrip') ? this.state.distance * 2 : this.state.distance,
+    trip: '2',
 
 
   };
@@ -519,12 +593,9 @@ submitTripRound = () =>{
 } );
 
 
-
-
-
-
-
 }
+
+
 
 
 render() {
@@ -546,7 +617,8 @@ render() {
         <MDBStep far icon="address-card" stepName="Basic Information" onClick={this.swapFormActive(1)(1)}></MDBStep>
         <MDBStep  icon="map-marked" stepName="Personal Data" onClick={this.swapFormActive(1)(2)}></MDBStep>
         <MDBStep  icon="map-marked-alt" stepName="Terms and Conditions" onClick={this.swapFormActive(1)(3)}></MDBStep>
-        <MDBStep icon="check" stepName="Finish" onClick={this.swapFormActive(1)(4)}></MDBStep>
+        <MDBStep icon="table" stepName="Trip" onClick={this.swapFormActive(1)(4)}></MDBStep>
+        <MDBStep icon="check" stepName="Finish" onClick={this.swapFormActive(1)(5)}></MDBStep>
       </MDBStepper>
 
 
@@ -669,7 +741,7 @@ render() {
           (<MDBCol md="12">
 
             <h2 className="text-center font-weight-bold my-4">Trip Details</h2>
-
+< MDBInput label="Weekend/After Hours"  type="checkbox" id="checkbox2" checked={this.state.weekends} getValue={this.getCheck3Value} />
       <MDBSelect
           options={this.state.optionsTrip}
           selected="Choose trip type"
@@ -684,9 +756,10 @@ render() {
           value={this.state.wheelchair} getValue={this.getCheckValue}
         />
 
+
 <div className='text-center red-text'>  <label htmlFor="formGroupExampleInput">Appointment Date</label>
 
-<MDBDatePicker inline id="datePicker" value={this.state.appointmentDate}  getValue={this.getPickerDateValue} />
+<MDBDatePicker id="datePicker" value={this.state.appointmentDate}  getValue={this.getPickerDateValue} />
 </div>
 
             <MDBInput label='Appointment Time' type='time' id="timePicker" value={this.state.appointmentTime}    getValue={this.getPickerValue} />
@@ -702,14 +775,36 @@ render() {
 
 
             <MDBBtn color="mdb-color" rounded className="float-left" onClick={this.handleNextPrevClick(1)(3)}>previous</MDBBtn>
-            <MDBBtn color="mdb-color" rounded className="float-right" onClick={this.handleNextPrevClick(1)(5)}>Next</MDBBtn>
+            <MDBBtn color="mdb-color" rounded className="float-right"  onClick={this.handleNextPrevClick(1)(5)} >Next</MDBBtn>
           </MDBCol>)}
 
           {this.state.formActivePanel1 == 5 &&
           (<MDBCol md="12">
 
             <h2 className="text-center font-weight-bold my-4">Trip Summary</h2>
-            <div className="text-center"><MDBBtn color="primary" rounded  onClick={this.toggle}><MDBIcon icon="info" /> Trip Details</MDBBtn></div>
+            <div className="text-center"><MDBBtn color="primary" rounded  onClick={this.toggle}><MDBIcon icon="info" /> Calculate</MDBBtn></div>
+                <MDBTable>
+      <MDBTableHead>
+        <tr>
+          <th>#</th>
+          <th>Address</th>
+          <th>Destination Address</th>
+
+          <th>Est Total Miles</th>
+          <th>Est Total Cost</th>
+        </tr>
+      </MDBTableHead>
+      <MDBTableBody>
+        <tr>
+          <td>1</td>
+          <td>{this.state.address}</td>
+          <td>{this.state.address2}</td>
+          <td>{(this.state.roundTrip === 'Roundtrip') ? this.state.distance * 2 : this.state.distance}</td>
+          <td>{ Math.round(this.state.price * 100)/100}</td>
+        </tr>
+
+      </MDBTableBody>
+    </MDBTable>
             <MDBBtn color="mdb-color" rounded className="float-left" onClick={this.handleNextPrevClick(1)(4)}>previous</MDBBtn>
             <MDBBtn color="success" rounded className="float-right" onClick={this.submitTrip}>submit</MDBBtn>
           </MDBCol>)}
@@ -723,8 +818,8 @@ render() {
         <h4 className="my-4">Details:<div className='red-text'> {this.state.address}</div></h4>
             <h4 className="my-4 ">Destination Address:<div className='red-text'> {this.state.address2}</div></h4>
             <h4 className="my-4">Est Time: <div className='red-text'>{this.state.duration}</div></h4>
-            <h4 className="my-4">Est Miles: <div className='red-text'>{this.state.distance}</div></h4>
-            <h4 className="my-4">Est Cost: <div className='red-text'>${this.state.price}</div></h4>
+            <h4 className="my-4">Est Miles: <div className='red-text'>{(this.state.roundTrip === 'Roundtrip') ? this.state.distance * 2 : this.state.distance}</div></h4>
+            <h4 className="my-4">Est Cost: <div className='red-text'>${ Math.round(this.state.price * 100)/100}</div></h4>
         </MDBModalBody>
         <MDBModalFooter>
           <MDBBtn rounded color="primary" onClick={this.toggle}>Close</MDBBtn>
@@ -760,7 +855,7 @@ render() {
                 const className = suggestion.active
                   ? 'suggestion-item--active'
                   : 'suggestion-item';
-                // inline style for demonstration purpose
+                //inline style for demonstration purpose
                 const style = suggestion.active
                   ? { backgroundColor: '#fafafa', cursor: 'pointer' }
                   : { backgroundColor: '#ffffff', cursor: 'pointer' };

@@ -4,7 +4,7 @@ import easyinvoice from 'easyinvoice';
 import { API,  graphqlOperation } from "aws-amplify";
 import {Helmet} from "react-helmet";
 import * as mutations from '../../graphql/mutations';
-import { listBrokers, listCustomers, listTrips } from '../../graphql/queries';
+import { listBrokers, listCustomers, listTrips, listInvoices } from '../../graphql/queries';
 import { MDBContainer, MDBRow, MDBTimePicker, MDBCol, MDBStepper, MDBStep, MDBBtn, MDBInput, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDataTableV5,MDBIcon, MDBDatePicker, MDBSelect, MDBCard, MDBCardBody  } from "mdbreact";
 import myLogo from '../../assets/logo.png'
 import './invoice.css'
@@ -68,6 +68,7 @@ class Invoice extends React.Component {
 
          ],
        customers: {
+
          columns: [
            {
              label: 'ID',
@@ -76,26 +77,26 @@ class Invoice extends React.Component {
              width: 150,
            },
            {
-             label: 'First Name',
-             field: 'fname',
+             label: 'PO Number',
+             field: 'poNumber',
              sort: 'asc',
              width: 150,
            },
            {
-             label: 'Last Name',
-             field: 'lname',
+             label: 'Name',
+             field: 'name',
              sort: 'asc',
              width: 150,
            },
            {
-             label: 'Appointment Time',
-             field: 'appointmentTime',
+             label: 'Cost',
+             field: 'cost',
              sort: 'asc',
              width: 150,
            },
            {
              label: 'Appointment Date',
-             field: 'appointmentDate',
+             field: 'date',
              sort: 'asc',
              width: 150,
            },
@@ -121,34 +122,27 @@ class Invoice extends React.Component {
 }
 
   async componentDidMount(){
-    const apiData = await API.graphql(graphqlOperation( listTrips))
-    this.state.queryData  = apiData.data.listTrips.items;
+    const apiData = await API.graphql(graphqlOperation( listInvoices , { limit: 1000 }))
+    this.state.queryData  = apiData.data.listInvoices.items;
 
     var myCustomers = [];
 
-    this.state.queryData.sort(this.sortByDate).filter(trip => trip.status.includes('pending')).map((customer) => {
+    this.state.queryData.sort(this.sortByDate).map((customer) => {
 
       //console.log(customer.address)
       if(customer.appointmentTime !== 'Will Call')
       {
       myCustomers.push({
-
         id: customer.id,
-        fname: customer.fname,
-        lname: customer.lname,
-        address: customer.address,
-        address2: customer.address2,
-        wheelchair: customer.wheelchair,
-        roundtrip: customer.roundtrip,
-        driver: customer.driver,
-        appointmentDate: customer.appointmentDate.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
-        year: 'numeric'}),
-        appointmentTime: customer.appointmentTime,
-        status:customer.status,
-        phone: customer.phoneNumber,
-        broker: customer.broker,
-        notes: customer.notes,
-        price: customer.cost,
+
+     poNumber: customer.poNumber,
+name: customer.name,
+broker: customer.broker,
+date: customer.date,
+product: customer.product,
+cost: customer.cost,
+distance: customer.distance,
+address: customer.address,
         clickEvent: (data) => this.handleRowClick(data),
         button: <MDBBtn outline rounded>Select</MDBBtn>
 
@@ -167,10 +161,10 @@ class Invoice extends React.Component {
     }
 
     sortByDate = (b, a)=> {
-      if (a.appointmentDate < b.appointmentDate) {
+      if (a.date < b.date) {
           return 1;
       }
-      if (a.appointmentDate > b.appointmentDate) {
+      if (a.date > b.date) {
           return -1;
       }
       return 0;
@@ -218,7 +212,7 @@ class Invoice extends React.Component {
   }
   async renderInvoice(){
      //See documentation for all data properties
-     document.getElementById("pdf").innerHTML = "loading...";
+     document.getElementById("pdf").innerHTML = "Loading...";
      const data = this.generateInvoice();
      const result = await easyinvoice.createInvoice(data);
      easyinvoice.render('pdf', result.pdf);
@@ -226,23 +220,14 @@ class Invoice extends React.Component {
 
   handleRowClick = (data) =>
   {
-   this.state.dataId = data.id
-    this.state.fname = data.fname;
-    this.state.lname = data.lname;
-    this.state.phone = data.phone;
-    this.state.email = data.email;
-    this.state.address = data.address;
-    this.state.address2 = data.address2;
-    this.state.wheelchair =  data.wheelchair
-    this.state.roundTrip =  data.roundtrip
-    this.state.driver =  data.driver
-    this.state.appointmentDate =  new Date(data.appointmentDate)
-    this.state.price = data.price
-    this.state.appointmentTime = data.appointmentTime
-    this.state.status =  data.status
-    this.state.phone = data.phone
-    this.state.brokers = data.broker
-    this.state.notes = data.notes
+ this.state.poNumber = data.poNumber
+this.state.name= data.name
+this.state.broker = data.broker
+this.state.date = data.date
+this.state.product = data.product
+this.state.cost = data.cost
+this.state.distance = data.distance
+this.state.address = data.address
 
    //console.log(data)
   }
@@ -380,7 +365,6 @@ class Invoice extends React.Component {
     var city = locationArr[1];
     var zip = locationArr[2]; // 10024
     var state = locationArr[3];
-    var invoiceNumber = this.state.dataId.split('-')[0]
 
   return {
     //"documentTitle": "RECEIPT", //Defaults to INVOICE
@@ -409,7 +393,7 @@ class Invoice extends React.Component {
       //"custom3": "custom value 3"
     },
     "client": {
-      "company": this.state.brokers,
+      "company": this.state.broker,
       "address": streetAddress,
       "city": city,
       "zip": zip,
@@ -418,15 +402,15 @@ class Invoice extends React.Component {
       //"custom2": "custom value 2",
       //"custom3": "custom value 3"
     },
-    "invoiceNumber": invoiceNumber,
-    "invoiceDate": this.state.appointmentDate.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
-    year: 'numeric'}),
+    "invoiceNumber": this.state.poNumber,
+    "invoiceDate": this.state.date,
     "products": [
         {
             "quantity": '1',
-            "description": this.state.wheelchair + " Transportation",
+            "description": this.state.product + ' ' + this.state.distance + 'mi',
+
             "tax": 0,
-            "price": this.state.price
+            "price": this.state.cost
         }
     ],
     "bottomNotice": "Five G Services LLC",

@@ -40,6 +40,9 @@ type Trip @model {
   driver:String
   broker:String
   notes: String
+  distance: String
+  trip: String
+  afterHours: String
 
 }
 
@@ -52,5 +55,21 @@ type Broker @model {
   ambRate: String
 }
 
+
+type Invoice @model {
+
+id: ID!
+poNumber: String
+name: String
+broker: String
+date: String
+product: String
+cost: String
+distance: String
+address: String
+
+
+
+}
 
 

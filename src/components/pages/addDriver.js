@@ -206,7 +206,7 @@ employee: myEmployee
 
     API.graphql(graphqlOperation( mutations.updateTrip,{input: updateTrip})).then(( )=> {
   alert('Updated. ')
-     //  window.location.reload();
+      window.location.reload();
     })
 
   }

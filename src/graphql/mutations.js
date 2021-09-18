@@ -169,6 +169,8 @@ export const createTrip = /* GraphQL */ `
       driver
       broker
       notes
+      distance
+      trip
       createdAt
       updatedAt
     }
@@ -195,6 +197,8 @@ export const updateTrip = /* GraphQL */ `
       driver
       broker
       notes
+      distance
+      trip
       createdAt
       updatedAt
     }
@@ -221,6 +225,8 @@ export const deleteTrip = /* GraphQL */ `
       driver
       broker
       notes
+      distance
+      trip
       createdAt
       updatedAt
     }
@@ -272,6 +278,66 @@ export const deleteBroker = /* GraphQL */ `
       email
       wcRate
       ambRate
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createInvoice = /* GraphQL */ `
+  mutation CreateInvoice(
+    $input: CreateInvoiceInput!
+    $condition: ModelInvoiceConditionInput
+  ) {
+    createInvoice(input: $input, condition: $condition) {
+      id
+      poNumber
+      name
+      broker
+      date
+      product
+      cost
+      distance
+      address
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateInvoice = /* GraphQL */ `
+  mutation UpdateInvoice(
+    $input: UpdateInvoiceInput!
+    $condition: ModelInvoiceConditionInput
+  ) {
+    updateInvoice(input: $input, condition: $condition) {
+      id
+      poNumber
+      name
+      broker
+      date
+      product
+      cost
+      distance
+      address
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteInvoice = /* GraphQL */ `
+  mutation DeleteInvoice(
+    $input: DeleteInvoiceInput!
+    $condition: ModelInvoiceConditionInput
+  ) {
+    deleteInvoice(input: $input, condition: $condition) {
+      id
+      poNumber
+      name
+      broker
+      date
+      product
+      cost
+      distance
+      address
       createdAt
       updatedAt
     }

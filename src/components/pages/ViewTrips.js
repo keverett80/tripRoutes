@@ -1,7 +1,7 @@
 import React from 'react';
 import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDataTableV5,MDBFormInline, MDBInput, MDBRow, MDBCol } from 'mdbreact';
 import { API,  graphqlOperation } from "aws-amplify";
-import { listTrips } from '../../graphql/queries';
+import { listTrips, listInvoice } from '../../graphql/queries';
 import * as mutations from '../../graphql/mutations';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
@@ -28,11 +28,12 @@ class ViewTrips extends React.Component {
 
 
   this.state = {
+    myPo: '',
     queryData:'',
     modal: false,
     radio: '',
-    startDate: new Date(),
-    endDate: new Date(),
+    startDate: new Date(today),
+    endDate: new Date(today),
     data:{
     columns: [
 
@@ -146,7 +147,7 @@ this.handleRowClick = this.handleRowClick.bind(this)
     var myCustomers = [];
     //console.log(this.state.queryData)
 
-    apiData.data.listTrips.items.sort(this.sortByTime).sort(this.sortByDate).map((customer) => {
+    apiData.data.listTrips.items.sort(this.sortByTime).sort(this.sortByDate).filter(trip => trip.status.includes('pending')).map((customer) => {
 
 
       myCustomers.push({
@@ -159,10 +160,13 @@ this.handleRowClick = this.handleRowClick.bind(this)
       wheelchair: customer.wheelchair,
       roundtrip: customer.roundtrip,
       driver: customer.driver,
-      appointmentDate: customer.appointmentDate.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
-      year: 'numeric'}),
+      appointmentDate: customer.appointmentDate,
       appointmentTime: customer.appointmentTime,
       status:customer.status,
+      cost: customer.cost,
+      broker:customer.broker,
+      distance: customer.distance,
+      trip: customer.trip,
       clickEvent: (data) => this.toggle(data),
       button: <MDBBtn color='danger'  outline rounded>Status</MDBBtn>
 
@@ -196,9 +200,45 @@ return;
       //alert('Trip Updated. ')
        this.setState({modal: false})
     this.setState({data: this.state.data})
+    if(this.state.status === "complete" && this.state.localData.trip === '1')
+    {
+this.generateInvoice(this.state.localData);
+    }
+    else{
     alert('Updated');
     location.reload()
+    }
     })
+
+  }
+
+  generateInvoice = async (data) =>{
+
+   var invoiceNumber = data.id.split('-')[0]
+
+console.log(data);
+const invoiceDetails = {
+poNumber: invoiceNumber,
+name: data.fname + ' ' + data.lname,
+broker: data.broker,
+date: data.appointmentDate,
+product: data.roundtrip + ' ' + data.wheelchair,
+cost: data.cost,
+distance: data.distance,
+address: data.address,
+};
+
+const newInvoice = await API.graphql({ query: mutations.createInvoice, variables: {input: invoiceDetails}}).then(( )=> {
+
+ alert('Updated');
+    location.reload()
+
+})
+
+
+
+
+
 
   }
 
@@ -286,7 +326,20 @@ setStartDate = (value) => {
     startDate: value
   });
 
+  var result =this.state.data.rows.filter(a => {
+    var date = new Date(a.appointmentDate);
+    return (date >= this.state.startDate && date <= this.state.endDate);
+  });
+  console.log(result)
 
+  this.setState({
+    data: {
+      ...this.state.data, // merge with the original `state.items`
+      rows: this.state.data.rows.concat(result)
+    }
+  });
+
+  this.getData();
 
 }
 setEndDate = (value) => {
@@ -299,6 +352,13 @@ setEndDate = (value) => {
     return (date >= this.state.startDate && date <= this.state.endDate);
   });
   console.log(result)
+  this.setState({
+    data: {
+      ...this.state.data, // merge with the original `state.items`
+      rows: this.state.data.rows.concat(result)
+    }
+  });
+  this.getData();
 
 }
 

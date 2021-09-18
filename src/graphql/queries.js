@@ -120,6 +120,8 @@ export const getTrip = /* GraphQL */ `
       driver
       broker
       notes
+      distance
+      trip
       createdAt
       updatedAt
     }
@@ -148,6 +150,8 @@ export const listTrips = /* GraphQL */ `
         driver
         broker
         notes
+        distance
+        trip
         createdAt
         updatedAt
       }
@@ -183,6 +187,47 @@ export const listBrokers = /* GraphQL */ `
         email
         wcRate
         ambRate
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getInvoice = /* GraphQL */ `
+  query GetInvoice($id: ID!) {
+    getInvoice(id: $id) {
+      id
+      poNumber
+      name
+      broker
+      date
+      product
+      cost
+      distance
+      address
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listInvoices = /* GraphQL */ `
+  query ListInvoices(
+    $filter: ModelInvoiceFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listInvoices(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        poNumber
+        name
+        broker
+        date
+        product
+        cost
+        distance
+        address
         createdAt
         updatedAt
       }

@@ -139,6 +139,8 @@ export const onCreateTrip = /* GraphQL */ `
       driver
       broker
       notes
+      distance
+      trip
       createdAt
       updatedAt
     }
@@ -162,6 +164,8 @@ export const onUpdateTrip = /* GraphQL */ `
       driver
       broker
       notes
+      distance
+      trip
       createdAt
       updatedAt
     }
@@ -185,6 +189,8 @@ export const onDeleteTrip = /* GraphQL */ `
       driver
       broker
       notes
+      distance
+      trip
       createdAt
       updatedAt
     }
@@ -227,6 +233,57 @@ export const onDeleteBroker = /* GraphQL */ `
       email
       wcRate
       ambRate
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateInvoice = /* GraphQL */ `
+  subscription OnCreateInvoice {
+    onCreateInvoice {
+      id
+      poNumber
+      name
+      broker
+      date
+      product
+      cost
+      distance
+      address
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateInvoice = /* GraphQL */ `
+  subscription OnUpdateInvoice {
+    onUpdateInvoice {
+      id
+      poNumber
+      name
+      broker
+      date
+      product
+      cost
+      distance
+      address
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteInvoice = /* GraphQL */ `
+  subscription OnDeleteInvoice {
+    onDeleteInvoice {
+      id
+      poNumber
+      name
+      broker
+      date
+      product
+      cost
+      distance
+      address
       createdAt
       updatedAt
     }

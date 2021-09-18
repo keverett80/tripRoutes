@@ -3,7 +3,7 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import { API,  graphqlOperation } from "aws-amplify";
 import { listTrips } from '../../graphql/queries';
-import { MDBIcon } from "mdbreact";
+import { MDBIcon, MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter,MDBTable, MDBTableBody, MDBTableHead  } from "mdbreact";
 
 import "./calendar.css";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -12,9 +12,12 @@ const localizer = momentLocalizer(moment);
 
 class Calendars extends Component {
   state = {
+     modal: false,
+      address: '',
+      address2: '',
+      customer: '',
+     phoneNumber:'',
     events: [
-
-
 
     ]
   };
@@ -54,7 +57,8 @@ if(customer.wheelchair == 'Wheelchair')
           end: new Date(customer.appointmentDate.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
           year: 'numeric'})),
 
-          allday: 'yes'
+          allday: 'yes',
+          name: customer
           });
 
 
@@ -68,6 +72,7 @@ if(customer.wheelchair == 'Wheelchair')
       year: 'numeric'})),
       end: new Date(customer.appointmentDate.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
       year: 'numeric'})),
+       name: customer
 
 
       });
@@ -82,7 +87,19 @@ if(customer.wheelchair == 'Wheelchair')
 
   });
   }
+toggle = (data) => {
 
+  console.log(data)
+this.setState({ address: data.address});
+this.setState({ address2: data.address2});
+this.setState({ phoneNumber: data.phoneNumber});
+this.setState({ customer: data.fname +  ' ' + data.lname});
+
+  this.setState({
+    modal: !this.state.modal
+  });
+
+}
 
   render() {
     return (
@@ -92,6 +109,7 @@ if(customer.wheelchair == 'Wheelchair')
           popup={true}
           defaultDate={new Date()}
           defaultView="month"
+            onSelectEvent={events => this.toggle(events.name)}
           events={this.state.events}
           style={{ height: "100vh" }}
           eventPropGetter={(event) => {
@@ -99,6 +117,37 @@ if(customer.wheelchair == 'Wheelchair')
             return { style: { backgroundColor } }
           }}
         />
+
+
+      <MDBModal isOpen={this.state.modal} toggle={this.toggle}>
+        <MDBModalHeader toggle={this.toggle}>{this.state.customer}</MDBModalHeader>
+        <MDBModalBody>
+         <MDBTable>
+      <MDBTableHead>
+        <tr>
+          <th>#</th>
+          <th>Pickup Address</th>
+          <th>Destination Address</th>
+          <th>Phone Number</th>
+
+        </tr>
+      </MDBTableHead>
+      <MDBTableBody>
+        <tr>
+          <td>1</td>
+          <td>{this.state.address}</td>
+          <td>{this.state.address2}</td>
+          <td>{this.state.phoneNumber}</td>
+        </tr>
+
+      </MDBTableBody>
+    </MDBTable>
+        </MDBModalBody>
+        <MDBModalFooter>
+          <MDBBtn color="primary" rounded onClick={this.toggle}>Close</MDBBtn>
+
+        </MDBModalFooter>
+      </MDBModal>
       </div>
     );
   }
