@@ -130,6 +130,12 @@ class TopNavigation extends React.Component {
 
             </MDBNavbarNav>
             <MDBNavbarNav right style={specialCaseNavbarStyles}>
+            <MDBNavItem>
+                <MDBNavLink to="/calendar">
+                  <MDBIcon icon="calendar" className="d-inline-inline" />{" "}
+                  <div className="d-none d-md-inline">Calendar</div>
+                </MDBNavLink>
+              </MDBNavItem>
 
               <MDBNavItem>
                 <MDBNavLink to="#!">

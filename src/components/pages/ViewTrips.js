@@ -368,28 +368,7 @@ setEndDate = (value) => {
   render() {
   return (
 <MDBContainer>
-  <MDBRow className='text-center'>
-  <MDBCol>
 
-</MDBCol>
-  <MDBCol>
-
-</MDBCol>
-
-<MDBCol>
-<DatePicker placeholderText='Start Date' selected={this.state.startDate} onChange={(date) => this.setStartDate(date)} />
-</MDBCol>
-
-<MDBCol>
-<DatePicker placeholderText='End Date' selected={this.state.endDate} onChange={(date) => this.setEndDate(date)} />
-</MDBCol>
-<MDBCol>
-
-</MDBCol>
-<MDBCol>
-
-</MDBCol>
-</MDBRow>
     <MDBDataTableV5
      onPageChange={ value => console.log(value) }
 
