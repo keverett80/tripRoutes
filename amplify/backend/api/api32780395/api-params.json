@@ -1,0 +1,35 @@
+{
+  "paths": [
+    {
+      "name": "/items",
+      "lambdaFunction": "tranportab1a7f3a",
+      "privacy": {
+        "open": true
+      },
+      "policyResourceName": "/items"
+    }
+  ],
+  "resourceName": "api32780395",
+  "apiName": "api32780395",
+  "functionArns": [
+    {
+      "lambdaFunction": "tranportab1a7f3a"
+    }
+  ],
+  "privacy": {
+    "auth": 0,
+    "unauth": 0,
+    "authRoleName": "amplify-tranport-dev-155233-authRole",
+    "unAuthRoleName": "amplify-tranport-dev-155233-unauthRole"
+  },
+  "dependsOn": [
+    {
+      "category": "function",
+      "resourceName": "tranportab1a7f3a",
+      "attributes": [
+        "Name",
+        "Arn"
+      ]
+    }
+  ]
+}

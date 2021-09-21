@@ -544,6 +544,7 @@ submitTrip = event =>{
     }
     else{
   this.state.address = ''
+  this.sendText();
   alert('New Trip Added! ')
   window.location.reload();
     }
@@ -587,6 +588,7 @@ submitTripRound = () =>{
 
   API.graphql({ query: mutations.createTrip, variables: {input: newTrips}}).then(()=>{
   this.state.address = ''
+  this.sendText();
   alert('New Trip Added! ')
   window.location.reload();
 
@@ -595,7 +597,12 @@ submitTripRound = () =>{
 
 }
 
+sendText = _ => {
 
+  fetch(`https://vsji3ei487.execute-api.us-east-2.amazonaws.com/dev/items?recipient=${this.state.phone}&textmessage=Transportation has been scheduled with Five G Transportation. Date: ${this.state.appointmentDate.toLocaleString('en-US', {   month: '2-digit', day: '2-digit' ,
+  year: 'numeric'})} Time: ${this.state.appointmentTime}`)
+  .catch(err => console.error(err))
+}
 
 
 render() {

@@ -14,6 +14,12 @@
     "categories": {
       "auth": {
         "tranport743f50b7": {}
+      },
+      "function": {
+        "tranportab1a7f3a": {
+          "deploymentBucketName": "amplify-tranport-dev-155233-deployment",
+          "s3Key": "amplify-builds/tranportab1a7f3a-444345757444496a6243-build.zip"
+        }
       }
     }
   }
