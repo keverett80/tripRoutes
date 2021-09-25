@@ -35,7 +35,9 @@ class ViewTrips extends React.Component {
       {
         label: 'First Name',
         field: 'fname',
+        sort: 'asc',
         width: 100,
+
 
       },
       {
@@ -85,7 +87,7 @@ this.handleRowClick = this.handleRowClick.bind(this)
     var myCustomers = [];
     //console.log(this.state.queryData)
 
-    this.state.queryData.map((customer) => {
+    this.state.queryData.sort(this.sortByName).map((customer) => {
 
 
       myCustomers.push({
@@ -108,6 +110,17 @@ this.handleRowClick = this.handleRowClick.bind(this)
     }
   });
   }
+
+
+sortByName =(b, a) => {
+  if (a.fname < b.fname) {
+      return 1;
+  }
+  if (a.fname > b.fname) {
+      return -1;
+  }
+  return 0;
+}
 
   formatPhoneNumber = (phoneNumberString) => {
     var cleaned = ('' + phoneNumberString).replace(/\D/g, '');
@@ -238,6 +251,7 @@ calculateAutofocus = (a) => {
     noBottomColumns
     order={['status', 'asc' ]}
    data={this.state.data}
+   sortRows={["fname"] }
 />
 
 <MDBModal isOpen={this.state.modal} toggle={this.toggle}>

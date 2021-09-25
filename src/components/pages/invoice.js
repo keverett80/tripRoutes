@@ -5,7 +5,7 @@ import { API,  graphqlOperation } from "aws-amplify";
 import {Helmet} from "react-helmet";
 import * as mutations from '../../graphql/mutations';
 import { listBrokers, listCustomers, listTrips, listInvoices } from '../../graphql/queries';
-import { MDBContainer, MDBRow, MDBCol, MDBStepper, MDBStep, MDBBtn, MDBInput, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDataTableV5,MDBIcon, MDBDatePicker, MDBSelect, MDBCard, MDBCardBody  } from "mdbreact";
+import { MDBContainer, MDBRow, MDBCol, MDBStepper, MDBStep, MDBBtn,  MDBTable, MDBTableBody, MDBTableHead , MDBDataTableV5,MDBIcon, MDBDatePicker, MDBSelect, MDBCard, MDBCardBody  } from "mdbreact";
 import myLogo from '../../assets/logo.png'
 import './invoice.css'
 import { confirmAlert } from 'react-confirm-alert'; // Import
@@ -381,9 +381,28 @@ this.state.address = data.address
               )}
               {this.state.formActivePanel1 === 3 && (
               <MDBCol md="12">
+<MDBTable>
+      <MDBTableHead color="blue-gradient" textWhite>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>PO #</th>
+          <th>Amount</th>
+        </tr>
+      </MDBTableHead>
+      <MDBTableBody>
+        <tr>
+          <td>1</td>
+          <td>{this.state.name}</td>
+          <td>{this.state.poNumber}</td>
+          <td>{this.state.cost}</td>
+        </tr>
 
+      </MDBTableBody>
+    </MDBTable>
 
 <div className='text-center'>
+
         <MDBBtn tag="a" size="lg" floating gradient="blue" onClick={()=>this.downloadInvoice()}>
         <MDBIcon icon="download" />
       </MDBBtn>
