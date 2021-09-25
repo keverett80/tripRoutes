@@ -148,9 +148,10 @@ this.handleRowClick = this.handleRowClick.bind(this)
     var myCustomers = [];
     //console.log(this.state.queryData)
 
-    apiData.data.listTrips.items.sort(this.sortByTime).sort(this.sortByDate).filter(trip => trip.status.includes('pending')).map((customer) => {
+    apiData.data.listTrips.items.sort(this.sortByTime).sort(this.sortByDate).map((customer) => {
 
-
+      if(customer.status !== 'pending' )
+      {
       myCustomers.push({
       id: customer.id,
       fname: customer.fname,
@@ -172,8 +173,10 @@ this.handleRowClick = this.handleRowClick.bind(this)
       button: <MDBBtn color='danger'  outline rounded>Status</MDBBtn>
 
       });
+    }
 
   })
+
   this.setState({
     data: {
       ...this.state.data, // merge with the original `state.items`
