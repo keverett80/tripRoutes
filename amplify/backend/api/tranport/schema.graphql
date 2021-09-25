@@ -67,6 +67,7 @@ product: String
 cost: String
 distance: String
 address: String
+status: String
 
 
 

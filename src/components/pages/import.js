@@ -94,6 +94,7 @@ class ImportTrips extends React.Component {
 
 }
 
+
 handleOnError = (err, file, inputElem, reason) => {
   console.log(err)
   location.reload();
@@ -123,6 +124,7 @@ render() {
 
               <h3 className="text-center">
               <strong>Import Trips</strong></h3>
+
               <CSVReader
         onDrop={this.handleOnDrop}
         onError={this.handleOnError}

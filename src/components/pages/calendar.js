@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import { API,  graphqlOperation } from "aws-amplify";
+import * as mutations from '../../graphql/mutations';
 import { listTrips } from '../../graphql/queries';
-import { MDBIcon, MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter,MDBTable, MDBTableBody, MDBTableHead  } from "mdbreact";
+import { MDBInput, MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter,MDBTable, MDBTableBody, MDBTableHead, MDBFormInline  } from "mdbreact";
 
 import "./calendar.css";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -17,6 +18,10 @@ class Calendars extends Component {
       address2: '',
       customer: '',
      phoneNumber:'',
+     radio: '',
+     status: '',
+     localData:[],
+     cost:'',
     events: [
 
     ]
@@ -44,7 +49,7 @@ class Calendars extends Component {
 
     apiData.data.listTrips.items.sort(this.sortByTime).filter(trip => trip.status.includes('pending')).map((customer) => {
 
-if(customer.appointmentTime !== 'Will Call'){
+
 if(customer.wheelchair == 'Wheelchair')
       {
 
@@ -77,7 +82,7 @@ if(customer.wheelchair == 'Wheelchair')
 
       });
     }
-  }
+
 
   })
   this.setState({
@@ -89,17 +94,109 @@ if(customer.wheelchair == 'Wheelchair')
   }
 toggle = (data) => {
 
+  if(data){
+
   console.log(data)
+  this.setState({localData:data});
 this.setState({ address: data.address});
 this.setState({ address2: data.address2});
 this.setState({ phoneNumber: data.phoneNumber});
 this.setState({ customer: data.fname +  ' ' + data.lname});
+this.setState({ cost: data.cost});
+  }
 
   this.setState({
     modal: !this.state.modal
   });
 
 }
+
+onClick = nr => () => {
+  this.setState({
+    radio: nr
+  });
+};
+
+handleChange = () =>{
+
+  this.setState({
+    status: 'pending'
+  });
+}
+handleChange1 = () =>{
+
+  this.setState({
+    status: 'complete'
+  });
+  }
+
+  handleChange2 = () =>{
+
+    this.setState({
+      status: 'canceled'
+    });
+    }
+
+
+    handleRowClick  = () =>{
+      if(this.state.radio == "")
+      {
+      alert("Please make a selection. ")
+      return;
+
+      }
+
+          var updateTrip = {
+            id: this.state.localData.id,
+            status: this.state.status
+          };
+
+
+          API.graphql(graphqlOperation( mutations.updateTrip,{input: updateTrip, limit: 1000 })).then(( )=> {
+            //alert('Trip Updated. ')
+             this.setState({modal: false})
+          this.setState({data: this.state.data})
+          if(this.state.status === "complete" && this.state.localData.trip === '1')
+          {
+      this.generateInvoice(this.state.localData);
+          }
+          else{
+          alert('Updated');
+          location.reload()
+          }
+          })
+
+        }
+
+        generateInvoice = async (data) =>{
+
+         var invoiceNumber = data.id.split('-')[0]
+
+      console.log(data);
+      const invoiceDetails = {
+      poNumber: invoiceNumber,
+      name: data.fname + ' ' + data.lname,
+      broker: data.broker,
+      date: data.appointmentDate,
+      product: data.roundtrip + ' ' + data.wheelchair,
+      cost: data.cost,
+      distance: data.distance,
+      address: data.address,
+      };
+
+      const newInvoice = await API.graphql({ query: mutations.createInvoice, variables: {input: invoiceDetails}}).then(( )=> {
+
+       alert('Updated');
+          location.reload()
+
+      })
+
+
+
+
+
+
+        }
 
   render() {
     return (
@@ -129,6 +226,7 @@ this.setState({ customer: data.fname +  ' ' + data.lname});
           <th>Pickup Address</th>
           <th>Destination Address</th>
           <th>Phone Number</th>
+          <th>Cost</th>
 
         </tr>
       </MDBTableHead>
@@ -138,12 +236,43 @@ this.setState({ customer: data.fname +  ' ' + data.lname});
           <td>{this.state.address}</td>
           <td>{this.state.address2}</td>
           <td>{this.state.phoneNumber}</td>
+          <td>{this.state.cost}</td>
         </tr>
 
       </MDBTableBody>
     </MDBTable>
+    <MDBFormInline>
+        <MDBInput
+          onClick={this.onClick(1)}
+          checked={this.state.radio === 1 ? true : false}
+          label='Pending'
+          type='radio'
+          id='radio1'
+          containerClass='mr-5'
+          onChange={this.handleChange}
+        />
+        <MDBInput
+          onClick={this.onClick(2)}
+          checked={this.state.radio === 2 ? true : false}
+          label='Complete'
+          type='radio'
+          id='radio2'
+          containerClass='mr-5'
+          onChange={this.handleChange1}
+        />
+        <MDBInput
+          onClick={this.onClick(3)}
+          checked={this.state.radio === 3 ? true : false}
+          label='Canceled'
+          type='radio'
+          id='radio3'
+          containerClass='mr-5'
+          onChange={this.handleChange2}
+        />
+      </MDBFormInline>
         </MDBModalBody>
         <MDBModalFooter>
+        <MDBBtn color="primary" rounded outline onClick={this.handleRowClick}>Update Status</MDBBtn>
           <MDBBtn color="primary" rounded onClick={this.toggle}>Close</MDBBtn>
 
         </MDBModalFooter>

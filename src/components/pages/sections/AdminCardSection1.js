@@ -46,7 +46,7 @@ let filterC = {
         <MDBCol xl="4" md="6" className="mb-r">
           <MDBCard className="cascading-admin-card">
               <div className="admin-up">
-              <MDBIcon icon="chart-line" className="warning-color"/>
+              <MDBIcon icon="car-alt" className="warning-color"/>
                 <div className="data">
                   <p>PENDING TRIPS</p>
                   <h4>
@@ -56,17 +56,17 @@ let filterC = {
               </div>
               <MDBCardBody>
                 <div className="progress">
-                  <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="25" className="progress-bar bg orange" role="progressbar"
-                    style={{width: '25%'}}></div>
+                  <div aria-valuemax={total} aria-valuemin="0" aria-valuenow={pending/total} className="progress-bar bg orange" role="progressbar"
+                    style={{width: pending}}></div>
                 </div>
-                <MDBCardText>Total Trips Pending (25%)</MDBCardText>
+                <MDBCardText>Total Trips Pending {Math.round(pending/total * 100)/100}%</MDBCardText>
               </MDBCardBody>
             </MDBCard>
         </MDBCol>
         <MDBCol xl="4" md="6" className="mb-r">
           <MDBCard className="cascading-admin-card">
               <div className="admin-up">
-              <MDBIcon icon="chart-pie" className="green lighten-1"/>
+              <MDBIcon icon="car-side" className="green lighten-1"/>
                 <div className="data">
                   <p>COMPLETE TRIPS</p>
                   <h4>
@@ -76,17 +76,17 @@ let filterC = {
               </div>
               <MDBCardBody>
                 <div className="progress">
-                  <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="25" className="progress-bar green darken-2" role="progressbar"
-                    style={{width: '75%'}}></div>
+                  <div aria-valuemax={total} aria-valuemin="0" aria-valuenow={complete/total} className="progress-bar green darken-2" role="progressbar"
+                    style={{width: complete}}></div>
                 </div>
-                <MDBCardText>Total Trips Complete (75%)</MDBCardText>
+                <MDBCardText>Total Trips Complete {Math.round(complete/total * 100)/100}%</MDBCardText>
               </MDBCardBody>
             </MDBCard>
         </MDBCol>
         <MDBCol xl="4" md="6" className="mb-r">
           <MDBCard className="cascading-admin-card">
               <div className="admin-up">
-              <MDBIcon icon="chart-bar" className="red accent-2"/>
+              <MDBIcon icon="car-crash" className="red accent-2"/>
                 <div className="data">
                   <p>CANCELED TRIPS</p>
                   <h4>
@@ -96,10 +96,10 @@ let filterC = {
               </div>
               <MDBCardBody>
                 <div className="progress">
-                  <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="25" className="progress-bar bg-danger" role="progressbar"
-                    style={{width: '25%'}}></div>
+                  <div aria-valuemax={total} aria-valuemin="0" aria-valuenow={canceled}className="progress-bar bg-danger" role="progressbar"
+                    style={{width: canceled}}></div>
                 </div>
-                <MDBCardText>Total Trips Canceled (25%)</MDBCardText>
+                <MDBCardText>Total Trips Canceled {Math.round(canceled/total * 100)/100}%</MDBCardText>
               </MDBCardBody>
             </MDBCard>
         </MDBCol>

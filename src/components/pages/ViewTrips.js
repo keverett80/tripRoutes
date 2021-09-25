@@ -34,6 +34,7 @@ class ViewTrips extends React.Component {
     radio: '',
     startDate: new Date(today),
     endDate: new Date(today),
+    status:'',
     data:{
     columns: [
 

@@ -96,14 +96,25 @@ class TopNavigation extends React.Component {
 
               </MDBSideNavCat>
 
+              <MDBSideNavCat
+                name="Invoices"
+                id="contact-me-cat"
+                icon="dollar-sign"
+              >
+                <MDBSideNavItem href='/invoice'>Manage Invoices</MDBSideNavItem>
+                <MDBSideNavItem href='/allInvoices'>View Invoices</MDBSideNavItem>
+
+
+              </MDBSideNavCat>
+
 
               <MDBSideNavCat
                 name="Five G Info"
                 id="contact-me-cat"
                 icon="building"
               >
-                <MDBSideNavItem href='/calendar'>Calendar</MDBSideNavItem>
-                <MDBSideNavItem href='/invoice'>Invoice</MDBSideNavItem>
+
+
                 <MDBSideNavItem href='/drivers'>Add Drivers</MDBSideNavItem>
                 <MDBSideNavItem href='/vehicles'>Add Vehicles</MDBSideNavItem>
                 <MDBSideNavItem href='/brokers'>Add Brokers</MDBSideNavItem>

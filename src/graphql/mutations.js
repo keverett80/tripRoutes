@@ -171,6 +171,7 @@ export const createTrip = /* GraphQL */ `
       notes
       distance
       trip
+      afterHours
       createdAt
       updatedAt
     }
@@ -199,6 +200,7 @@ export const updateTrip = /* GraphQL */ `
       notes
       distance
       trip
+      afterHours
       createdAt
       updatedAt
     }
@@ -227,6 +229,7 @@ export const deleteTrip = /* GraphQL */ `
       notes
       distance
       trip
+      afterHours
       createdAt
       updatedAt
     }
@@ -298,6 +301,7 @@ export const createInvoice = /* GraphQL */ `
       cost
       distance
       address
+      status
       createdAt
       updatedAt
     }
@@ -318,6 +322,7 @@ export const updateInvoice = /* GraphQL */ `
       cost
       distance
       address
+      status
       createdAt
       updatedAt
     }
@@ -338,6 +343,7 @@ export const deleteInvoice = /* GraphQL */ `
       cost
       distance
       address
+      status
       createdAt
       updatedAt
     }

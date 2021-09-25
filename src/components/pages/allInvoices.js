@@ -106,6 +106,12 @@ class Invoice extends React.Component {
            width: 150,
          },
          {
+          label: 'Status',
+          field: 'status',
+          sort: 'asc',
+          width: 150,
+        },
+         {
           label: 'PO Number',
           field: 'poNumber',
           sort: 'asc',
@@ -134,7 +140,7 @@ class Invoice extends React.Component {
     this.state.queryData.sort(this.sortByDate).map((customer) => {
 
       //console.log(customer.address)
-      if(customer.appointmentTime !== 'Will Call' && customer.status !== 'paid')
+      if(customer.appointmentTime !== 'Will Call')
       {
       myCustomers.push({
         id: customer.id,
@@ -147,6 +153,7 @@ product: customer.product,
 cost: customer.cost,
 distance: customer.distance,
 address: customer.address,
+status: customer.status,
         clickEvent: (data) => this.handleRowClick(data),
         button: <MDBBtn outline rounded>Select</MDBBtn>
 
@@ -238,54 +245,6 @@ this.state.address = data.address
   }
 
 
-  submit = () => {
-
-    confirmAlert({
-      title: 'Pay Invoice',
-      message: 'Are you sure you want to mark invoice as paid? ',
-      buttons: [
-        {
-          label: 'Yes',
-          onClick: () =>  this.invoiceStatus()
-
-        },
-        {
-          label: 'No',
-          onClick:() =>  this.myReturn()
-        }
-      ]
-    });
-  };
-
- myReturn = () =>
-  {
-    return;
-  }
-
-
-
-
-  invoiceStatus  = () =>{
-
-
-      var myInvoice = {
-          id: this.state.id,
-          status: 'paid'
-        };
-
-
-        API.graphql(graphqlOperation( mutations.updateInvoice,{input: myInvoice, limit: 1000 })).then(( )=> {
-          //alert('Trip Updated. ')
-
-
-
-
-        alert('Invoice Updated');
-        location.reload()
-
-        })
-
-      }
 
   render() {
     return (
@@ -393,9 +352,7 @@ this.state.address = data.address
                   previous
                 </MDBBtn>
 
-                <MDBBtn color="dark-green" rounded className="float-right" onClick={this.submit}>
-                <MDBIcon icon="dollar-sign" className="mr-1" />    Paid
-                </MDBBtn>
+
 
               </MDBCol>
               )}
