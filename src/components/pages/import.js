@@ -19,14 +19,21 @@ const buttonRef = React.createRef()
 
 class ImportTrips extends React.Component {
 
+ constructor(props) {
+    super(props);
+    this.state = {
 
+      spinner: ''
+
+      };
+  }
 
 
  handleOnDrop = async (data) => {
 
 
 
-
+this.setState({ spinner:<MDBSpinner crazy />});
 
 
 
@@ -39,8 +46,8 @@ class ImportTrips extends React.Component {
       let firstName = parts.shift();
       let lastName = parts.join(' ');
     let wheelchair;
-    console.log(data[i].data[8])
-      if (data[i].data[8].toUpperCase() == 'FALSE')
+    console.log(data[i].data[11])
+      if (data[i].data[11].toUpperCase() == 'FALSE')
       {
 
       wheelchair = 'Ambulatory';
@@ -55,19 +62,20 @@ class ImportTrips extends React.Component {
         id:  data[i].data[0],
         fname: firstName,
         lname: lastName,
-        address: data[i].data[2],
-        address2: data[i].data[4],
+        address: data[i].data[2] + ' ' + data[i].data[3] ,
+        address2:  data[i].data[5] + ' ' + data[i].data[6] ,
 
         wheelchair: wheelchair ,
         roundtrip: '',
-        appointmentTime: data[i].data[6],
-        appointmentDate: data[i].data[5],
+        appointmentTime: data[i].data[8],
+        appointmentDate: data[i].data[7],
         status: 'pending',
-        phoneNumber: data[i].data[3] ? data[i].data[3] : '',
+        phoneNumber: data[i].data[4] ? data[i].data[4] : '',
         cost: '',
         driver: '',
+        distance: data[i].data[9],
         broker: 'Access2Care',
-        notes:data[i].data[7] ? data[i].data[7]: '',
+        notes:data[i].data[10] ? data[i].data[10]: '',
       };
       try {
       await API.graphql({ query: mutations.createTrip, variables: {input: tripData, limit: 1000 }})
@@ -80,6 +88,7 @@ class ImportTrips extends React.Component {
     }
 
     if(data.length - 1 === i) {
+      this.state.spinner = ''
       alert('Data Uploaded');
       location.reload();
   }
@@ -124,7 +133,7 @@ render() {
 
               <h3 className="text-center">
               <strong>Import Trips</strong></h3>
-
+<h4 className="text-center">{this.state.spinner}</h4>
               <CSVReader
         onDrop={this.handleOnDrop}
         onError={this.handleOnError}

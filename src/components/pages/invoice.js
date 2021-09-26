@@ -134,8 +134,9 @@ class Invoice extends React.Component {
     this.state.queryData.sort(this.sortByDate).map((customer) => {
 
       //console.log(customer.address)
-      if(customer.appointmentTime !== 'Will Call' && customer.status !== 'paid')
-      {
+
+
+        if(customer.status !== 'paid'){
       myCustomers.push({
         id: customer.id,
 
@@ -152,6 +153,7 @@ address: customer.address,
 
       });
     }
+
   })
   this.setState({
     customers: {

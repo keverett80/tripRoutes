@@ -18,8 +18,10 @@ class Calendars extends Component {
       address2: '',
       customer: '',
      phoneNumber:'',
+     distance: '',
      radio: '',
      status: '',
+     notes: '',
      localData:[],
      cost:'',
     events: [
@@ -48,7 +50,8 @@ class Calendars extends Component {
     //console.log(this.state.queryData)
 
     apiData.data.listTrips.items.sort(this.sortByTime).filter(trip => trip.status.includes('pending')).map((customer) => {
-
+if(customer.appointmentTime !== 'Will Call')
+{
 
 if(customer.wheelchair == 'Wheelchair')
       {
@@ -83,7 +86,7 @@ if(customer.wheelchair == 'Wheelchair')
       });
     }
 
-
+}
   })
   this.setState({
 
@@ -102,7 +105,9 @@ this.setState({ address: data.address});
 this.setState({ address2: data.address2});
 this.setState({ phoneNumber: data.phoneNumber});
 this.setState({ customer: data.fname +  ' ' + data.lname});
+this.setState({ distance: data.distance});
 this.setState({ cost: data.cost});
+this.setState({ notes: data.notes});
   }
 
   this.setState({
@@ -226,6 +231,8 @@ handleChange1 = () =>{
           <th>Pickup Address</th>
           <th>Destination Address</th>
           <th>Phone Number</th>
+          <th>Miles</th>
+          <th>Notes</th>
           <th>Cost</th>
 
         </tr>
@@ -236,6 +243,8 @@ handleChange1 = () =>{
           <td>{this.state.address}</td>
           <td>{this.state.address2}</td>
           <td>{this.state.phoneNumber}</td>
+          <td>{this.state.distance}</td>
+          <td>{this.state.notes}</td>
           <td>{this.state.cost}</td>
         </tr>
 
