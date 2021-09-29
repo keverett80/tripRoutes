@@ -18,6 +18,8 @@ import EditTrips from './pages/editTrips';
 import Invoice from './pages/invoice';
 import AllInvoices from './pages/allInvoices';
 import ImportTrips from './pages/import';
+import Archived from './pages/archived';
+
 
 class Routes extends React.Component {
   render() {
@@ -26,6 +28,7 @@ class Routes extends React.Component {
         <Route path='/' exact component={Calendars} />
         <Route path='/addTrips' component={AddTrips} />
         <Route path='/viewTrips' component={ViewTrips} />
+        <Route path='/archived' component={Archived} />
         <Route path='/vehicles' component={Vehicles} />
         <Route path='/drivers' component={Drivers} />
         <Route path='/brokers' component={Broker} />

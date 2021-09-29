@@ -144,8 +144,8 @@ this.handleRowClick = this.handleRowClick.bind(this)
     //console.log(this.state.queryData)
 
     apiData.data.listTrips.items.sort(this.sortByTime).sort(this.sortByDate).map((customer) => {
-      if(customer.status === 'pending'){
 
+      if(customer.status !== 'pending'){
       myCustomers.push({
       id: customer.id,
       fname: customer.fname,
@@ -168,6 +168,7 @@ this.handleRowClick = this.handleRowClick.bind(this)
 
       });
     }
+
 
   })
 
