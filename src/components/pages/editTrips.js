@@ -515,8 +515,8 @@ submitTrip = event =>{
 
   const newTrips = {
     id: this.state.dataId,
-    fname: this.state.fname,
-    lname: this.state.lname,
+    fname: this.state.fname.toUpperCase(),
+    lname: this.state.lname.toUpperCase(),
     address: this.state.address,
     address2: this.state.address2,
     wheelchair: this.state.wheelchair,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDataTableV5,MDBFormInline, MDBInput, MDBSelect } from 'mdbreact';
+import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDataTableV5,MDBFormInline, MDBTimePicker, MDBSelect, MDBCol } from 'mdbreact';
 import { API,  graphqlOperation } from "aws-amplify";
 import { listTrips, listEmployees } from '../../graphql/queries';
 import * as mutations from '../../graphql/mutations';
@@ -12,7 +12,7 @@ class AddDriver extends React.Component {
     super(props)
 
   this.state = {
-
+    pickupTime: '',
     driver:'',
     queryData:'',
     queryEmployee:'',
@@ -200,7 +200,8 @@ employee: myEmployee
 
     var updateTrip = {
       id: this.state.localData.id,
-      driver: this.state.driver[0]
+      driver: this.state.driver[0],
+      pickupTime: this.state.pickupTime
     };
 
 
@@ -297,6 +298,12 @@ sortByDate =(b, a) => {
   return 0;
 }
 
+getPickerValue = value => {
+  console.log(value);
+
+  this.setState({ pickupTime: value});
+};
+
 
   render() {
   return (
@@ -316,18 +323,27 @@ sortByDate =(b, a) => {
 
      <MDBModal isOpen={this.state.modal} toggle={this.toggle}>
        <div className='text-center'>
-       <MDBModalHeader toggle={this.toggle} >Assign Employee</MDBModalHeader>
+       <MDBModalHeader toggle={this.toggle} >Assign Driver</MDBModalHeader>
        </div>
+
        <MDBModalBody>
-       <MDBFormInline>
+
+
+       <div className='text-center'>
+       <div className='text-primary'><a>Employee</a></div>
         <MDBSelect
           options={this.state.employee}
           selected="Assign Employee"
-          label="Employee"
+
           getValue={this.handleAssign}
         />
-      </MDBFormInline>
+<div className='text-primary'><a>Pickup Time</a></div>
+
+        <MDBTimePicker id="timePicker" getValue={this.getPickerValue} />
+
+        </div>
        </MDBModalBody>
+
        <MDBModalFooter>
          <MDBBtn rounded color="secondary" outline onClick={this.toggle}>Close</MDBBtn>
          <MDBBtn color="primary" rounded outline onClick={this.handleRowClick}>Save changes</MDBBtn>

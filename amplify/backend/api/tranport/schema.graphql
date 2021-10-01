@@ -43,6 +43,7 @@ type Trip @model {
   distance: String
   trip: String
   afterHours: String
+  pickupTime: String
 
 }
 

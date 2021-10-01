@@ -257,8 +257,8 @@ calculateAutofocus = (a) => {
 <MDBModal isOpen={this.state.modal} toggle={this.toggle}>
         <MDBModalHeader toggle={this.toggle}>New Customer</MDBModalHeader>
         <MDBModalBody><div className="text-left">
-        <MDBInput icon='user'  value={this.state.fname} getValue={this.getFNValue} label="First Name" className="mt-4" autoFocus={this.calculateAutofocus(1)} />
-            <MDBInput icon='user'  value={this.state.lname} getValue={this.getLNValue} label="Last Name" className="mt-4" />
+        <MDBInput icon='user'  value={this.state.fname} getValue={this.getFNValue} label="First Name" className="mt-4 text-uppercase" autoFocus={this.calculateAutofocus(1)} />
+            <MDBInput icon='user'  value={this.state.lname} getValue={this.getLNValue} label="Last Name" className="mt-4 text-uppercase" />
             <MDBInput icon='phone'  value={this.state.phone} getValue={this.getPhoneValue} label="Phone Number" className="mt-4" />
             <MDBInput icon='envelope-open'  value={this.state.email} getValue={this.getEmailValue} label="Email Address" className="mt-4" />
             <PlacesAutocomplete

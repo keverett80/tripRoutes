@@ -837,8 +837,8 @@ render() {
       <MDBModal isOpen={this.state.modal1} toggle={this.toggle1}>
         <MDBModalHeader toggle={this.toggle1}>New Customer</MDBModalHeader>
         <MDBModalBody><div className="text-left">
-        <MDBInput icon='user' getValue={this.getFNValue} label="First Name" className="mt-4" autoFocus={this.calculateAutofocus(1)} />
-            <MDBInput icon='user' getValue={this.getLNValue} label="Last Name" className="mt-4" />
+        <MDBInput icon='user' getValue={this.getFNValue} label="First Name" className="mt-4 text-uppercase" autoFocus={this.calculateAutofocus(1)} />
+            <MDBInput icon='user' getValue={this.getLNValue} label="Last Name" className="mt-4 text-uppercase" />
             <MDBInput icon='phone' getValue={this.getPhoneValue} label="Phone Number" className="mt-4" />
             <MDBInput icon='envelope-open' getValue={this.getEmailValue} label="Email Address" className="mt-4" />
             <PlacesAutocomplete

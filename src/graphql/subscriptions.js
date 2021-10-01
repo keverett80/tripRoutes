@@ -142,6 +142,7 @@ export const onCreateTrip = /* GraphQL */ `
       distance
       trip
       afterHours
+      pickupTime
       createdAt
       updatedAt
     }
@@ -168,6 +169,7 @@ export const onUpdateTrip = /* GraphQL */ `
       distance
       trip
       afterHours
+      pickupTime
       createdAt
       updatedAt
     }
@@ -194,6 +196,7 @@ export const onDeleteTrip = /* GraphQL */ `
       distance
       trip
       afterHours
+      pickupTime
       createdAt
       updatedAt
     }

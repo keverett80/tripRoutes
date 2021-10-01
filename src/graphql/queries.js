@@ -123,6 +123,7 @@ export const getTrip = /* GraphQL */ `
       distance
       trip
       afterHours
+      pickupTime
       createdAt
       updatedAt
     }
@@ -154,6 +155,7 @@ export const listTrips = /* GraphQL */ `
         distance
         trip
         afterHours
+        pickupTime
         createdAt
         updatedAt
       }
