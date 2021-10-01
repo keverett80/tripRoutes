@@ -83,7 +83,7 @@ class AddDriver extends React.Component {
         width: 100,
       },
       {
-        label: 'Status',
+        label: 'Pickup Time',
         field: 'status',
 
         width: 100,
@@ -146,7 +146,7 @@ this.handleRowClick = this.handleRowClick.bind(this)
       appointmentDate: customer.appointmentDate.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
       year: 'numeric'}),
       appointmentTime: customer.appointmentTime,
-      status:customer.status,
+      status:customer.pickupTime,
       clickEvent: (data) => this.toggle(data),
       button: <MDBBtn color='success'  outline rounded>Assign Employee</MDBBtn>
 
@@ -316,7 +316,7 @@ getPickerValue = value => {
     searchBottom={false}
     barReverse
     noBottomColumns
-    order={['status', 'asc' ]}
+
 
     data={this.state.data}
 />

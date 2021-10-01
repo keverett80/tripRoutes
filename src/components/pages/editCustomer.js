@@ -192,14 +192,14 @@ sortByName =(b, a) => {
 
   getFNValue = value => {
     //console.log(value);
-    this.setState({fname: value});
+    this.setState({fname: value.toUpperCase()});
 
   };
 
 
   getLNValue = value => {
     //console.log(value);
-    this.setState({lname: value});
+    this.setState({lname: value.toUpperCase()});
 
   };
   getPhoneValue = value => {

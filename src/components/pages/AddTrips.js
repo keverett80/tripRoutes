@@ -278,7 +278,7 @@ this.setState({
   };
   getFNValue = value => {
     //console.log(value);
-    this.setState({fname: value});
+    this.setState({fname: value.toUpperCase()});
 
   };
 
@@ -288,7 +288,7 @@ this.setState({
   }
   getLNValue = value => {
     //console.log(value);
-    this.setState({lname: value});
+    this.setState({lname: value.toUpperCase()});
 
   };
   getPhoneValue = value => {

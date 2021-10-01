@@ -47,7 +47,7 @@ this.setState({ spinner:<MDBSpinner crazy />});
       let lastName = parts.join(' ');
     let wheelchair;
     console.log(data[i].data[11])
-      if (data[i].data[11].toUpperCase() == 'FALSE')
+      if (data[i].data[12].toUpperCase() == 'FALSE')
       {
 
       wheelchair = 'Ambulatory';
@@ -73,10 +73,10 @@ this.setState({ spinner:<MDBSpinner crazy />});
         phoneNumber: data[i].data[4] ? data[i].data[4] : '',
         cost: '',
         driver: '',
-        distance: data[i].data[9],
+        distance: data[i].data[10],
         broker: 'Access2Care',
-        notes:data[i].data[10] ? data[i].data[10]: '',
-        pickupTime: data[i].data[12],
+        notes:data[i].data[11] ? data[i].data[11]: '',
+        pickupTime: data[i].data[9],
       };
       try {
       await API.graphql({ query: mutations.createTrip, variables: {input: tripData, limit: 1000 }})
