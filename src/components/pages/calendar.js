@@ -18,6 +18,7 @@ class Calendars extends Component {
       address2: '',
       customer: '',
      phoneNumber:'',
+     pickupTime:'',
      distance: '',
      radio: '',
      status: '',
@@ -108,6 +109,7 @@ this.setState({ customer: data.fname +  ' ' + data.lname});
 this.setState({ distance: data.distance});
 this.setState({ cost: data.cost});
 this.setState({ notes: data.notes});
+this.setState({ pickupTime: data.pickupTime});
   }
 
   this.setState({
@@ -231,9 +233,7 @@ handleChange1 = () =>{
           <th>Pickup Address</th>
           <th>Destination Address</th>
           <th>Phone Number</th>
-          <th>Miles</th>
-          <th>Notes</th>
-          <th>Cost</th>
+
 
         </tr>
       </MDBTableHead>
@@ -243,6 +243,29 @@ handleChange1 = () =>{
           <td>{this.state.address}</td>
           <td>{this.state.address2}</td>
           <td>{this.state.phoneNumber}</td>
+
+        </tr>
+
+      </MDBTableBody>
+    </MDBTable>
+
+    <MDBTable>
+      <MDBTableHead>
+        <tr>
+          <th>#</th>
+
+          <th>Pickup Time</th>
+          <th>Miles</th>
+          <th>Notes</th>
+          <th>Cost</th>
+
+        </tr>
+      </MDBTableHead>
+      <MDBTableBody>
+        <tr>
+          <td>1</td>
+
+          <td>{this.state.pickupTime}</td>
           <td>{this.state.distance}</td>
           <td>{this.state.notes}</td>
           <td>{this.state.cost}</td>

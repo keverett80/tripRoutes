@@ -76,6 +76,7 @@ this.setState({ spinner:<MDBSpinner crazy />});
         distance: data[i].data[9],
         broker: 'Access2Care',
         notes:data[i].data[10] ? data[i].data[10]: '',
+        pickupTime: data[i].data[12],
       };
       try {
       await API.graphql({ query: mutations.createTrip, variables: {input: tripData, limit: 1000 }})
