@@ -13,6 +13,7 @@ type Employee @model {
   lastName: String!
   phoneNumber: String!
   emailAddress: String
+  token: String
 }
 
 

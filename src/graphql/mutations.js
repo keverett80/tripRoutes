@@ -63,6 +63,7 @@ export const createEmployee = /* GraphQL */ `
       lastName
       phoneNumber
       emailAddress
+      token
       createdAt
       updatedAt
     }
@@ -79,6 +80,7 @@ export const updateEmployee = /* GraphQL */ `
       lastName
       phoneNumber
       emailAddress
+      token
       createdAt
       updatedAt
     }
@@ -95,6 +97,7 @@ export const deleteEmployee = /* GraphQL */ `
       lastName
       phoneNumber
       emailAddress
+      token
       createdAt
       updatedAt
     }

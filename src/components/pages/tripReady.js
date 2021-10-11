@@ -7,7 +7,7 @@ import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
 
-class AddDriver extends React.Component {
+class TripReady extends React.Component {
   constructor(props) {
     super(props)
 
@@ -129,11 +129,16 @@ this.handleRowClick = this.handleRowClick.bind(this)
 
     var myCustomers = [];
     //console.log(this.state.queryData)
-
+    var d = new Date();
+    console.log(d.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
+    year: 'numeric'}))
     this.state.queryData.sort(this.sortByTime).sort(this.sortByDate).map((customer) => {
 
       //console.log(customer.wheelchair)
-      if(customer.appointmentTime !== 'Will Call'){
+      var e = new Date(customer.appointmentDate);
+      if(customer.appointmentTime == 'Will Call' && e.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
+      year: 'numeric'}) ===  d.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
+      year: 'numeric'}) ){
       myCustomers.push({
       id: customer.id,
       fname: customer.fname,
@@ -208,7 +213,7 @@ employee: myEmployee
       id: this.state.localData.id,
       driver: this.state.driver[0],
       pickupTime: this.state.pickupTime,
-      trip: '1'
+      trip: '2'
     };
 
 
@@ -362,4 +367,4 @@ getPickerValue = value => {
 }
   }
 
-export default AddDriver;
+export default TripReady;

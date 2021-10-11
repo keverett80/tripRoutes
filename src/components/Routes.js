@@ -10,6 +10,7 @@ import ViewTrips from './pages/ViewTrips';
 import Vehicles from './pages/Vehicles';
 import Drivers from './pages/Drivers';
 import DriversAssign from './pages/addDriver';
+import TripReady from './pages/tripReady';
 import Broker from './pages/addBrokers';
 import EditCustomer from './pages/editCustomer';
 import Links from './pages/links';
@@ -37,6 +38,7 @@ class Routes extends React.Component {
         <Route path='/calendar' component={Calendars} />
         <Route path='/editTrips' component={EditTrips} />
         <Route path='/driversAssign' component={DriversAssign} />
+        <Route path='/tripReady' component={TripReady} />
         <Route path='/invoice' component={Invoice} />
         <Route path='/allInvoices' component={AllInvoices} />
         <Route path='/import' component={ImportTrips} />

@@ -80,10 +80,11 @@ class TopNavigation extends React.Component {
               >
                 <MDBSideNavItem href='/addTrips'>Add Trips</MDBSideNavItem>
                 <MDBSideNavItem href='/driversAssign'>Assign Drivers</MDBSideNavItem>
-
+                <MDBSideNavItem href='/tripReady'>Ready Pickup</MDBSideNavItem>
                 <MDBSideNavItem href='/import'>Import Trips</MDBSideNavItem>
                 <MDBSideNavItem href='/viewTrips'>Pending Trips</MDBSideNavItem>
                 <MDBSideNavItem href='/archived'>Archived Trips</MDBSideNavItem>
+
 
               </MDBSideNavCat>
 

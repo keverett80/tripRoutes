@@ -51,6 +51,7 @@ export const onCreateEmployee = /* GraphQL */ `
       lastName
       phoneNumber
       emailAddress
+      token
       createdAt
       updatedAt
     }
@@ -64,6 +65,7 @@ export const onUpdateEmployee = /* GraphQL */ `
       lastName
       phoneNumber
       emailAddress
+      token
       createdAt
       updatedAt
     }
@@ -77,6 +79,7 @@ export const onDeleteEmployee = /* GraphQL */ `
       lastName
       phoneNumber
       emailAddress
+      token
       createdAt
       updatedAt
     }

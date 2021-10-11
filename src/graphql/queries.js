@@ -44,6 +44,7 @@ export const getEmployee = /* GraphQL */ `
       lastName
       phoneNumber
       emailAddress
+      token
       createdAt
       updatedAt
     }
@@ -62,6 +63,7 @@ export const listEmployees = /* GraphQL */ `
         lastName
         phoneNumber
         emailAddress
+        token
         createdAt
         updatedAt
       }
