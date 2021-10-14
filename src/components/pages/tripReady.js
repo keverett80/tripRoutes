@@ -12,6 +12,7 @@ class TripReady extends React.Component {
     super(props)
 
   this.state = {
+    employeeToken: '',
     pickupTime: '',
     driver:'',
     queryData:'',
@@ -204,10 +205,43 @@ employee: myEmployee
 
   }
 
+  fetchToken = async () =>{
+
+    let filter = {
+      emailAddress: {
+          eq: this.state.driver[0] // filter priority = 1
+      }
+  };
+   const employeeData  = await API.graphql({ query: listEmployees, variables: { filter: filter}});
+const employeeToken = employeeData.data.listEmployees.items[0].token
+this.setState({employeeToken:employeeToken})
+
+
+this.handleRowClick();
+
+
+  }
+
 
 
 
   handleRowClick  = () =>{
+
+    fetch('https://exp.host/--/api/v2/push/send', {
+      'mode': 'no-cors',
+      'method': 'POST',
+      'headers': {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+      },
+  body: JSON.stringify({
+    to: this.state.employeeToken,
+
+    title: 'Ready Pickup',
+    body: 'A member is ready for pickup! ',
+    sound: "default",
+  }),
+})
 
     var updateTrip = {
       id: this.state.localData.id,
@@ -358,7 +392,7 @@ getPickerValue = value => {
 
        <MDBModalFooter>
          <MDBBtn rounded color="secondary" outline onClick={this.toggle}>Close</MDBBtn>
-         <MDBBtn color="primary" rounded outline onClick={this.handleRowClick}>Save changes</MDBBtn>
+         <MDBBtn color="primary" rounded outline onClick={this.fetchToken}>Save changes</MDBBtn>
        </MDBModalFooter>
      </MDBModal>
      </MDBContainer>
