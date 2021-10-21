@@ -4,7 +4,7 @@ import moment from "moment";
 import { API,  graphqlOperation } from "aws-amplify";
 import * as mutations from '../../graphql/mutations';
 import { listTrips } from '../../graphql/queries';
-import { MDBInput, MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter,MDBTable, MDBTableBody, MDBTableHead, MDBFormInline  } from "mdbreact";
+import { MDBInput, MDBBadge, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter,MDBTable, MDBTableBody, MDBTableHead, MDBFormInline  } from "mdbreact";
 
 import "./calendar.css";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -23,6 +23,7 @@ class Calendars extends Component {
      radio: '',
      status: '',
      notes: '',
+     badge: <MDBBadge color="primary">New</MDBBadge>,
      localData:[],
      cost:'',
     events: [
@@ -50,8 +51,9 @@ class Calendars extends Component {
     var myCustomers = [];
     //console.log(this.state.queryData)
 
-    apiData.data.listTrips.items.sort(this.sortByTime).filter(trip => trip.status.includes('pending')).map((customer) => {
-if(customer.appointmentTime !== 'Will Call')
+    apiData.data.listTrips.items.sort(this.sortByTime).map((customer) => {
+if(customer.status == 'pending' || customer.status == 'new'){
+      if(customer.appointmentTime !== 'Will Call')
 {
 
 if(customer.wheelchair == 'Wheelchair')
@@ -72,6 +74,24 @@ if(customer.wheelchair == 'Wheelchair')
 
 
       }
+      else if(customer.status == 'new')
+      {
+
+        myCustomers.push({
+
+          title: customer.fname + ' ' + customer.lname +  this.state.badge[1],
+
+          start: new Date(customer.appointmentDate.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
+          year: 'numeric'})),
+          end: new Date(customer.appointmentDate.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
+          year: 'numeric'})),
+
+          newRequest: 'yes',
+          name: customer
+          });
+
+
+      }
       else{
       myCustomers.push({
 
@@ -86,7 +106,7 @@ if(customer.wheelchair == 'Wheelchair')
 
       });
     }
-
+  }
 }
   })
   this.setState({
@@ -217,7 +237,17 @@ handleChange1 = () =>{
           events={this.state.events}
           style={{ height: "100vh" }}
           eventPropGetter={(event) => {
-            const backgroundColor = event.allday ? 'orange' : '';
+            let backgroundColor;
+            if(event.allday)
+            {
+             backgroundColor = 'orange';
+            }
+            if(event.newRequest)
+            {
+             backgroundColor = 'red';
+            }
+
+
             return { style: { backgroundColor } }
           }}
         />

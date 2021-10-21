@@ -214,6 +214,8 @@ employee: myEmployee
   };
    const employeeData  = await API.graphql({ query: listEmployees, variables: { filter: filter}});
 const employeeToken = employeeData.data.listEmployees.items[0].token
+
+
 this.setState({employeeToken:employeeToken})
 
 
@@ -240,7 +242,11 @@ this.handleRowClick();
     title: 'Ready Pickup',
     body: 'A member is ready for pickup! ',
     sound: "default",
-  }),
+    errors: [{
+    code: "number",
+    message: "string"
+  }]
+  })
 })
 
     var updateTrip = {

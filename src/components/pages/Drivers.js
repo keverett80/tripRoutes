@@ -152,6 +152,7 @@ return;
       lastName: this.state.lname,
       emailAddress: this.state.email,
       phoneNumber: this.state.phone,
+      token: ''
 
     };
 

@@ -145,9 +145,10 @@ this.handleChange = this.handleChange.bind(this)
 
     var myCustomers = [];
     this.getBroker();
-    this.state.queryData.sort(this.sortByDate).filter(trip => trip.status.includes('pending')).map((customer) => {
+    this.state.queryData.sort(this.sortByDate).map((customer) => {
 
       //console.log(customer.address)
+      if(customer.status == 'pending' || customer.status == 'new'){
       myCustomers.push({
  weekends:'',
         id: customer.id,
@@ -169,6 +170,7 @@ this.handleChange = this.handleChange.bind(this)
         button: <MDBBtn outline rounded>Select</MDBBtn>
 
       });
+    }
 
   })
   this.setState({
