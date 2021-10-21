@@ -23,7 +23,7 @@ class Calendars extends Component {
      radio: '',
      status: '',
      notes: '',
-     badge: <MDBBadge color="primary">New</MDBBadge>,
+     badge: '',
      localData:[],
      cost:'',
     events: [
@@ -76,10 +76,10 @@ if(customer.wheelchair == 'Wheelchair')
       }
       else if(customer.status == 'new')
       {
-
+        this.setState({ badge:<MDBBadge color="primary">New</MDBBadge>});
         myCustomers.push({
 
-          title: customer.fname + ' ' + customer.lname +  this.state.badge[1],
+          title: 'New Request: ' +  customer.fname + ' ' + customer.lname,
 
           start: new Date(customer.appointmentDate.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
           year: 'numeric'})),
