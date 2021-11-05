@@ -136,7 +136,7 @@ class Invoice extends React.Component {
       //console.log(customer.address)
 
 
-        if(customer.status !== 'paid'){
+        if(customer.status !== 'paid' && customer.status !== 'canceled'){
       myCustomers.push({
         id: customer.id,
 
@@ -259,6 +259,25 @@ this.state.address = data.address
     });
   };
 
+  cancel = () => {
+
+    confirmAlert({
+      title: 'Cancel Invoice',
+      message: 'Are you sure you want to cancel this invoice? ',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () =>  this.invoiceCancel()
+
+        },
+        {
+          label: 'No',
+          onClick:() =>  this.myReturn()
+        }
+      ]
+    });
+  };
+
  myReturn = () =>
   {
     return;
@@ -288,6 +307,30 @@ this.state.address = data.address
         })
 
       }
+
+
+      invoiceCancel  = () =>{
+
+
+        var myInvoice = {
+            id: this.state.id,
+            status: 'canceled'
+          };
+
+
+          API.graphql(graphqlOperation( mutations.updateInvoice,{input: myInvoice, limit: 1000 })).then(( )=> {
+            //alert('Trip Updated. ')
+
+
+
+
+          alert('Invoice Canceled');
+          location.reload()
+
+          })
+
+        }
+
 
   render() {
     return (
@@ -413,6 +456,11 @@ this.state.address = data.address
                 <MDBBtn color="mdb-color" rounded className="float-left" onClick={this.handleNextPrevClick(1)(2)}>
                   previous
                 </MDBBtn>
+
+                <MDBBtn color="red" rounded className="float-right"  onClick={this.cancel}>
+                <MDBIcon icon="ban" className="mr-1" />    Cancel
+                </MDBBtn>
+
 
                 <MDBBtn color="dark-green" rounded className="float-right" onClick={this.submit}>
                 <MDBIcon icon="dollar-sign" className="mr-1" />    Paid

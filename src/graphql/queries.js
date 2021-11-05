@@ -45,6 +45,7 @@ export const getEmployee = /* GraphQL */ `
       phoneNumber
       emailAddress
       token
+      location
       createdAt
       updatedAt
     }
@@ -64,6 +65,7 @@ export const listEmployees = /* GraphQL */ `
         phoneNumber
         emailAddress
         token
+        location
         createdAt
         updatedAt
       }
@@ -126,6 +128,9 @@ export const getTrip = /* GraphQL */ `
       trip
       afterHours
       pickupTime
+      pickupStatus
+      pickupStatusTime
+      arrivedTime
       createdAt
       updatedAt
     }
@@ -158,6 +163,9 @@ export const listTrips = /* GraphQL */ `
         trip
         afterHours
         pickupTime
+        pickupStatus
+        pickupStatusTime
+        arrivedTime
         createdAt
         updatedAt
       }

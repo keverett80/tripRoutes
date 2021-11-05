@@ -20,6 +20,8 @@ import Invoice from './pages/invoice';
 import AllInvoices from './pages/allInvoices';
 import ImportTrips from './pages/import';
 import Archived from './pages/archived';
+import DriverStatus from './pages/driverStatus';
+
 
 
 class Routes extends React.Component {
@@ -42,6 +44,8 @@ class Routes extends React.Component {
         <Route path='/invoice' component={Invoice} />
         <Route path='/allInvoices' component={AllInvoices} />
         <Route path='/import' component={ImportTrips} />
+        <Route path='/driverStatus' component={DriverStatus} />
+
         <Route path='/dash' component={DashboardPage} />
       </Switch>
     );

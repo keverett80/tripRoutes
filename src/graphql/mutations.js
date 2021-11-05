@@ -64,6 +64,7 @@ export const createEmployee = /* GraphQL */ `
       phoneNumber
       emailAddress
       token
+      location
       createdAt
       updatedAt
     }
@@ -81,6 +82,7 @@ export const updateEmployee = /* GraphQL */ `
       phoneNumber
       emailAddress
       token
+      location
       createdAt
       updatedAt
     }
@@ -98,6 +100,7 @@ export const deleteEmployee = /* GraphQL */ `
       phoneNumber
       emailAddress
       token
+      location
       createdAt
       updatedAt
     }
@@ -176,6 +179,9 @@ export const createTrip = /* GraphQL */ `
       trip
       afterHours
       pickupTime
+      pickupStatus
+      pickupStatusTime
+      arrivedTime
       createdAt
       updatedAt
     }
@@ -206,6 +212,9 @@ export const updateTrip = /* GraphQL */ `
       trip
       afterHours
       pickupTime
+      pickupStatus
+      pickupStatusTime
+      arrivedTime
       createdAt
       updatedAt
     }
@@ -236,6 +245,9 @@ export const deleteTrip = /* GraphQL */ `
       trip
       afterHours
       pickupTime
+      pickupStatus
+      pickupStatusTime
+      arrivedTime
       createdAt
       updatedAt
     }

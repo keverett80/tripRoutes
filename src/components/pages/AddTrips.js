@@ -210,7 +210,38 @@ this.handleChange = this.handleChange.bind(this)
        this.setState({broker: myEmployee});
         }
 
+        generateInvoice = async () =>{
 
+          var invoiceNumber = (new Date().getTime()).toString(36);
+
+
+
+       const invoiceDetails = {
+       poNumber: invoiceNumber,
+       name: this.state.fname + ' ' + this.state.lname,
+       broker: this.state.brokers[0],
+       date: this.state.appointmentDate.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
+       year: 'numeric'}),
+       product: this.state.roundTrip + ' ' + this.state.wheelchair,
+       cost: this.state.price,
+       distance: this.state.distance,
+       address: this.state.address,
+       };
+
+       const newInvoice = await API.graphql({ query: mutations.createInvoice, variables: {input: invoiceDetails}}).then(( )=> {
+        this.sendText();
+        alert('New Trip Added! ')
+        window.location.reload();
+
+
+       })
+
+
+
+
+
+
+         }
 
 
 
@@ -496,6 +527,7 @@ newCustomer = event =>{
 
     this.setState({ address:'' });
    alert('Customer Added! ')
+
    window.location.reload();
   } );
 
@@ -543,10 +575,11 @@ submitTrip = event =>{
 
     }
     else{
-  this.state.address = ''
-  this.sendText();
-  alert('New Trip Added! ')
-  window.location.reload();
+
+
+  this.generateInvoice()
+
+
     }
 
 } );
@@ -587,10 +620,10 @@ submitTripRound = () =>{
   };
 
   API.graphql({ query: mutations.createTrip, variables: {input: newTrips}}).then(()=>{
-  this.state.address = ''
-  this.sendText();
-  alert('New Trip Added! ')
-  window.location.reload();
+
+
+  this.generateInvoice()
+
 
 } );
 
