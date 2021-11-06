@@ -5,6 +5,9 @@ import { listBrokers, listCustomers } from '../../graphql/queries';
 import { MDBContainer, MDBRow, MDBTimePicker, MDBCol, MDBStepper, MDBStep, MDBBtn, MDBInput, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDataTableV5,MDBIcon, MDBDatePicker, MDBSelect, MDBTable, MDBTableBody, MDBTableHead  } from "mdbreact";
 import PlacesAutocomplete from 'react-places-autocomplete';
 import {Helmet} from "react-helmet";
+import DatePicker from "react-multi-date-picker"
+import TimePicker from "react-multi-date-picker/plugins/time_picker";
+import DatePanel from "react-multi-date-picker/plugins/date_panel";
 
 
 
@@ -52,6 +55,9 @@ this.state = {
   queryData: '',
   appointmentTime:'',
   appointmentDate:today,
+  appointmentDate1:{},
+
+  counter:0,
 
   optionsTrip: [
       {
@@ -230,8 +236,18 @@ this.handleChange = this.handleChange.bind(this)
 
        const newInvoice = await API.graphql({ query: mutations.createInvoice, variables: {input: invoiceDetails}}).then(( )=> {
         this.sendText();
+
+
+        if((this.state.appointmentDate1.length-1) !== this.state.counter){
+          this.state.counter++
+
+          this.submitTrip();
+
+
+        }else {
         alert('New Trip Added! ')
         window.location.reload();
+        }
 
 
        })
@@ -305,7 +321,17 @@ this.setState({
   };
   getPickerDateValue = value => {
     this.setState({ appointmentDate: value });
+   // console.log(this.state.appointmentDate1[0].month.number + '/' + this.state.appointmentDate1[0].day.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}) + '/' + this.state.appointmentDate1[0].year);
+
+  //  console.log(this.state.appointmentDate1[0].hour.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}) + ':' + this.state.appointmentDate1[0].minute.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}) );
     //console.log(value);
+  };
+
+  getPickerDateValue1 = value => {
+
+
+    this.setState({ appointmentDate1: value });
+    //og(value.length);
   };
   getFNValue = value => {
     //console.log(value);
@@ -534,11 +560,20 @@ newCustomer = event =>{
   this.setState({ address:'' });
 }
 
-submitTrip = event =>{
-  event.preventDefault();
+submitTrip = () =>{
+
   if(this.state.price === '' || this.state.price === null || this.state.price === 0)
   {
  alert('Please calculate total. ')
+
+ return;
+
+
+  }
+
+  if(this.state.appointmentDate1 === '' || this.state.appointmentDate1 === null )
+  {
+ alert('Please select your date. ')
 
  return;
 
@@ -552,9 +587,8 @@ submitTrip = event =>{
     address2: this.state.address2,
     wheelchair: this.state.wheelchair,
     roundtrip: this.state.roundTrip,
-    appointmentTime: this.state.appointmentTime,
-    appointmentDate: this.state.appointmentDate.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
-    year: 'numeric'}),
+    appointmentTime: this.state.appointmentDate1[this.state.counter].hour.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}) + ':' + this.state.appointmentDate1[this.state.counter].minute.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}),
+    appointmentDate: this.state.appointmentDate1[this.state.counter].month.number + '/' + this.state.appointmentDate1[this.state.counter].day.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}) + '/' + this.state.appointmentDate1[this.state.counter].year,
     status: this.state.status,
     phoneNumber: this.state.phone,
     cost: Math.round(this.state.price * 100)/100,
@@ -605,8 +639,7 @@ submitTripRound = () =>{
     wheelchair: this.state.wheelchair,
     roundtrip: this.state.roundTrip,
     appointmentTime: 'Will Call' ,
-    appointmentDate: this.state.appointmentDate.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
-    year: 'numeric'}),
+    appointmentDate: this.state.appointmentDate1[this.state.counter].month.number + '/' + this.state.appointmentDate1[this.state.counter].day.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}) + '/' + this.state.appointmentDate1[this.state.counter].year ,
     status: this.state.status,
     phoneNumber: this.state.phone,
     cost: Math.round(this.state.price * 100)/100,
@@ -797,12 +830,23 @@ render() {
         />
 
 
-<div className='text-center red-text'>  <label htmlFor="formGroupExampleInput">Appointment Date</label>
+<div className='text-center red-text'>  <label htmlFor="formGroupExampleInput">Appointment Date: </label>
 
-<MDBDatePicker id="datePicker" value={this.state.appointmentDate}  getValue={this.getPickerDateValue} />
+
+<DatePicker
+      multiple
+      value={this.state.appointmentDate1}
+      onChange={this.getPickerDateValue1}
+      format="MM/DD/YYYY HH:mm"
+      plugins={[
+        <TimePicker position="bottom" />,
+        <DatePanel markFocused />
+      ]}
+    />
+
 </div>
 
-            <MDBInput label='Appointment Time' type='time' id="timePicker" value={this.state.appointmentTime}    getValue={this.getPickerValue} />
+
 
         <MDBSelect
           options={this.state.broker}

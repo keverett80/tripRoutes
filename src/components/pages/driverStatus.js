@@ -1,9 +1,8 @@
 import React from 'react';
-import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDataTableV5,MDBFormInline, MDBTimePicker, MDBSelect, MDBCol } from 'mdbreact';
+import { MDBContainer, MDBTooltip, MDBDataTableV5} from 'mdbreact';
 import { API,  graphqlOperation } from "aws-amplify";
-import { listTrips, listEmployees } from '../../graphql/queries';
-import * as mutations from '../../graphql/mutations';
-import { confirmAlert } from 'react-confirm-alert'; // Import
+import { listTrips} from '../../graphql/queries';
+import ReactTooltip from 'react-tooltip';
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
 
@@ -32,35 +31,35 @@ class TripReady extends React.Component {
 
 
       {
-        label: 'First Name',
+        label: <p data-tip="First Name">FN</p>,
         field: 'fname',
         width: 100,
 
       },
       {
-        label: 'Last Name',
+        label: <p data-tip="Last Name">LN</p>,
         field: 'lname',
         width: 100,
       },
       {
-        label: 'Pickup Address',
+        label: <p data-tip="Pickup Address">PA</p>,
         field: 'address',
         width: 200,
       },
       {
-        label: 'Destination Address',
+        label: <p data-tip="Destination Address">DA</p>,
         field: 'address2',
 
         width: 200,
       },
       {
-        label: 'Phone Number',
+        label: <p data-tip="Phone Number">PN</p>,
         field: 'phone',
 
         width: 100,
       },
       {
-        label: 'Wheelchair',
+        label: <p data-tip="Type">TY</p>,
         field: 'wheelchair',
 
         width: 100,
@@ -68,36 +67,36 @@ class TripReady extends React.Component {
 
 
       {
-        label: 'Appointment Time',
+        label: <p data-tip="Appointment Time">AT</p>,
         field: 'appointmentTime',
         sort: 'disabled',
-        width: 100,
+        width: 75,
       },
       {
-        label: 'Pickup Time',
+        label: <p data-tip="Pickup Time">PT</p>,
         field: 'status',
 
-        width: 100,
+        width: 75,
       },
       {
-        label: 'Member Status',
+        label: <p data-tip="Status">ST</p>,
         field: 'route',
 
-        width: 100,
+        width: 75,
       },
 
       {
-        label: 'Time Picked Up',
+        label: <p data-tip="Time Picked Up">TPU</p>,
         field: 'statusTime',
 
-        width: 100,
+        width: 200,
       },
 
       {
-        label: 'Time Arrived',
+        label: <p data-tip="Time Arrived">TA</p>,
         field: 'arrivedTime',
 
-        width: 100,
+        width: 200,
       },
 
 
@@ -222,7 +221,7 @@ sortByDate =(b, a) => {
 
     data={this.state.data}
 />
-
+<ReactTooltip />
 
      </MDBContainer>
 
