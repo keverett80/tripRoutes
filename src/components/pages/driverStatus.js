@@ -1,9 +1,12 @@
 import React from 'react';
-import { MDBContainer, MDBTooltip, MDBDataTableV5} from 'mdbreact';
+import { MDBContainer, MDBDataTableV5,  MDBTabPane, MDBTabContent, MDBNav, MDBNavItem, MDBNavLink, MDBIcon } from 'mdbreact';
 import { API,  graphqlOperation } from "aws-amplify";
-import { listTrips} from '../../graphql/queries';
+import { listTrips, listEmployees} from '../../graphql/queries';
 import ReactTooltip from 'react-tooltip';
-import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+
+import mapboxgl from '!mapbox-gl';
+
+mapboxgl.accessToken = 'pk.eyJ1Ijoia2V2ZXJldHQiLCJhIjoiY2toNjVlbmJqMDB0bTJybjIyZm4yd3JsMSJ9.DgDX0g0uFuARMIytMYqMNg';
 
 
 class TripReady extends React.Component {
@@ -11,6 +14,12 @@ class TripReady extends React.Component {
     super(props)
 
   this.state = {
+
+
+    lng: '',
+    lat:'',
+    zoom: 9,
+    activeItemJustified: "1",
     employeeToken: '',
     pickupTime: '',
     driver:'',
@@ -109,7 +118,7 @@ class TripReady extends React.Component {
 
 
 }
-
+this.mapContainer = React.createRef();
 
   }
 
@@ -118,6 +127,19 @@ class TripReady extends React.Component {
 
 
   async componentDidMount(){
+    window.dispatchEvent(new Event('resize'));
+    const locations = await API.graphql({ query: listEmployees });
+    const myObj = JSON.parse(locations.data.listEmployees.items[1].location)
+this.setState({lng: myObj.coords.longitude});
+
+this.setState({lat: myObj.coords.latitude});
+    this.getLocation();
+
+
+
+
+
+
     let filter = {
       status: {
           eq: 'pending' // filter priority = 1
@@ -171,8 +193,36 @@ class TripReady extends React.Component {
   }
 
 
+  getLocation = async() =>{
+
+    const { lng, lat, zoom } = this.state;
+    const map = new mapboxgl.Map({
+    container: this.mapContainer.current,
+    style: 'mapbox://styles/mapbox/streets-v11',
+    center: [lng, lat],
+    zoom: zoom
+    });
 
 
+
+
+
+
+    const marker = new mapboxgl.Marker() // initialize a new marker
+  .setLngLat([ lng, lat]) // Marker [lng, lat] coordinates
+  .addTo(map); // Add the marker to the map
+  map.resize()
+  }
+
+
+
+  toggleJustified = tab => e => {
+    if (this.state.activeItemJustified !== tab) {
+      this.setState({
+        activeItemJustified: tab
+      });
+    }
+  };
 
 
 
@@ -208,7 +258,28 @@ sortByDate =(b, a) => {
 
   render() {
   return (
+
+
 <MDBContainer>
+<MDBNav tabs className="nav-justified" color='red'>
+          <MDBNavItem>
+            <MDBNavLink link to="#" active={this.state.activeItemJustified === "1"} onClick={this.toggleJustified("1")} role="tab" >
+              <MDBIcon icon="user" /> Driver Status
+            </MDBNavLink>
+          </MDBNavItem>
+          <MDBNavItem>
+            <MDBNavLink link to="#" active={this.state.activeItemJustified === "2"} onClick={this.toggleJustified("2")} role="tab" >
+              <MDBIcon icon="map" /> Driver Location
+            </MDBNavLink>
+          </MDBNavItem>
+
+        </MDBNav>
+
+        <MDBTabContent
+          className="card"
+          activeItem={this.state.activeItemJustified}
+        >
+          <MDBTabPane tabId="1" role="tabpanel">
     <MDBDataTableV5
     hover entriesOptions={[5, 20, 25]} entries={20} pagesAmount={4}
     searchTop
@@ -223,6 +294,13 @@ sortByDate =(b, a) => {
 />
 <ReactTooltip />
 
+</MDBTabPane>
+          <MDBTabPane tabId="2" role="tabpanel">
+          <div>
+          <div ref={this.mapContainer} className="map-container" />
+</div>
+          </MDBTabPane>
+          </MDBTabContent>
      </MDBContainer>
 
   );

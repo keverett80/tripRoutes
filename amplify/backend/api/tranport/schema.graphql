@@ -49,6 +49,7 @@ type Trip @model {
   pickupStatus: String
   pickupStatusTime: String
   arrivedTime: String
+  invoiceNumber: String
 
 
 }
@@ -66,7 +67,7 @@ type Broker @model {
 type Invoice @model {
 
 id: ID!
-poNumber: String
+poNumber: ID!
 name: String
 broker: String
 date: String

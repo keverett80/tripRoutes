@@ -30,6 +30,8 @@ class AddTrips extends React.Component {
   constructor(props) {
     super(props)
 this.state = {
+
+  invoiceNumber: '',
   weekends:'',
   notes: '',
   broker:[],
@@ -218,12 +220,12 @@ this.handleChange = this.handleChange.bind(this)
 
         generateInvoice = async () =>{
 
-          var invoiceNumber = (new Date().getTime()).toString(36);
+
 
 
 
        const invoiceDetails = {
-       poNumber: invoiceNumber,
+       poNumber: this.state.invoiceNumber,
        name: this.state.fname + ' ' + this.state.lname,
        broker: this.state.brokers[0],
        date: this.state.appointmentDate.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
@@ -579,7 +581,7 @@ submitTrip = () =>{
 
 
   }
-
+this.setState({invoiceNumber:(new Date().getTime()).toString(36)})
   const newTrips = {
     fname: this.state.fname,
     lname: this.state.lname,
@@ -597,6 +599,7 @@ submitTrip = () =>{
     notes: this.state.notes,
     distance: (this.state.roundTrip === 'Roundtrip') ? this.state.distance * 2 : this.state.distance,
     trip: '1',
+    invoiceNumber: this.state.invoiceNumber,
 
 
   };
@@ -648,6 +651,7 @@ submitTripRound = () =>{
     notes: this.state.notes,
     distance: (this.state.roundTrip === 'Roundtrip') ? this.state.distance * 2 : this.state.distance,
     trip: '2',
+    invoiceNumber: this.state.invoiceNumber,
 
 
   };

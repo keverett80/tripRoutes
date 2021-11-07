@@ -1,7 +1,7 @@
 import React from "react";
 import { API,  graphqlOperation } from "aws-amplify";
 import * as mutations from '../../graphql/mutations';
-import { listBrokers, listCustomers, listTrips } from '../../graphql/queries';
+import { listBrokers, listInvoices, listTrips } from '../../graphql/queries';
 import { MDBContainer, MDBRow, MDBTimePicker, MDBCol, MDBStepper, MDBStep, MDBBtn, MDBInput, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDataTableV5,MDBIcon, MDBDatePicker, MDBSelect, MDBTable, MDBTableBody, MDBTableHead   } from "mdbreact";
 import PlacesAutocomplete from 'react-places-autocomplete';
 import {Helmet} from "react-helmet";
@@ -52,6 +52,8 @@ this.state = {
   queryData: '',
   appointmentTime:'',
   appointmentDate:'',
+  invoiceNumber: '',
+  poId: '',
 
   optionsTrip: [
       {
@@ -166,6 +168,7 @@ this.handleChange = this.handleChange.bind(this)
         phone: customer.phoneNumber,
         broker: customer.broker,
         notes: customer.notes,
+        invoiceNumber: customer.invoiceNumber,
         clickEvent: (data) => this.handleRowClick(data),
         button: <MDBBtn outline rounded>Select</MDBBtn>
 
@@ -253,6 +256,7 @@ this.handleChange = this.handleChange.bind(this)
    this.state.brokers = data.broker
    this.state.notes = data.notes
     this.state.distance = data.distance
+    this.state.invoiceNumber = data.invoiceNumber
 
   //console.log(data)
  }
@@ -414,6 +418,57 @@ this.setState({
 
  }
 
+ getPoNumber = async () =>{
+// Query with filters, limits, and pagination
+let filter = {
+  poNumber: {
+      eq: this.state.invoiceNumber // filter priority = 1
+  }
+};
+  const poNumber = await API.graphql({ query: listInvoices, variables: { filter: filter}});
+  console.log(poNumber.data.listInvoices.items[0].id)
+  this.setState({poId: poNumber.data.listInvoices.items[0].id})
+  this.generateInvoice()
+
+ }
+
+
+ generateInvoice = async () =>{
+
+
+
+  const invoiceDetails = {
+  id: this.state.poId,
+  poNumber: this.state.invoiceNumber,
+  name: this.state.fname + ' ' + this.state.lname,
+  broker: this.state.brokers[0],
+  date: this.state.appointmentDate.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
+  year: 'numeric'}),
+  product: this.state.roundTrip + ' ' + this.state.wheelchair,
+  cost: this.state.price,
+  distance: this.state.distance,
+  address: this.state.address,
+  };
+
+  const newInvoice = await API.graphql({ query: mutations.updateInvoice, variables: {input: invoiceDetails}}).then(( )=> {
+
+
+
+
+   alert('New Trip Added! ')
+   window.location.reload();
+
+
+
+  })
+
+
+
+
+
+
+    }
+
 
 
    calcDistance =()=> {
@@ -540,9 +595,7 @@ submitTrip = event =>{
   API.graphql({ query: mutations.updateTrip, variables: {input: newTrips , limit: 1000 }}).then(()=>{
 
 
-  this.state.address = ''
-  alert('Trip Updated! ')
-  window.location.reload();
+    this.getPoNumber()
 
 
 } );

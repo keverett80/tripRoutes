@@ -131,6 +131,7 @@ export const getTrip = /* GraphQL */ `
       pickupStatus
       pickupStatusTime
       arrivedTime
+      invoiceNumber
       createdAt
       updatedAt
     }
@@ -166,6 +167,7 @@ export const listTrips = /* GraphQL */ `
         pickupStatus
         pickupStatusTime
         arrivedTime
+        invoiceNumber
         createdAt
         updatedAt
       }

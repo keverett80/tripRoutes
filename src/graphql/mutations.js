@@ -182,6 +182,7 @@ export const createTrip = /* GraphQL */ `
       pickupStatus
       pickupStatusTime
       arrivedTime
+      invoiceNumber
       createdAt
       updatedAt
     }
@@ -215,6 +216,7 @@ export const updateTrip = /* GraphQL */ `
       pickupStatus
       pickupStatusTime
       arrivedTime
+      invoiceNumber
       createdAt
       updatedAt
     }
@@ -248,6 +250,7 @@ export const deleteTrip = /* GraphQL */ `
       pickupStatus
       pickupStatusTime
       arrivedTime
+      invoiceNumber
       createdAt
       updatedAt
     }
