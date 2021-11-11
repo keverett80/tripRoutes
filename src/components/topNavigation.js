@@ -82,6 +82,7 @@ class TopNavigation extends React.Component {
                 <MDBSideNavItem href='/driversAssign'>Assign Drivers</MDBSideNavItem>
                 <MDBSideNavItem href='/tripReady'>Ready Pickup</MDBSideNavItem>
                 <MDBSideNavItem href='/driverStatus'>Driver Status</MDBSideNavItem>
+                <MDBSideNavItem href='/driverLocation'>Driver Location</MDBSideNavItem>
                 <MDBSideNavItem href='/import'>Import Trips</MDBSideNavItem>
                 <MDBSideNavItem href='/viewTrips'>Pending Trips</MDBSideNavItem>
                 <MDBSideNavItem href='/archived'>Archived Trips</MDBSideNavItem>

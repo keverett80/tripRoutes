@@ -4,12 +4,10 @@ import { API,  graphqlOperation } from "aws-amplify";
 import { listTrips, listEmployees} from '../../graphql/queries';
 import ReactTooltip from 'react-tooltip';
 
-import mapboxgl from '!mapbox-gl';
-
-mapboxgl.accessToken = 'pk.eyJ1Ijoia2V2ZXJldHQiLCJhIjoiY2toNjVlbmJqMDB0bTJybjIyZm4yd3JsMSJ9.DgDX0g0uFuARMIytMYqMNg';
 
 
-class TripReady extends React.Component {
+
+class DriverStatus extends React.Component {
   constructor(props) {
     super(props)
 
@@ -128,12 +126,7 @@ this.mapContainer = React.createRef();
 
   async componentDidMount(){
     window.dispatchEvent(new Event('resize'));
-    const locations = await API.graphql({ query: listEmployees });
-    const myObj = JSON.parse(locations.data.listEmployees.items[1].location)
-this.setState({lng: myObj.coords.longitude});
 
-this.setState({lat: myObj.coords.latitude});
-    this.getLocation();
 
 
 
@@ -141,13 +134,11 @@ this.setState({lat: myObj.coords.latitude});
 
 
     let filter = {
-      status: {
-          eq: 'pending' // filter priority = 1
-      }
+      or: [{ status: {eq:'complete'} },
+           { status: {eq:'pending'} }]
   };
-
     const apiData = await API.graphql(graphqlOperation(listTrips,
-       { limit: 1000 }));
+        { filter: filter,limit: 1000 }));
     this.state.queryData = apiData.data.listTrips.items;
 
     var myCustomers = [];
@@ -193,26 +184,6 @@ this.setState({lat: myObj.coords.latitude});
   }
 
 
-  getLocation = async() =>{
-
-    const { lng, lat, zoom } = this.state;
-    const map = new mapboxgl.Map({
-    container: this.mapContainer.current,
-    style: 'mapbox://styles/mapbox/streets-v11',
-    center: [lng, lat],
-    zoom: zoom
-    });
-
-
-
-
-
-
-    const marker = new mapboxgl.Marker() // initialize a new marker
-  .setLngLat([ lng, lat]) // Marker [lng, lat] coordinates
-  .addTo(map); // Add the marker to the map
-  map.resize()
-  }
 
 
 
@@ -267,11 +238,7 @@ sortByDate =(b, a) => {
               <MDBIcon icon="user" /> Driver Status
             </MDBNavLink>
           </MDBNavItem>
-          <MDBNavItem>
-            <MDBNavLink link to="#" active={this.state.activeItemJustified === "2"} onClick={this.toggleJustified("2")} role="tab" >
-              <MDBIcon icon="map" /> Driver Location
-            </MDBNavLink>
-          </MDBNavItem>
+
 
         </MDBNav>
 
@@ -295,11 +262,7 @@ sortByDate =(b, a) => {
 <ReactTooltip />
 
 </MDBTabPane>
-          <MDBTabPane tabId="2" role="tabpanel">
-          <div>
-          <div ref={this.mapContainer} className="map-container" />
-</div>
-          </MDBTabPane>
+
           </MDBTabContent>
      </MDBContainer>
 
@@ -307,4 +270,4 @@ sortByDate =(b, a) => {
 }
   }
 
-export default TripReady;
+export default DriverStatus;
