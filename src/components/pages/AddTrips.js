@@ -56,7 +56,7 @@ this.state = {
   modal: false,
   queryData: '',
   appointmentTime:'',
-  appointmentDate:today,
+  appointmentDate:'',
   appointmentDate1:{},
 
   counter:0,
@@ -228,8 +228,7 @@ this.handleChange = this.handleChange.bind(this)
        poNumber: this.state.invoiceNumber,
        name: this.state.fname + ' ' + this.state.lname,
        broker: this.state.brokers[0],
-       date: this.state.appointmentDate.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
-       year: 'numeric'}),
+       date: this.state.appointmentDate1[this.state.counter].month.number + '/' + this.state.appointmentDate1[this.state.counter].day.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}) + '/' + this.state.appointmentDate1[this.state.counter].year,
        product: this.state.roundTrip + ' ' + this.state.wheelchair,
        cost: this.state.price,
        distance: this.state.distance,
