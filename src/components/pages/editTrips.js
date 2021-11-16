@@ -425,7 +425,10 @@ let filter = {
       eq: this.state.invoiceNumber // filter priority = 1
   }
 };
-  const poNumber = await API.graphql({ query: listInvoices, variables: { filter: filter}});
+const poNumber = await API.graphql(graphqlOperation(listInvoices,
+  { filter: filter,limit: 1000 }));
+
+
   console.log(poNumber.data.listInvoices.items[0].id)
   this.setState({poId: poNumber.data.listInvoices.items[0].id})
   this.generateInvoice()

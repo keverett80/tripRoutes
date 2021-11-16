@@ -148,6 +148,7 @@ this.state = {
 this.handleChange = this.handleChange.bind(this)
   }
   async componentDidMount(){
+    this.setState({invoiceNumber:(new Date().getTime()).toString(36)})
     const apiData = await API.graphql(graphqlOperation( listCustomers))
 
 
@@ -559,9 +560,13 @@ newCustomer = event =>{
   } );
 
   this.setState({ address:'' });
+
 }
 
+
+
 submitTrip = () =>{
+
 
   if(this.state.price === '' || this.state.price === null || this.state.price === 0)
   {
@@ -580,7 +585,7 @@ submitTrip = () =>{
 
 
   }
-this.setState({invoiceNumber:(new Date().getTime()).toString(36)})
+
   const newTrips = {
     fname: this.state.fname,
     lname: this.state.lname,
@@ -668,8 +673,7 @@ submitTripRound = () =>{
 
 sendText = _ => {
 
-  fetch(`https://vsji3ei487.execute-api.us-east-2.amazonaws.com/dev/items?recipient=${this.state.phone}&textmessage=Transportation has been scheduled with Five G Transportation. Date: ${this.state.appointmentDate.toLocaleString('en-US', {   month: '2-digit', day: '2-digit' ,
-  year: 'numeric'})} Time: ${this.state.appointmentTime}`)
+  fetch(`https://vsji3ei487.execute-api.us-east-2.amazonaws.com/dev/items?recipient=${this.state.phone}&textmessage=Transportation has been scheduled with Five G Transportation. Date: ${this.state.appointmentDate1[this.state.counter].month.number + '/' + this.state.appointmentDate1[this.state.counter].day.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}) + '/' + this.state.appointmentDate1[this.state.counter].year} Time: ${this.state.appointmentDate1[this.state.counter].hour.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}) + ':' + this.state.appointmentDate1[this.state.counter].minute.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}`)
   .catch(err => console.error(err))
 }
 

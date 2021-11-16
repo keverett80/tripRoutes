@@ -183,47 +183,15 @@ handleChange1 = () =>{
             //alert('Trip Updated. ')
              this.setState({modal: false})
           this.setState({data: this.state.data})
-          if(this.state.status === "complete" && this.state.localData.trip === '1')
-          {
-      this.generateInvoice(this.state.localData);
-          }
-          else{
+
           alert('Updated');
           location.reload()
-          }
+
           })
 
         }
 
-        generateInvoice = async (data) =>{
 
-         var invoiceNumber = data.id.split('-')[0]
-
-      console.log(data);
-      const invoiceDetails = {
-      poNumber: invoiceNumber,
-      name: data.fname + ' ' + data.lname,
-      broker: data.broker,
-      date: data.appointmentDate,
-      product: data.roundtrip + ' ' + data.wheelchair,
-      cost: data.cost,
-      distance: data.distance,
-      address: data.address,
-      };
-
-      const newInvoice = await API.graphql({ query: mutations.createInvoice, variables: {input: invoiceDetails}}).then(( )=> {
-
-       alert('Updated');
-          location.reload()
-
-      })
-
-
-
-
-
-
-        }
 
   render() {
     return (
