@@ -78,7 +78,7 @@ class TopNavigation extends React.Component {
                 id="contact-me-cat"
                 icon="car"
               >
-                <MDBSideNavItem href='/addTrips'>Add Trips</MDBSideNavItem>
+                <MDBSideNavItem href='/addTrips'>Add Trip</MDBSideNavItem>
                 <MDBSideNavItem href='/driversAssign'>Assign Drivers</MDBSideNavItem>
                 <MDBSideNavItem href='/tripReady'>Ready Pickup</MDBSideNavItem>
                 <MDBSideNavItem href='/driverStatus'>Driver Status</MDBSideNavItem>
