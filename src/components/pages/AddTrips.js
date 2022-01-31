@@ -421,14 +421,14 @@ this.setState({
   if(this.state.wheelchair == 'Wheelchair' && this.state.roundTrip == 'Roundtrip')
 {
 
-this.state.price = (this.state.distance * 3) * 2 + 80
+this.state.price = (this.state.distance * 3) * 2 + 120
 this.setState({
   modal: !this.state.modal
 });
 }
 else if(this.state.wheelchair == 'Ambulatory' && this.state.roundTrip == 'One way'){
 
-this.state.price = (this.state.distance * 3) + 40
+this.state.price = (this.state.distance * 3) + 60
 this.setState({
   modal: !this.state.modal
 });
@@ -437,13 +437,13 @@ this.setState({
 }
 else if(this.state.wheelchair == 'Wheelchair' && this.state.roundTrip == 'One way'){
 
-this.state.price = (this.state.distance * 3) + 40
+this.state.price = (this.state.distance * 3) + 60
 this.setState({
   modal: !this.state.modal
 });
 }
 else if(this.state.wheelchair == 'Ambulatory' && this.state.roundTrip == 'Roundtrip'){
-this.state.price = (this.state.distance * 3) * 2 + 80
+this.state.price = (this.state.distance * 3) * 2 + 120
 this.setState({
   modal: !this.state.modal
 });
