@@ -384,14 +384,14 @@ calcPrice = ()=>{
   if(this.state.wheelchair == 'Wheelchair' && this.state.roundTrip == 'Roundtrip')
 {
 
-this.state.price = (this.state.distance * 2) * 2 + 60
+this.state.price = (this.state.distance * 2) * 2 + 80
 this.setState({
   modal: !this.state.modal
 });
 }
 else if(this.state.wheelchair == 'Ambulatory' && this.state.roundTrip == 'One way'){
 
-this.state.price = (this.state.distance * 2) + 15
+this.state.price = (this.state.distance * 2) + 40
 this.setState({
   modal: !this.state.modal
 });
@@ -400,13 +400,13 @@ this.setState({
 }
 else if(this.state.wheelchair == 'Wheelchair' && this.state.roundTrip == 'One way'){
 
-this.state.price = (this.state.distance * 2) + 30
+this.state.price = (this.state.distance * 2) + 40
 this.setState({
   modal: !this.state.modal
 });
 }
 else if(this.state.wheelchair == 'Ambulatory' && this.state.roundTrip == 'Roundtrip'){
-this.state.price = (this.state.distance * 2) * 2 + 30
+this.state.price = (this.state.distance * 2) * 2 + 80
 this.setState({
   modal: !this.state.modal
 });
@@ -421,14 +421,14 @@ this.setState({
   if(this.state.wheelchair == 'Wheelchair' && this.state.roundTrip == 'Roundtrip')
 {
 
-this.state.price = (this.state.distance * 3) * 2 + 60
+this.state.price = (this.state.distance * 3) * 2 + 80
 this.setState({
   modal: !this.state.modal
 });
 }
 else if(this.state.wheelchair == 'Ambulatory' && this.state.roundTrip == 'One way'){
 
-this.state.price = (this.state.distance * 3) + 15
+this.state.price = (this.state.distance * 3) + 40
 this.setState({
   modal: !this.state.modal
 });
@@ -437,13 +437,13 @@ this.setState({
 }
 else if(this.state.wheelchair == 'Wheelchair' && this.state.roundTrip == 'One way'){
 
-this.state.price = (this.state.distance * 3) + 30
+this.state.price = (this.state.distance * 3) + 40
 this.setState({
   modal: !this.state.modal
 });
 }
 else if(this.state.wheelchair == 'Ambulatory' && this.state.roundTrip == 'Roundtrip'){
-this.state.price = (this.state.distance * 3) * 2 + 30
+this.state.price = (this.state.distance * 3) * 2 + 80
 this.setState({
   modal: !this.state.modal
 });
