@@ -307,6 +307,48 @@ export const deleteBroker = /* GraphQL */ `
     }
   }
 `;
+export const createVehicleCheck = /* GraphQL */ `
+  mutation CreateVehicleCheck(
+    $input: CreateVehicleCheckInput!
+    $condition: ModelVehicleCheckConditionInput
+  ) {
+    createVehicleCheck(input: $input, condition: $condition) {
+      id
+      myVehicle
+      status
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateVehicleCheck = /* GraphQL */ `
+  mutation UpdateVehicleCheck(
+    $input: UpdateVehicleCheckInput!
+    $condition: ModelVehicleCheckConditionInput
+  ) {
+    updateVehicleCheck(input: $input, condition: $condition) {
+      id
+      myVehicle
+      status
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteVehicleCheck = /* GraphQL */ `
+  mutation DeleteVehicleCheck(
+    $input: DeleteVehicleCheckInput!
+    $condition: ModelVehicleCheckConditionInput
+  ) {
+    deleteVehicleCheck(input: $input, condition: $condition) {
+      id
+      myVehicle
+      status
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const createInvoice = /* GraphQL */ `
   mutation CreateInvoice(
     $input: CreateInvoiceInput!

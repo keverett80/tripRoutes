@@ -210,6 +210,35 @@ export const listBrokers = /* GraphQL */ `
     }
   }
 `;
+export const getVehicleCheck = /* GraphQL */ `
+  query GetVehicleCheck($id: ID!) {
+    getVehicleCheck(id: $id) {
+      id
+      myVehicle
+      status
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listVehicleChecks = /* GraphQL */ `
+  query ListVehicleChecks(
+    $filter: ModelVehicleCheckFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listVehicleChecks(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        myVehicle
+        status
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const getInvoice = /* GraphQL */ `
   query GetInvoice($id: ID!) {
     getInvoice(id: $id) {

@@ -149,7 +149,7 @@ this.handleChange = this.handleChange.bind(this)
   }
   async componentDidMount(){
     this.setState({invoiceNumber:(new Date().getTime()).toString(36)})
-    const apiData = await API.graphql(graphqlOperation( listCustomers))
+    const apiData = await API.graphql(graphqlOperation( listCustomers, { limit: 1000 }))
 
 
     var myCustomers = [];

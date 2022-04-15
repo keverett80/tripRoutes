@@ -63,6 +63,13 @@ type Broker @model {
   ambRate: String
 }
 
+type VehicleCheck @model {
+  id: ID!
+  myVehicle: String!
+  status: String!
+
+}
+
 
 type Invoice @model {
 
@@ -76,8 +83,6 @@ cost: String
 distance: String
 address: String
 status: String
-
-
 
 }
 

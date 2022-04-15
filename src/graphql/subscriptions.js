@@ -262,6 +262,39 @@ export const onDeleteBroker = /* GraphQL */ `
     }
   }
 `;
+export const onCreateVehicleCheck = /* GraphQL */ `
+  subscription OnCreateVehicleCheck {
+    onCreateVehicleCheck {
+      id
+      myVehicle
+      status
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateVehicleCheck = /* GraphQL */ `
+  subscription OnUpdateVehicleCheck {
+    onUpdateVehicleCheck {
+      id
+      myVehicle
+      status
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteVehicleCheck = /* GraphQL */ `
+  subscription OnDeleteVehicleCheck {
+    onDeleteVehicleCheck {
+      id
+      myVehicle
+      status
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const onCreateInvoice = /* GraphQL */ `
   subscription OnCreateInvoice {
     onCreateInvoice {
