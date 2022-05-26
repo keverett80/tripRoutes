@@ -45,7 +45,7 @@ class Calendars extends Component {
 
 
 
-    const apiData = await API.graphql(graphqlOperation(listTrips, { limit: 1000 }));
+    const apiData = await API.graphql(graphqlOperation(listTrips, { limit: 2000 }));
 
 
     var myCustomers = [];
@@ -79,7 +79,7 @@ if(customer.wheelchair == 'Wheelchair')
         this.setState({ badge:<MDBBadge color="primary">New</MDBBadge>});
         myCustomers.push({
 
-          title: 'New Request: ' +  customer.fname + ' ' + customer.lname,
+          title: 'New: ' + customer.appointmentTime + ' ' + customer.fname + ' ' + customer.lname,
 
           start: new Date(customer.appointmentDate.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
           year: 'numeric'})),
@@ -179,7 +179,7 @@ handleChange1 = () =>{
           };
 
 
-          API.graphql(graphqlOperation( mutations.updateTrip,{input: updateTrip, limit: 1000 })).then(( )=> {
+          API.graphql(graphqlOperation( mutations.updateTrip,{input: updateTrip, limit: 2000 })).then(( )=> {
             //alert('Trip Updated. ')
              this.setState({modal: false})
           this.setState({data: this.state.data})
