@@ -540,7 +540,7 @@ this.state.address = data.address
             "description": this.state.product + ' ' + this.state.distance + 'mi',
 
             "tax": 0,
-            "price": this.state.cost
+            "price": 5
         }
     ],
     "bottomNotice": "Five G Services LLC",
