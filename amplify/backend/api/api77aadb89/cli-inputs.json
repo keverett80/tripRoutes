@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/invoice": {
+      "name": "/invoice",
+      "lambdaFunction": "tranport581cc7c7",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}

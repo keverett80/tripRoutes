@@ -29,6 +29,20 @@
           ]
         }
       ]
+    },
+    "api77aadb89": {
+      "service": "API Gateway",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [
+        {
+          "category": "function",
+          "resourceName": "tranport581cc7c7",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        }
+      ]
     }
   },
   "auth": {
@@ -41,6 +55,11 @@
   },
   "function": {
     "tranportab1a7f3a": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "tranport581cc7c7": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"

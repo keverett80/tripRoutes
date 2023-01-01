@@ -1,14 +1,46 @@
-import React from 'react';
-import useCreateAndSendInvoice from './squareInvoice';
+import React, { useState } from 'react';
 
-const Invoice = () => {
-  const { invoiceId, error } = useCreateAndSendInvoice();
+function Invoice() {
+  const [invoiceId, setInvoiceId] = useState(null);
 
-  if (error) {
-    return <p>Error: {error.message}</p>;
-  }
+  const handleClick = () => {
+    const invoice = {
+      billing_info: [
+        {
+          email_address: 'customer@example.com',
+        },
+      ],
+      due_date: '2022-01-01',
+      line_items: [
+        {
+          name: 'Item 1',
+          quantity: '1',
+          base_price_money: {
+            amount: 100, // $1.00
+            currency: 'USD',
+          },
+        },
+      ],
+    };
 
-  return invoiceId ? <p>Invoice sent! Invoice ID: {invoiceId}</p> : <p>Loading...</p>;
-};
+    fetch('https://metmei56l0.execute-api.us-east-2.amazonaws.com/dev/invoice/create-invoice', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(invoice),
+    })
+      .then((response) => response.text())
+      .then((id) => {
+        setInvoiceId(id);
+      });
+  };
+
+  return (
+    <button onClick={handleClick}>
+      Create Invoice
+    </button>
+  );
+}
 
 export default Invoice;
