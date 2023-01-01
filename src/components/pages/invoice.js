@@ -7,7 +7,7 @@ function Invoice() {
     const invoice = {
       billing_info: [
         {
-          email_address: 'customer@example.com',
+          email_address: 'keverett1980@gmail.com',
         },
       ],
       due_date: '2022-01-01',
@@ -23,7 +23,7 @@ function Invoice() {
       ],
     };
 
-    fetch('https://metmei56l0.execute-api.us-east-2.amazonaws.com/dev/invoice/create-invoice', {
+    fetch('https://kjidspetdi.execute-api.us-east-2.amazonaws.com/dev/create-invoice/create-invoice/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -55,6 +55,9 @@ app.get('/item/*', function(req, res) {
 
 app.post('/create-invoice', (req, res) => {
   const request = {
+    "isBase64Encoded": false,
+    "statusCode": httpStatusCode,
+    "headers": { "headerName": "headerValue" },
     body: req.body,
   };
 

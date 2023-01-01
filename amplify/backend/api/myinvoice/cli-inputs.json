@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/create-invoice": {
+      "name": "/create-invoice",
+      "lambdaFunction": "tranport581cc7c7",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}
