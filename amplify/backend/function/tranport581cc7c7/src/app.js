@@ -1,114 +1,39 @@
-/*
-Copyright 2017 - 2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at
-    http://aws.amazon.com/apache2.0/
-or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and limitations under the License.
-*/
+const AWS = require('aws-sdk');
+const squareConnect = require('square-connect');
 
+exports.handler = async (event) => {
+  // Load the Square API credentials from environment variables
+  const clientId = process.env.SQUARE_CLIENT_ID;
+  const accessToken = process.env.SQUARE_ACCESS_TOKEN;
 
+  // Set up the Square API client
+  const defaultClient = squareConnect.ApiClient.instance;
+  defaultClient.basePath = 'https://connect.squareupsandbox.com';
+  defaultClient.authentications['oauth2'].accessToken = accessToken;
 
+  const invoicesApi = new squareConnect.InvoicesApi();
 
-const express = require('express')
-const bodyParser = require('body-parser')
-const awsServerlessExpressMiddleware = require('aws-serverless-express/middleware')
+  // Extract the customer and line item information from the event data
+  const customerId = event.customer_id;
+  const lineItems = event.line_items;
 
-// declare a new express app
-const { InvoicesApi } = require('square-connect');
-
-const app = express();
-
-// Configure the Square Connect API client
-const defaultClient = require('square-connect').ApiClient.instance;
-defaultClient.basePath = 'https://connect.squareup.com';
-defaultClient.defaultHeaders['Authorization'] = 'EAAAEOFxr3s6BrRecWpxAF4F4DbL-Hyw3KtAAe0Ra6BBl6bPU88amfLX18-4m4oS';
-
-const invoicesApi = new InvoicesApi();
-app.use(bodyParser.json())
-app.use(awsServerlessExpressMiddleware.eventContext())
-
-// Enable CORS for all methods
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000")
-  res.header("Access-Control-Allow-Headers", "http://localhost:3000")
-  next()
-});
-
-
-/**********************
- * Example get method *
- **********************/
-
-app.get('/item', function(req, res) {
-  // Add your code here
-  res.json({success: 'get call succeed!', url: req.url});
-});
-
-app.get('/item/*', function(req, res) {
-  // Add your code here
-  res.json({success: 'get call succeed!', url: req.url});
-});
-
-/****************************
-* Example post method *
-****************************/
-
-app.post('/create-invoice', (req, res) => {
-  const request = {
-    "isBase64Encoded": false,
-    "statusCode": httpStatusCode,
-    "headers": { "headerName": "headerValue" },
-    body: req.body,
-  };
-
-  invoicesApi.createInvoice(request)
-    .then((response) => {
-      res.send(response.invoice.id);
-    })
-    .catch((error) => {
-      res.send(error);
+  // Create the invoice using the Square API
+  try {
+    const response = await invoicesApi.createInvoice({
+      body: {
+        customer_id: customerId,
+        line_items: lineItems,
+      },
     });
-});
-
-
-app.post('/item/*', function(req, res) {
-  // Add your code here
-  res.json({success: 'post call succeed!', url: req.url, body: req.body})
-});
-
-/****************************
-* Example put method *
-****************************/
-
-app.put('/item', function(req, res) {
-  // Add your code here
-  res.json({success: 'put call succeed!', url: req.url, body: req.body})
-});
-
-app.put('/item/*', function(req, res) {
-  // Add your code here
-  res.json({success: 'put call succeed!', url: req.url, body: req.body})
-});
-
-/****************************
-* Example delete method *
-****************************/
-
-app.delete('/item', function(req, res) {
-  // Add your code here
-  res.json({success: 'delete call succeed!', url: req.url});
-});
-
-app.delete('/item/*', function(req, res) {
-  // Add your code here
-  res.json({success: 'delete call succeed!', url: req.url});
-});
-
-app.listen(3000, function() {
-    console.log("App started")
-});
-
-// Export the app object. When executing the application local this does nothing. However,
-// to port it to AWS Lambda we will create a wrapper around that will load the app from
-// this file
-module.exports = app
+    const invoiceId = response.invoice.id;
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ invoice_id: invoiceId }),
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: error.message }),
+    };
+  }
+};

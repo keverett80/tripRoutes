@@ -1,5 +1,6 @@
 import React from "react";
 import { API,  graphqlOperation } from "aws-amplify";
+import {createOrder } from 'square-connect';
 import * as mutations from '../../graphql/mutations';
 import { listBrokers, listCustomers } from '../../graphql/queries';
 import { MDBContainer, MDBRow, MDBTimePicker, MDBCol, MDBStepper, MDBStep, MDBBtn, MDBInput, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDataTableV5,MDBIcon, MDBDatePicker, MDBSelect, MDBTable, MDBTableBody, MDBTableHead  } from "mdbreact";
@@ -29,6 +30,7 @@ class AddTrips extends React.Component {
 
   constructor(props) {
     super(props)
+    this.createInvoice = this.createInvoice.bind(this);
 this.state = {
 
   invoiceNumber: '',
@@ -58,6 +60,9 @@ this.state = {
   appointmentTime:'',
   appointmentDate:'',
   appointmentDate1:{},
+  REACT_APP_AWS_LAMBDA_INVOKE_ENDPOINT:
+  'https://ct4utd523c.execute-api.us-east-2.amazonaws.com/default/createCustomer',
+  customersID: '',
 
   counter:0,
 
@@ -219,47 +224,6 @@ this.handleChange = this.handleChange.bind(this)
        this.setState({broker: myEmployee});
         }
 
-        generateInvoice = async () =>{
-
-
-
-
-
-       const invoiceDetails = {
-       poNumber: this.state.invoiceNumber,
-       name: this.state.fname + ' ' + this.state.lname,
-       broker: this.state.brokers[0],
-       date: this.state.appointmentDate1[this.state.counter].month.number + '/' + this.state.appointmentDate1[this.state.counter].day.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}) + '/' + this.state.appointmentDate1[this.state.counter].year,
-       product: this.state.roundTrip + ' ' + this.state.wheelchair,
-       cost: this.state.price,
-       distance: this.state.distance,
-       address: this.state.address,
-       };
-
-       const newInvoice = await API.graphql({ query: mutations.createInvoice, variables: {input: invoiceDetails}}).then(( )=> {
-        this.sendText();
-
-
-        if((this.state.appointmentDate1.length-1) !== this.state.counter){
-          this.state.counter++
-
-          this.submitTrip();
-
-
-        }else {
-        alert('New Trip Added! ')
-        window.location.reload();
-        }
-
-
-       })
-
-
-
-
-
-
-         }
 
 
 
@@ -539,6 +503,8 @@ formatPhoneNumber = (phoneNumberString) => {
   return null;
 }
 
+
+
 newCustomer = event =>{
   event.preventDefault();
 
@@ -550,6 +516,35 @@ newCustomer = event =>{
     address: this.state.address
 
   };
+
+  const payload = {
+
+    given_name: this.state.fname,
+    family_name: this.state.lname,
+    phone_number: this.formatPhoneNumber(this.state.phone),
+    email_address: this.state.email,
+    address: {
+      address_line_1: this.state.address,
+    },
+
+  };
+console.log(JSON.stringify(payload))
+  fetch(this.state.REACT_APP_AWS_LAMBDA_INVOKE_ENDPOINT, {
+    method: 'POST',
+    mode: '*cors', // no-cors, *cors, same-origin
+ // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  })
+    .then((response) => response.json())
+    .then((data) => console.log(data))
+    .catch((error) => {
+      setError(error.message);
+    });
+
+
 
    API.graphql({ query: mutations.createCustomer, variables: {input: newCustomer}}).then(()=>{
 
@@ -610,21 +605,106 @@ submitTrip = () =>{
 
   API.graphql({ query: mutations.createTrip, variables: {input: newTrips}}).then(()=>{
 
+this.createInvoice();
+
     if(this.state.roundTrip =='Roundtrip')
     {
  this.submitTripRound();
 
     }
-    else{
 
-
-  this.generateInvoice()
-
-
-    }
 
 } );
 
+}
+
+createInvoice = (orderId) => {
+
+  const payload = {
+  phoneNumber: this.state.phone,
+  orderId: orderId,
+  }
+
+
+ console.log(JSON.stringify(payload))
+  fetch('https://jne2nlifnf.execute-api.us-east-2.amazonaws.com/default/createInvoice', {
+    method: 'POST',
+    mode: '*cors', // no-cors, *cors, same-origin
+ // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  })
+    .then((response) => response.json())
+    .then((data) => console.log(data))
+    .catch((error) => {
+      setError(error.message);
+    });
+
+
+
+
+
+
+};
+
+createIdempotencyKey = () => {
+  // Generate a unique string using the current timestamp
+  const key = `idempotency_key_${Date.now()}`;
+  return key;
+}
+
+createOrder = () => {
+  // Set up your Square Connect API credentials
+  const creds = {
+    accessToken: 'EAAAEZZ7JGXz14aktzcwX5LxUnrYDHoC6LvsTkyu2TAT7AHpB0CF1QKaIP4YMNKm',
+    locationId: 'LB25KA4492SBQ'
+  };
+
+  const orderData = {
+
+    location_id: 'LB25KA4492SBQ',
+    line_items: [
+
+      {
+        name: 'Item 1',
+        quantity: '1',
+        base_price_money: {
+          amount: 1000,
+          currency: 'USD'
+        }
+      }
+    ]
+
+  };
+
+  // Send the order data to the Lambda function
+  fetch('https://72gudxuu9k.execute-api.us-east-2.amazonaws.com/default/createOrder', {
+    method: 'POST',
+    mode: 'no-cors', // no-cors, *cors, same-origin
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      idempotency_key: this.createIdempotencyKey(),
+      order: orderData,
+      credentials: creds
+    })
+  }).then(response => {
+    if (response.ok) {
+      return response.json();
+    }
+    console.log(response)
+    throw new Error(response.statusText);
+  }).then(response => {
+    // Do something with the response
+    const orderId = response.orderId;
+    console.log(response)
+  }).catch(error => {
+    // Handle the error
+    console.log(error)
+  });
 }
 handleAssign = value => {
 
@@ -663,7 +743,7 @@ submitTripRound = () =>{
   API.graphql({ query: mutations.createTrip, variables: {input: newTrips}}).then(()=>{
 
 
-  this.generateInvoice()
+
 
 
 } );
@@ -897,7 +977,7 @@ render() {
       </MDBTableBody>
     </MDBTable>
             <MDBBtn color="mdb-color" rounded className="float-left" onClick={this.handleNextPrevClick(1)(4)}>previous</MDBBtn>
-            <MDBBtn color="success" rounded className="float-right" onClick={this.submitTrip}>submit</MDBBtn>
+            <MDBBtn color="success" rounded className="float-right" onClick={this.createOrder}>submit</MDBBtn>
           </MDBCol>)}
         </MDBRow>
         </div>
