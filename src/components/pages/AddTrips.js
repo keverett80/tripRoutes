@@ -63,7 +63,7 @@ this.state = {
   REACT_APP_AWS_LAMBDA_INVOKE_ENDPOINT:
   'https://ct4utd523c.execute-api.us-east-2.amazonaws.com/default/createCustomer',
   customersID: '',
-
+  orderId:'',
   counter:0,
 
   optionsTrip: [
@@ -531,7 +531,7 @@ newCustomer = event =>{
 console.log(JSON.stringify(payload))
   fetch(this.state.REACT_APP_AWS_LAMBDA_INVOKE_ENDPOINT, {
     method: 'POST',
-    mode: '*cors', // no-cors, *cors, same-origin
+    mode: 'no-cors', // no-cors, *cors, same-origin
  // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
     headers: {
       'Content-Type': 'application/json',
@@ -541,7 +541,7 @@ console.log(JSON.stringify(payload))
     .then((response) => response.json())
     .then((data) => console.log(data))
     .catch((error) => {
-      setError(error.message);
+      console.log(error.message);
     });
 
 
@@ -605,12 +605,15 @@ submitTrip = () =>{
 
   API.graphql({ query: mutations.createTrip, variables: {input: newTrips}}).then(()=>{
 
-this.createInvoice();
+
 
     if(this.state.roundTrip =='Roundtrip')
     {
  this.submitTripRound();
 
+    }else{
+
+      this.createOrder();
     }
 
 
@@ -619,28 +622,55 @@ this.createInvoice();
 }
 
 createInvoice = (orderId) => {
-
+console.log(orderId)
   const payload = {
   phoneNumber: this.state.phone,
   orderId: orderId,
+  appointmentDate: this.state.appointmentDate1[this.state.counter].month.number + '/' + this.state.appointmentDate1[this.state.counter].day.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}) + '/' + this.state.appointmentDate1[this.state.counter].year,
   }
+console.log(JSON.stringify(payload));
+console.log(this.state.phone);
 
 
- console.log(JSON.stringify(payload))
-  fetch('https://jne2nlifnf.execute-api.us-east-2.amazonaws.com/default/createInvoice', {
+  fetch('https://j17q5uhse6.execute-api.us-east-2.amazonaws.com/default/createInvoice', {
     method: 'POST',
-    mode: '*cors', // no-cors, *cors, same-origin
- // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+   mode: 'no-cors', // no-cors, *cors, same-origin
+    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(payload),
-  })
-    .then((response) => response.json())
-    .then((data) => console.log(data))
-    .catch((error) => {
-      setError(error.message);
-    });
+  }).then(response => {
+    //console.log(response)
+    if (response.ok) {
+      return response;
+    }
+   // throw new Error(response.statusText);
+  }).then(response => {
+    // Do something with the response
+
+
+      this.sendText();
+
+
+      if((this.state.appointmentDate1.length-1) !== this.state.counter){
+        this.state.counter++
+
+        this.submitTrip();
+
+
+      }else {
+      alert('New Trip Added! ')
+      window.location.reload();
+      }
+
+
+
+
+  }).catch(response => {
+    // Handle the error
+    console.log(response)
+  });
 
 
 
@@ -657,6 +687,14 @@ createIdempotencyKey = () => {
 
 createOrder = () => {
   // Set up your Square Connect API credentials
+  //let number = parseInt(Math.round(this.state.price * 100)/100);
+  const price = this.state.price;
+
+  const formattedPrice = Math.round(price * 100);
+  const integerPrice = parseInt(formattedPrice);
+
+
+console.log(integerPrice)
   const creds = {
     accessToken: 'EAAAEZZ7JGXz14aktzcwX5LxUnrYDHoC6LvsTkyu2TAT7AHpB0CF1QKaIP4YMNKm',
     locationId: 'LB25KA4492SBQ'
@@ -668,10 +706,10 @@ createOrder = () => {
     line_items: [
 
       {
-        name: 'Item 1',
+        name: 'Wheelchair Transport',
         quantity: '1',
         base_price_money: {
-          amount: 1000,
+          amount:   integerPrice,
           currency: 'USD'
         }
       }
@@ -680,9 +718,10 @@ createOrder = () => {
   };
 
   // Send the order data to the Lambda function
-  fetch('https://72gudxuu9k.execute-api.us-east-2.amazonaws.com/default/createOrder', {
+  fetch('https://9mvh05lmg5.execute-api.us-east-2.amazonaws.com/default/createOrder', {
     method: 'POST',
-    mode: 'no-cors', // no-cors, *cors, same-origin
+    //credentials: 'include',
+    cache: 'no-cache',
     headers: {
       'Content-Type': 'application/json'
     },
@@ -692,18 +731,24 @@ createOrder = () => {
       credentials: creds
     })
   }).then(response => {
+    //console.log(response)
     if (response.ok) {
       return response.json();
     }
-    console.log(response)
-    throw new Error(response.statusText);
+   // throw new Error(response.statusText);
   }).then(response => {
     // Do something with the response
     const orderId = response.orderId;
-    console.log(response)
-  }).catch(error => {
+    if (orderId) {
+      console.log(orderId);
+      this.createInvoice(orderId);
+    }
+
+
+
+  }).catch(response => {
     // Handle the error
-    console.log(error)
+    console.log(response)
   });
 }
 handleAssign = value => {
@@ -742,7 +787,7 @@ submitTripRound = () =>{
 
   API.graphql({ query: mutations.createTrip, variables: {input: newTrips}}).then(()=>{
 
-
+    this.createOrder();
 
 
 
@@ -1049,7 +1094,7 @@ render() {
         </MDBModalBody>
         <MDBModalFooter>
           <MDBBtn color="secondary" onClick={this.toggle1}>Close</MDBBtn>
-          <MDBBtn color="primary" onClick= {this.newCustomer}>Save changes</MDBBtn>
+          <MDBBtn color="primary" onClick= {this.submitTrip}>Save changes</MDBBtn>
         </MDBModalFooter>
       </MDBModal>
     </MDBContainer>
