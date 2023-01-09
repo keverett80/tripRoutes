@@ -1022,7 +1022,7 @@ render() {
       </MDBTableBody>
     </MDBTable>
             <MDBBtn color="mdb-color" rounded className="float-left" onClick={this.handleNextPrevClick(1)(4)}>previous</MDBBtn>
-            <MDBBtn color="success" rounded className="float-right" onClick={this.createOrder}>submit</MDBBtn>
+            <MDBBtn color="success" rounded className="float-right" onClick={this.submitTrip}>submit</MDBBtn>
           </MDBCol>)}
         </MDBRow>
         </div>
@@ -1094,7 +1094,7 @@ render() {
         </MDBModalBody>
         <MDBModalFooter>
           <MDBBtn color="secondary" onClick={this.toggle1}>Close</MDBBtn>
-          <MDBBtn color="primary" onClick= {this.submitTrip}>Save changes</MDBBtn>
+          <MDBBtn color="primary" onClick= {this.newCustomer}>Save changes</MDBBtn>
         </MDBModalFooter>
       </MDBModal>
     </MDBContainer>
