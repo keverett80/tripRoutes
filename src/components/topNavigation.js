@@ -107,8 +107,8 @@ class TopNavigation extends React.Component {
                 icon="dollar-sign"
               >
 
-                <MDBSideNavItem href='/invoice'>Manage Invoices</MDBSideNavItem>
-                <MDBSideNavItem href='/allInvoices'>Paid Invoices</MDBSideNavItem>
+                <MDBSideNavItem href='/invoice'>Invoices</MDBSideNavItem>
+
 
 
               </MDBSideNavCat>

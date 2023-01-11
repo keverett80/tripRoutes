@@ -9,6 +9,7 @@
     "@googlemaps/js-api-loader": "^1.12.2",
     "aws-amplify": "^4.2.3",
     "aws-sdk": "^2.1286.0",
+    "axios": "^1.2.2",
     "chart.js": "^3.5.0",
     "cors": "^2.8.5",
     "csvtojson": "^2.0.10",
