@@ -81,7 +81,7 @@ import { Container } from 'react-bootstrap';
             <tr key={invoice.id}>
               <td>{invoice.id}</td>
               <td>{invoice.primary_recipient.given_name} {invoice.primary_recipient.family_name}</td>
-              <td>${(invoice.payment_requests[0].total_completed_amount_money.amount/100).toFixed(2)}</td>
+              <td>${(invoice.payment_requests[0].computed_amount_money.amount/100).toFixed(2)}</td>
               <td>
                 <MDBBadge
                   color={

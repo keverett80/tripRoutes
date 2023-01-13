@@ -2,6 +2,7 @@ import React from "react";
 import { API,  graphqlOperation } from "aws-amplify";
 import {createOrder } from 'square-connect';
 import * as mutations from '../../graphql/mutations';
+import * as queries from '../../graphql/queries';
 import { listBrokers, listCustomers } from '../../graphql/queries';
 import { MDBContainer, MDBRow, MDBTimePicker, MDBCol, MDBStepper, MDBStep, MDBBtn, MDBInput, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDataTableV5,MDBIcon, MDBDatePicker, MDBSelect, MDBTable, MDBTableBody, MDBTableHead  } from "mdbreact";
 import PlacesAutocomplete from 'react-places-autocomplete';
@@ -32,7 +33,7 @@ class AddTrips extends React.Component {
     super(props)
     this.createInvoice = this.createInvoice.bind(this);
 this.state = {
-
+  editModalOpen: false,
   invoiceNumber: '',
   weekends:'',
   notes: '',
@@ -131,7 +132,17 @@ this.state = {
     {
 
       label: 'Select',
-      field: 'button'
+      field: 'selectButton'
+    },
+    {
+
+      label: 'Select',
+      field: 'editButton'
+    },
+    {
+
+      label: 'Select',
+      field: 'deleteButton'
     }
 
 
@@ -148,44 +159,61 @@ this.state = {
 
 }
 
-
+this.openEditModal = this.openEditModal.bind(this);
+this.closeEditModal = this.closeEditModal.bind(this);
 
 this.handleChange = this.handleChange.bind(this)
   }
-  async componentDidMount(){
-    this.setState({invoiceNumber:(new Date().getTime()).toString(36)})
-    const apiData = await API.graphql(graphqlOperation( listCustomers, { limit: 1000 }))
 
+  openEditModal() {
+    console.log(this.state.fname + 'test')
+    this.setState({editModalOpen: true});
+  }
+
+  closeEditModal() {
+    this.setState({editModalOpen: false});
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.fname !== prevState.fname) {
+      // Do something with the updated fname state
+      //location.reload()
+    }
+  }
+  async componentDidMount() {
+    this.setState({invoiceNumber: (new Date().getTime()).toString(36)});
+    const apiData = await API.graphql(graphqlOperation(listCustomers, { limit: 1000 }));
 
     var myCustomers = [];
     this.getBroker();
     apiData.data.listCustomers.items.sort(this.sortByTime).map((customer) => {
-
-      //console.log(customer.address)
       myCustomers.push({
-
         id: customer.id,
         fname: customer.fname,
         lname: customer.lname,
         phone: customer.phoneNumber,
         email: customer.emailAddress,
         address: customer.address,
-        clickEvent: (data) => this.handleRowClick(data),
-        button: <MDBBtn outline rounded>Select</MDBBtn>
-
+        selectButton: <MDBBtn outline rounded  color="success" onClick={() => this.handleRowClick(customer)}>Select</MDBBtn>,
+        editButton: <MDBBtn outline rounded  color="warning" onClick={() => this.editCustomer(customer.id)}>Edit</MDBBtn>,
+        deleteButton: <MDBBtn outline rounded  color="danger" onClick={() => this.deleteCustomer(customer.id)}>Delete</MDBBtn>
       });
+    });
+    this.setState({
+      customers: {
+        ...this.state.customers,
+        rows: this.state.customers.rows.concat(myCustomers)
+      }
+    }, () => {
+      this.setState({
+        fname: myCustomers[0].fname,
+        lname: myCustomers[0].lname,
+        phone: myCustomers[0].phone,
+        email: myCustomers[0].email,
+        address: myCustomers[0].address
+      });
+    });
+  }
 
-  })
-  this.setState({
-    customers: {
-      ...this.state.customers, // merge with the original `state.items`
-      rows: this.state.customers.rows.concat(myCustomers)
-    }
-  });
-
-
-
-    }
 
     sortByTime =(b, a) => {
       if (a.createdAt > b.createdAt) {
@@ -235,16 +263,17 @@ this.handleChange = this.handleChange.bind(this)
 
 
   }
- handleRowClick = (data) =>
- {
-   this.state.fname = data.fname;
-   this.state.lname = data.lname;
-   this.state.phone = data.phone;
-   this.state.email = data.email;
-   this.state.address = data.address;
-
-  //console.log(data)
+  handleRowClick = (data) => {
+   // alert('hello')
+    this.setState({
+      fname: data.fname,
+      lname: data.lname,
+      phone: data.phone,
+      email: data.email,
+      address: data.address
+    }, this.handleNextPrevClick(1)(2));
  }
+
 
   getCheckValue = value => {
 
@@ -558,7 +587,82 @@ console.log(JSON.stringify(payload))
 
 }
 
+editCustomer = (customerId, updatedInfo) => {
+  API.graphql({
+    query: queries.getCustomer,
+    variables: { id: customerId }
+  }).then(({ data }) => {
 
+    const currentCustomer = data.getCustomer;
+
+    // Open the modal and populate the fields
+    //console.log(currentCustomer.fname)
+    this.setState({
+        editModalOpen: true,
+        fname: currentCustomer.fname,
+        lname: currentCustomer.lname,
+        phone: currentCustomer.phoneNumber,
+        email: currentCustomer.emailAddress,
+        address: currentCustomer.address
+    });
+
+    // save changes when the user clicks the Save Changes button
+    this.saveChanges = () => {
+      const updatedCustomer = {
+        fname: this.state.fname,
+        lname: this.state.lname,
+        phoneNumber: this.state.phone,
+        emailAddress: this.state.email,
+        address: this.state.address
+      }
+
+      console.log(this.state.address)
+
+
+
+
+      fetch('https://ct4utd523c.execute-api.us-east-2.amazonaws.com/default/EditCustomer', {
+        method: 'POST',
+        mode: 'no-cors', // no-cors, *cors, same-origin
+     // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedCustomer),
+      })
+        .then((response) => response.json())
+        .then((data) => console.log(data))
+        .catch((error) => {
+          console.log(error.message);
+        });
+
+
+
+
+      API.graphql({
+        query: mutations.updateCustomer,
+        variables: { input: { id: customerId, ...updatedCustomer } }
+      }).then(() => {
+        this.setState({editModalOpen: false });
+        location.reload()
+      });
+
+
+    }
+  });
+}
+
+
+
+deleteCustomer = (customerId) => {
+  API.graphql({
+    query: mutations.deleteCustomer,
+    variables: { input: { id: customerId } }
+  }).then(() => {
+
+    location.reload()
+  });
+}
 
 submitTrip = () =>{
 
@@ -839,7 +943,7 @@ render() {
       searchTop searchBottom={false}
       barReverse
 
-      onClick={this.handleNextPrevClick(1)(2)}
+      //onClick={this.handleNextPrevClick(1)(2)}
    data={this.state.customers}
 
 
@@ -1097,6 +1201,61 @@ render() {
           <MDBBtn color="primary" onClick= {this.newCustomer}>Save changes</MDBBtn>
         </MDBModalFooter>
       </MDBModal>
+
+      <MDBModal isOpen={this.state.editModalOpen} toggle={this.closeEditModal}>
+  <MDBModalHeader toggle={this.closeEditModal}>Edit Customer</MDBModalHeader>
+  <MDBModalBody>
+    <div className="text-left">
+    <MDBInput icon='user' value={this.state.fname} onChange={event => this.setState({fname: event.target.value})} label="First Name" className="mt-4 text-uppercase" autoFocus={this.calculateAutofocus(1)} />
+            <MDBInput icon='user' value={this.state.lname} onChange={event => this.setState({lname: event.target.value})} label="Last Name" className="mt-4 text-uppercase" />
+            <MDBInput icon='phone' value={this.state.phone} onChange={event => this.setState({phone: event.target.value})} label="Phone Number" className="mt-4" />
+            <MDBInput icon='envelope-open' value={this.state.email} onChange={event => this.setState({email: event.target.value})} label="Email" className="mt-4" />
+
+      <PlacesAutocomplete
+        value={this.state.address}
+        onChange={this.handleChange}
+      >
+        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+          <div>
+            <MDBInput icon='address-book'
+              {...getInputProps({
+                placeholder: 'Customer Address',
+                className: 'location-search-input',
+              })}
+            />
+            <div className="autocomplete-dropdown-container">
+              {loading && <div>Loading...</div>}
+              {suggestions.map(suggestion => {
+                const className = suggestion.active
+                  ? 'suggestion-item--active'
+                  : 'suggestion-item';
+                //inline style for demonstration purpose
+                const style = suggestion.active
+                  ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                  : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                return (
+                  <div
+                    {...getSuggestionItemProps(suggestion, {
+                      className,
+                      style,
+                    })}
+                  >
+                    <span>{suggestion.description}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </PlacesAutocomplete>
+    </div>
+  </MDBModalBody>
+  <MDBModalFooter>
+    <MDBBtn color="secondary" onClick={this.closeEditModal}>Close</MDBBtn>
+    <MDBBtn color="primary" onClick={this.saveChanges}>Save Changes</MDBBtn>
+  </MDBModalFooter>
+</MDBModal>
+
     </MDBContainer>
     );
   };
