@@ -13,6 +13,7 @@ class TripReady extends React.Component {
 
   this.state = {
     employeeToken: '',
+    employeePhone:'',
     pickupTime: '',
     driver:'',
     queryData:'',
@@ -131,8 +132,8 @@ this.handleRowClick = this.handleRowClick.bind(this)
     var myCustomers = [];
     //console.log(this.state.queryData)
     var d = new Date();
-    console.log(d.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
-    year: 'numeric'}))
+   /*  console.log(d.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
+    year: 'numeric'})) */
     this.state.queryData.sort(this.sortByTime).sort(this.sortByDate).map((customer) => {
 
       //console.log(customer.wheelchair)
@@ -205,6 +206,7 @@ employee: myEmployee
 
   }
 
+
   fetchToken = async () =>{
 
     let filter = {
@@ -213,10 +215,9 @@ employee: myEmployee
       }
   };
    const employeeData  = await API.graphql({ query: listEmployees, variables: { filter: filter}});
-const employeeToken = employeeData.data.listEmployees.items[0].token
-
-
-this.setState({employeeToken:employeeToken})
+  // console.log(employeeData)
+const employeePhone = employeeData.data.listEmployees.items[0].phoneNumber
+this.setState({employeePhone:employeePhone})
 
 
 this.handleRowClick();
@@ -227,33 +228,18 @@ this.handleRowClick();
 
 
 
+
   handleRowClick  = () =>{
 
-    fetch('https://exp.host/--/api/v2/push/send', {
-      'mode': 'no-cors',
-      'method': 'POST',
-      'headers': {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-      },
-  body: JSON.stringify({
-    to: this.state.employeeToken,
+    fetch(`https://vsji3ei487.execute-api.us-east-2.amazonaws.com/dev/items?recipient=${this.state.employeePhone}&textmessage=A return Five G Trip is in your portal under the Ready Pickup tab. The pickup time is ${this.state.pickupTime}.`)
+  .catch(err => console.error(err))
 
-    title: 'Ready Pickup',
-    body: 'A member is ready for pickup! ',
-    sound: "default",
-    errors: [{
-    code: "number",
-    message: "string"
-  }]
-  })
-})
 
     var updateTrip = {
       id: this.state.localData.id,
       driver: this.state.driver[0],
       pickupTime: this.state.pickupTime,
-      trip: '2'
+      trip: '1'
     };
 
 
@@ -263,6 +249,7 @@ this.handleRowClick();
     })
 
   }
+
 
   submit = () => {
 
@@ -351,7 +338,7 @@ sortByDate =(b, a) => {
 }
 
 getPickerValue = value => {
-  console.log(value);
+  //console.log(value);
 
   this.setState({ pickupTime: value});
 };

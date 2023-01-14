@@ -13,6 +13,7 @@ class AddDriver extends React.Component {
 
   this.state = {
     employeeToken: '',
+    employeePhone:'',
     pickupTime: '',
     driver:'',
     queryData:'',
@@ -208,8 +209,9 @@ employee: myEmployee
       }
   };
    const employeeData  = await API.graphql({ query: listEmployees, variables: { filter: filter}});
-const employeeToken = employeeData.data.listEmployees.items[0].token
-this.setState({employeeToken:employeeToken})
+   //console.log(employeeData)
+const employeePhone = employeeData.data.listEmployees.items[0].phoneNumber
+this.setState({employeePhone:employeePhone})
 
 
 this.handleRowClick();
@@ -221,21 +223,9 @@ this.handleRowClick();
 
   handleRowClick  = () =>{
 
-    fetch('https://exp.host/--/api/v2/push/send', {
-      'mode': 'no-cors',
-      'method': 'POST',
-      'headers': {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-      },
-  body: JSON.stringify({
-    to: this.state.employeeToken,
+    fetch(`https://vsji3ei487.execute-api.us-east-2.amazonaws.com/dev/items?recipient=${this.state.employeePhone}&textmessage=A new Five G Trip is in your portal. The pickup time is ${this.state.pickupTime}.`)
+  .catch(err => console.error(err))
 
-    title: 'New Trip',
-    body: 'A new trip has been assigned to you! ',
-    sound: "default",
-  }),
-})
 
     var updateTrip = {
       id: this.state.localData.id,
@@ -339,7 +329,7 @@ sortByDate =(b, a) => {
 }
 
 getPickerValue = value => {
-  console.log(value);
+  //console.log(value);
 
   this.setState({ pickupTime: value});
 };

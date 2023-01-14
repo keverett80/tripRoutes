@@ -188,7 +188,7 @@ return;
 
 
     API.graphql(graphqlOperation( mutations.createEmployee,{input: addEmployee , limit: 1000 })).then(( )=> {
-      alert('Employee has beed added. ')
+      alert('Employee has been added. ')
        window.location.reload();
     })
 
@@ -275,17 +275,21 @@ return;
       await API.graphql(
         graphqlOperation(mutations.updateEmployee, { input: updatedEmployee })
       );
-      alert("Employee updated successfully.");
-      const apiData = await API.graphql(graphqlOperation(listEmployees));
-      this.setState({
-        queryData: apiData.data.listEmployees.items,
-        modal: false,
-        employeeId: "",
-        fname: "",
-        lname: "",
-        phone: "",
-        email: "",
+
+      const apiData = await API.graphql(graphqlOperation(listEmployees)).then(apiData => {
+        this.setState({
+          queryData: apiData.data.listEmployees.items,
+          modal: false,
+          employeeId: "",
+          fname: "",
+          lname: "",
+          phone: "",
+          email: "",
+        });
+        alert("Employee updated successfully.");
+        location.reload();
       });
+
     } catch (err) {
       console.log("Error updating employee:", err);
 
