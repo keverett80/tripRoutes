@@ -43,7 +43,8 @@ class Calendars extends Component {
 
   async componentDidMount(){
 
-
+    let today = new Date().toLocaleDateString();
+    let currentTime = new Date().toLocaleTimeString();
 
     const apiData = await API.graphql(graphqlOperation(listTrips, { limit: 2000 }));
 
@@ -52,7 +53,28 @@ class Calendars extends Component {
     //console.log(this.state.queryData)
 
     apiData.data.listTrips.items.sort(this.sortByTime).map((customer) => {
+     // console.log(customer)
 if(customer.status == 'pending' || customer.status == 'new'){
+
+  if(customer.wheelchair == 'Wheelchair' && customer.appointmentDate === today  && customer.pickupTime !== null && customer.appointmentTime === 'Will Call' )
+  {
+
+    myCustomers.push({
+
+      title: customer.fname + ' ' + customer.lname + ' ' +  customer.appointmentTime +  ' WC',
+
+      start: new Date(customer.appointmentDate.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
+      year: 'numeric'})),
+      end: new Date(customer.appointmentDate.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
+      year: 'numeric'})),
+
+      allday: 'Will Call',
+      name: customer
+      });
+
+
+  }
+
       if(customer.appointmentTime !== 'Will Call')
 {
 
@@ -213,6 +235,11 @@ handleChange1 = () =>{
             if(event.newRequest)
             {
              backgroundColor = 'red';
+            }
+            if(event.allday === 'Will Call')
+            {
+              backgroundColor = '#50648E';
+
             }
 
 

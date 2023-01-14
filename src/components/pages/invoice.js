@@ -20,6 +20,7 @@ import { Container } from 'react-bootstrap';
   fetchInvoices = async () => {
     try {
       const result = await axios.get('https://pb9bo5u0cf.execute-api.us-east-2.amazonaws.com/default/viewInvoice');
+      console.log(result.data.invoices)
       this.setState({ invoices: result.data.invoices });
     } catch (error) {
       console.error(error);
@@ -49,7 +50,7 @@ import { Container } from 'react-bootstrap';
 
   componentDidMount() {
     axios.get('https://pb9bo5u0cf.execute-api.us-east-2.amazonaws.com/default/viewInvoice')
-      .then(result => this.setState({ invoices: result.data.invoices }))
+      .then(result => this.setState({ invoices: result.data.invoices }) )
       .catch(error => console.log(error));
   }
 
@@ -89,6 +90,8 @@ import { Container } from 'react-bootstrap';
                       ? 'success'
                       : invoice.status === 'CANCELED'
                       ? 'danger'
+                      : invoice.status === 'UNPAID'
+                      ? 'warning'
                       : 'primary'
                   }
                 >

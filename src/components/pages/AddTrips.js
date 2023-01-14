@@ -3,8 +3,8 @@ import { API,  graphqlOperation } from "aws-amplify";
 import {createOrder } from 'square-connect';
 import * as mutations from '../../graphql/mutations';
 import * as queries from '../../graphql/queries';
-import { listBrokers, listCustomers } from '../../graphql/queries';
-import { MDBContainer, MDBRow, MDBTimePicker, MDBCol, MDBStepper, MDBStep, MDBBtn, MDBInput, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDataTableV5,MDBIcon, MDBDatePicker, MDBSelect, MDBTable, MDBTableBody, MDBTableHead  } from "mdbreact";
+import { listCustomers } from '../../graphql/queries';
+import { MDBContainer, MDBRow, MDBTimePicker, MDBCol, MDBStepper, MDBStep, MDBBtn, MDBInput, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDataTableV5,MDBIcon, MDBDatePicker, MDBSelect, MDBTable, MDBTableBody, MDBTableHead, Spinner  } from "mdbreact";
 import PlacesAutocomplete from 'react-places-autocomplete';
 import {Helmet} from "react-helmet";
 import DatePicker from "react-multi-date-picker"
@@ -37,8 +37,7 @@ this.state = {
   invoiceNumber: '',
   weekends:'',
   notes: '',
-  broker:[],
-  brokers:'',
+  loading: false,
   formActivePanel1: 1,
   formActivePanel1Changed: false,
   fname: '',
@@ -184,7 +183,7 @@ this.handleChange = this.handleChange.bind(this)
     const apiData = await API.graphql(graphqlOperation(listCustomers, { limit: 1000 }));
 
     var myCustomers = [];
-    this.getBroker();
+
     apiData.data.listCustomers.items.sort(this.sortByTime).map((customer) => {
       myCustomers.push({
         id: customer.id,
@@ -226,31 +225,6 @@ this.handleChange = this.handleChange.bind(this)
     }
 
 
-    getBroker = () =>{
-
-      var myThis = this;
-      var myEmployee= [];
-
-       API.graphql(graphqlOperation(listBrokers)).then(function(results)
-        {
-
-
-          results.data.listBrokers.items.map((customer) => {
-
-            //console.log(customer.emailAddress)
-            myEmployee.push({
-            text: customer.name,
-            value: customer.name,
-
-            });
-
-
-        })
-
-
-        })
-       this.setState({broker: myEmployee});
-        }
 
 
 
@@ -264,11 +238,11 @@ this.handleChange = this.handleChange.bind(this)
 
   }
   handleRowClick = (data) => {
-   // alert('hello')
+
     this.setState({
       fname: data.fname,
       lname: data.lname,
-      phone: data.phone,
+      phone: data.phoneNumber,
       email: data.email,
       address: data.address
     }, this.handleNextPrevClick(1)(2));
@@ -601,7 +575,7 @@ editCustomer = (customerId, updatedInfo) => {
         editModalOpen: true,
         fname: currentCustomer.fname,
         lname: currentCustomer.lname,
-        phone: currentCustomer.phoneNumber,
+        phone: this.formatPhoneNumber(currentCustomer.phoneNumber),
         email: currentCustomer.emailAddress,
         address: currentCustomer.address
     });
@@ -611,9 +585,19 @@ editCustomer = (customerId, updatedInfo) => {
       const updatedCustomer = {
         fname: this.state.fname,
         lname: this.state.lname,
-        phoneNumber: this.state.phone,
+        phoneNumber: this.formatPhoneNumber(this.state.phone),
         emailAddress: this.state.email,
-        address: this.state.address
+        address: this.state.address,
+        oldPhone: currentCustomer.phoneNumber
+      }
+
+      const updatedCustomerData = {
+        fname: this.state.fname,
+        lname: this.state.lname,
+        phoneNumber: this.formatPhoneNumber(this.state.phone),
+        emailAddress: this.state.email,
+        address: this.state.address,
+
       }
 
       console.log(this.state.address)
@@ -641,7 +625,7 @@ editCustomer = (customerId, updatedInfo) => {
 
       API.graphql({
         query: mutations.updateCustomer,
-        variables: { input: { id: customerId, ...updatedCustomer } }
+        variables: { input: { id: customerId, ...updatedCustomerData } }
       }).then(() => {
         this.setState({editModalOpen: false });
         location.reload()
@@ -666,11 +650,11 @@ deleteCustomer = (customerId) => {
 
 submitTrip = () =>{
 
-
+  this.setState({ loading: true });
   if(this.state.price === '' || this.state.price === null || this.state.price === 0)
   {
  alert('Please calculate total. ')
-
+ this.setState({ loading: false });
  return;
 
 
@@ -679,7 +663,7 @@ submitTrip = () =>{
   if(this.state.appointmentDate1 === '' || this.state.appointmentDate1 === null )
   {
  alert('Please select your date. ')
-
+ this.setState({ loading: false });
  return;
 
 
@@ -698,7 +682,6 @@ submitTrip = () =>{
     phoneNumber: this.state.phone,
     cost: Math.round(this.state.price * 100)/100,
     driver: '',
-    broker: this.state.brokers[0],
     notes: this.state.notes,
     distance: (this.state.roundTrip === 'Roundtrip') ? this.state.distance * 2 : this.state.distance,
     trip: '1',
@@ -765,6 +748,7 @@ console.log(this.state.phone);
 
       }else {
       alert('New Trip Added! ')
+      this.setState({ loading: false });
       window.location.reload();
       }
 
@@ -855,13 +839,7 @@ console.log(integerPrice)
     console.log(response)
   });
 }
-handleAssign = value => {
 
-
-  this.setState({ brokers: value});
-
-
-};
 
 
 submitTripRound = () =>{
@@ -880,7 +858,6 @@ submitTripRound = () =>{
     phoneNumber: this.state.phone,
     cost: Math.round(this.state.price * 100)/100,
     driver: '',
-    broker: this.state.brokers[0],
     notes: this.state.notes,
     distance: (this.state.roundTrip === 'Roundtrip') ? this.state.distance * 2 : this.state.distance,
     trip: '2',
@@ -913,6 +890,7 @@ render() {
 
 
         <div className="application">
+
             <Helmet>
             <script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAdnS_bTUUA8hlPRJkr0tDPBZ_vdA4hH9Y&libraries=places,distancematrix" type="text/javascript" />
@@ -929,7 +907,11 @@ render() {
         <MDBStep icon="table" stepName="Trip" onClick={this.swapFormActive(1)(4)}></MDBStep>
         <MDBStep icon="check" stepName="Finish" onClick={this.swapFormActive(1)(5)}></MDBStep>
       </MDBStepper>
-
+{this.state.loading ? (
+     <div className='d-flex justify-content-center'>
+    <Spinner color="primary" />
+    </div>
+  ) : (
 
         <div className='text-left'>
         <MDBRow>
@@ -1084,12 +1066,7 @@ render() {
 
 
 
-        <MDBSelect
-          options={this.state.broker}
-          selected="Choose your option"
-          label="Select Broker"
-          getValue={this.handleAssign}
-        />
+
         <MDBInput type="textarea" getValue={this.getNotesValue} label="Trip Notes" background />
 
 
@@ -1130,7 +1107,7 @@ render() {
           </MDBCol>)}
         </MDBRow>
         </div>
-
+ )}
 
       <MDBModal isOpen={this.state.modal} toggle={this.toggle}>
 
