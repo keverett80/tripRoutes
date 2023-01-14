@@ -231,7 +231,7 @@ this.handleRowClick();
 
   handleRowClick  = () =>{
 
-    fetch(`https://vsji3ei487.execute-api.us-east-2.amazonaws.com/dev/items?recipient=${this.state.employeePhone}&textmessage=A return Five G Trip is in your portal under the Ready Pickup tab. The pickup time is ${this.state.pickupTime}.`)
+    fetch(`https://vsji3ei487.execute-api.us-east-2.amazonaws.com/dev/items?recipient=${this.state.employeePhone}&textmessage=A return Five G Trip is in your portal under the Ready Pickup tab. `)
   .catch(err => console.error(err))
 
 
