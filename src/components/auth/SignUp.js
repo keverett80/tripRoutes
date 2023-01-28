@@ -1,6 +1,6 @@
 import React from "react";
 import { Auth } from "aws-amplify";
-import { MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput, MDBBtn, MDBIcon, MDBModalFooter } from 'mdbreact';
+import { MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput, MDBBtn, MDBIcon, MDBModalFooter } from 'mdb-react-ui-kit';
 import "./auth.css";
 
 import PhoneInput from 'react-phone-input-2'
@@ -49,11 +49,11 @@ class SignUp extends React.Component  {
         </div>
         <MDBInput
           label="Username"
-          group
+          group='true'
           type="text"
           name="username"
 
-          validate
+          validate='true'
           error="wrong"
           success="right"
           value={this.props.username}
@@ -61,11 +61,11 @@ class SignUp extends React.Component  {
         />
            <MDBInput
                 label="Your email"
-                group
+                group='true'
                 type="email"
                 name="email"
 
-                validate
+                validate='true'
                 error="wrong"
                 success="right"
                 value={this.props.email}
@@ -73,21 +73,21 @@ class SignUp extends React.Component  {
               />
         <MDBInput
           label="Your password"
-          group
+          group='true'
           type="password"
-          type="password"
+
           name="password"
-          validate
-          containerClass="mb-0"
+          validate='true'
+          className="mb-0"
           value={this.props.password}
           onChange={this.props.handleFormInput}
         />
          <PhoneInput
   country={'us'}
                 label="Phone Number"
-                group
+                group='true'
                 type="phone"
-                validate
+                validate='true'
                 error="wrong"
                 success="right"
                 name="phone"

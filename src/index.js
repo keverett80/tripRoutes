@@ -1,12 +1,14 @@
 import React from 'react';
 import Auth from "@aws-amplify/auth";
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import {BrowserRouter} from 'react-router-dom'
 import './index.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import '@fortawesome/fontawesome-free/css/all.min.css';
-import 'bootstrap-css-only/css/bootstrap.min.css';
-import 'mdbreact/dist/css/mdb.css';
+import 'mdb-react-ui-kit/dist/css/mdb.min.css';
+import "@fortawesome/fontawesome-free/css/all.min.css";
+
+
+
 
 
 
@@ -27,15 +29,14 @@ Auth.currentUserInfo({
   else{
     log = false
   }
-  ReactDOM.render(
 
-    <BrowserRouter>
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  <BrowserRouter>
+    <App isLoggedIn={log} />
+  </BrowserRouter>
 
-      <App  isLoggedIn={log}  />
-    </BrowserRouter>,
-
-    document.getElementById('root')
-  );
+);
 
   // If you want to start measuring performance in your app, pass a function
   // to log results (for example: reportWebVitals(//console.log))

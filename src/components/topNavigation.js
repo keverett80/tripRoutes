@@ -1,9 +1,9 @@
 import React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
-import { MDBInput, MDBNavbar, MDBNavbarNav, MDBNavItem, MDBNavLink, MDBDropdown, MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem, MDBIcon, MDBSideNavItem, MDBSideNavCat, MDBSideNavNav, MDBSideNav, MDBSideNavLink } from "mdbreact";
+import { MDBInput, MDBNavbar, MDBNavbarNav, MDBSideNavItem, MDBDropdown, MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem, MDBIcon, MDBSideNavLink, MDBSideNavMenu, MDBSideNav} from 'mdb-react-ui-kit';
 import { NavLink } from 'react-router-dom';
 import logo from "../assets/logo.png";
-import { AmplifySignOut } from '@aws-amplify/ui-react';
+import { Authenticator } from '@aws-amplify/ui-react';
 import { Auth } from '@aws-amplify/auth';
 
 
@@ -71,9 +71,9 @@ class TopNavigation extends React.Component {
            fixed
           >
 
-            <MDBSideNavNav>
+            <MDBSideNavMenu>
 
-            <MDBSideNavCat
+            <MDBSideNavLink
                 name="Trips"
                 id="contact-me-cat"
                 icon="car"
@@ -88,9 +88,9 @@ class TopNavigation extends React.Component {
                 <MDBSideNavItem href='/archived'>Archived Trips</MDBSideNavItem>
 
 
-              </MDBSideNavCat>
+              </MDBSideNavLink>
 
-              <MDBSideNavCat
+              <MDBSideNavLink
                 name="Edits"
                 id="contact-me-cat"
                 icon="pen"
@@ -99,9 +99,9 @@ class TopNavigation extends React.Component {
                 <MDBSideNavItem href='/editTrips'>Edit Trips</MDBSideNavItem>
 
 
-              </MDBSideNavCat>
+              </MDBSideNavLink>
 
-              <MDBSideNavCat
+              <MDBSideNavLink
                 name="Invoices"
                 id="contact-me-cat"
                 icon="dollar-sign"
@@ -111,10 +111,10 @@ class TopNavigation extends React.Component {
 
 
 
-              </MDBSideNavCat>
+              </MDBSideNavLink>
 
 
-              <MDBSideNavCat
+              <MDBSideNavLink
                 name="Five G Info"
                 id="contact-me-cat"
                 icon="building"
@@ -126,12 +126,12 @@ class TopNavigation extends React.Component {
                 <MDBSideNavItem href='/brokers'>Add Brokers</MDBSideNavItem>
                 <MDBSideNavItem href='/links'>Business Links</MDBSideNavItem>
                 <MDBSideNavItem href='/dash'>Dashboards</MDBSideNavItem>
-              </MDBSideNavCat>
-            </MDBSideNavNav>
+              </MDBSideNavLink>
+            </MDBSideNavMenu>
           </MDBSideNav>
           <MDBNavbar double expand="md" fixed="top" scrolling>
             <MDBNavbarNav left>
-              <MDBNavItem>
+              <MDBSideNavItem>
                 <div
                   onClick={this.handleToggleClickA}
                   key="sideNavToggleA"
@@ -143,34 +143,34 @@ class TopNavigation extends React.Component {
                 >
                   <MDBIcon icon="bars" color="white" size="2x" />
                 </div>
-              </MDBNavItem>
+              </MDBSideNavItem>
 
             </MDBNavbarNav>
             <MDBNavbarNav right style={specialCaseNavbarStyles}>
-            <MDBNavItem>
-                <MDBNavLink to="/calendar">
+            <MDBSideNavItem>
+                <MDBSideNavLink to="/calendar">
                   <MDBIcon icon="calendar" className="d-inline-inline" />{" "}
                   <div className="d-none d-md-inline">Calendar</div>
-                </MDBNavLink>
-              </MDBNavItem>
+                </MDBSideNavLink>
+              </MDBSideNavItem>
 
-              <MDBNavItem>
-                <MDBNavLink to="#!">
+              <MDBSideNavItem>
+                <MDBSideNavLink to="#!">
                   <MDBIcon icon="user" className="d-inline-inline" />{" "}
                   <div className="d-none d-md-inline">{this.state.user}</div>
-                </MDBNavLink>
-              </MDBNavItem>
-              <MDBNavItem>
+                </MDBSideNavLink>
+              </MDBSideNavItem>
+              <MDBSideNavItem>
                 <MDBDropdown>
                   <MDBDropdownToggle nav caret>
                     <div className="d-none d-md-inline">Sign Out</div>
                   </MDBDropdownToggle>
                   <MDBDropdownMenu right>
-                    <MDBDropdownItem href="#!"><AmplifySignOut handleAuthStateChange={this.handleAuthStateChange} /></MDBDropdownItem>
+                    <MDBDropdownItem href="#!"><Authenticator handleAuthStateChange={this.handleAuthStateChange} /></MDBDropdownItem>
 
                   </MDBDropdownMenu>
                 </MDBDropdown>
-              </MDBNavItem>
+              </MDBSideNavItem>
             </MDBNavbarNav>
           </MDBNavbar>
 

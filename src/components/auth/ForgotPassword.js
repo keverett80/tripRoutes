@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Auth } from "aws-amplify";
-import { MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput, MDBBtn, MDBIcon, MDBModalFooter } from 'mdbreact';
+import { MDBInput, MDBBtn, MDBModalFooter } from 'mdb-react-ui-kit';
 
 export default class ForgotPassword extends Component {
   handleReset = event => {
@@ -25,9 +25,9 @@ export default class ForgotPassword extends Component {
 <div>
               <MDBInput
 
-                group
+                group='true'
 
-                validate
+                validate='true'
                 error="wrong"
                 success="right"
                 type="text"
@@ -43,7 +43,7 @@ export default class ForgotPassword extends Component {
                   color="white"
                   rounded
                   className="btn-block z-depth-1a"
-                  type="submit"
+
 
                   onClick={this.handleReset}
                 >

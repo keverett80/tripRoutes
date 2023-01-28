@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Auth } from "aws-amplify";
-import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBIcon, MDBInput } from 'mdbreact';
+import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBIcon, MDBInput } from 'mdb-react-ui-kit';
 
 export default class Verify extends Component {
   handleVerification = event => {
@@ -27,8 +27,8 @@ export default class Verify extends Component {
       <p className="h5 text-center mb-4">Subscribe</p>
       <div className="text-left">
 
-        <MDBInput label="Verification Code" icon="paper-plane" group type="verify"
-          success="right"   type="text"
+        <MDBInput label="Verification Code" icon="paper-plane"   group='true' type="verify"
+          success="right"
           name="code"
           value={this.props.code}
           placeholder="Verification Code"

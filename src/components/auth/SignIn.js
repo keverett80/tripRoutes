@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Auth } from "aws-amplify";
-import { MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput, MDBBtn, MDBIcon, MDBModalFooter } from 'mdbreact';
+import {MDBInput, MDBBtn} from 'mdb-react-ui-kit';
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 
@@ -38,9 +38,9 @@ export default class SignIn extends Component {
 <div>
               <MDBInput
 
-                group
+group='true'
 
-                validate
+validate='true'
                 error="wrong"
                 success="right"
                 type="text"
@@ -52,15 +52,15 @@ export default class SignIn extends Component {
               />
               <MDBInput
                 label="Your password"
-                group
+                group='true'
                 type="password"
                 name="password"
                 autoComplete="off"
                 value={this.props.password}
                 placeholder="Password"
                 onChange={this.props.handleFormInput}
-                validate
-                containerClass="mb-0"
+                validate='true'
+                className="mb-0"
               />
 
               <div className="text-center mb-3">
@@ -69,7 +69,7 @@ export default class SignIn extends Component {
                   color="white "
                   rounded
                   className="btn-block z-depth-1a"
-                  type="submit"
+
 
                   onClick={this.handleSignIn}
                 >

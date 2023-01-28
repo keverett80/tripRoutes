@@ -1,5 +1,5 @@
 import React from 'react';
-import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDataTableV5,MDBFormInline, MDBTimePicker, MDBSelect, MDBCol } from 'mdbreact';
+import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDatatable, MDBTimepicker, MDBSelect, MDBCol } from 'mdb-react-ui-kit';
 import { API,  graphqlOperation } from "aws-amplify";
 import { listTrips, listEmployees } from '../../graphql/queries';
 import * as mutations from '../../graphql/mutations';
@@ -347,7 +347,7 @@ getPickerValue = value => {
   render() {
   return (
 <MDBContainer>
-    <MDBDataTableV5
+    <MDBDatatable
     hover entriesOptions={[5, 20, 25]} entries={5} pagesAmount={4}
     searchTop
    btn
@@ -378,7 +378,7 @@ getPickerValue = value => {
         />
 <div className='text-primary'><a>Pickup Time</a></div>
 
-        <MDBTimePicker id="timePicker" getValue={this.getPickerValue} />
+        <MDBTimepicker id="timePicker" getValue={this.getPickerValue} />
 
         </div>
        </MDBModalBody>

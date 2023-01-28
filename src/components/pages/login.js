@@ -2,7 +2,7 @@
 
 import React from "react";
 
-import { MDBContainer } from "mdbreact";
+import { MDBContainer } from 'mdb-react-ui-kit';
 import Login from "../auth/pageLogin"
 
 

@@ -2,7 +2,7 @@ import React from "react";
 import { API,  graphqlOperation } from "aws-amplify";
 import * as mutations from '../../graphql/mutations';
 import { listBrokers, listInvoices, listTrips } from '../../graphql/queries';
-import { MDBContainer, MDBRow, MDBTimePicker, MDBCol, MDBStepper, MDBStep, MDBBtn, MDBInput, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDataTableV5,MDBIcon, MDBDatePicker, MDBSelect, MDBTable, MDBTableBody, MDBTableHead   } from "mdbreact";
+import { MDBContainer, MDBRow,  MDBCol, MDBStepper, MDBStepperStep, MDBBtn, MDBInput, MDBModal, MDBModalBody,  MDBModalFooter, MDBDatatable,MDBIcon, MDBDatepicker, MDBSelect, MDBTable, MDBTableBody, MDBTableHead   } from 'mdb-react-ui-kit';;
 import PlacesAutocomplete from 'react-places-autocomplete';
 import {Helmet} from "react-helmet";
 
@@ -632,11 +632,11 @@ render() {
         </div>
 
         <MDBStepper icon>
-        <MDBStep far icon="address-card" stepName="Basic Information" onClick={this.swapFormActive(1)(1)}></MDBStep>
-        <MDBStep  icon="map-marked" stepName="Personal Data" onClick={this.swapFormActive(1)(2)}></MDBStep>
-        <MDBStep  icon="map-marked-alt" stepName="Terms and Conditions" onClick={this.swapFormActive(1)(3)}></MDBStep>
-        <MDBStep icon="table" stepName="Trip" onClick={this.swapFormActive(1)(4)}></MDBStep>
-        <MDBStep icon="check" stepName="Finish" onClick={this.swapFormActive(1)(5)}></MDBStep>
+        <MDBStepperStep far icon="address-card" stepName="Basic Information" onClick={this.swapFormActive(1)(1)}></MDBStepperStep>
+        <MDBStepperStep  icon="map-marked" stepName="Personal Data" onClick={this.swapFormActive(1)(2)}></MDBStepperStep>
+        <MDBStepperStep  icon="map-marked-alt" stepName="Terms and Conditions" onClick={this.swapFormActive(1)(3)}></MDBStepperStep>
+        <MDBStepperStep icon="table" stepName="Trip" onClick={this.swapFormActive(1)(4)}></MDBStepperStep>
+        <MDBStepperStep icon="check" stepName="Finish" onClick={this.swapFormActive(1)(5)}></MDBStepperStep>
       </MDBStepper>
 
 
@@ -648,7 +648,7 @@ render() {
             <h3 className="font-weight-bold pl-0 my-4 text-center">
               <strong>Edit Trips</strong></h3>
 
-              <MDBDataTableV5
+              <MDBDatatable
       hover entriesOptions={[5, 20, 25]} entries={5} pagesAmount={4}
       searchTop searchBottom={false}
       barReverse
@@ -777,7 +777,7 @@ render() {
 
 <div className='text-center red-text'>  <label htmlFor="formGroupExampleInput">Appointment Date</label>
 
-<MDBDatePicker  id="datePicker" value={this.state.appointmentDate}  getValue={this.getPickerDateValue} />
+<MDBDatepicker  id="datePicker" value={this.state.appointmentDate}  getValue={this.getPickerDateValue} />
 </div>
 
             <MDBInput label='Appointment Time'  id="timePicker" value={this.state.appointmentTime}    getValue={this.getPickerValue} />

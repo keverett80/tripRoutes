@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Auth } from "aws-amplify";
-import { MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput, MDBBtn, MDBIcon, MDBModalFooter } from 'mdbreact';
+import { MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput, MDBBtn, MDBIcon, MDBModalFooter } from 'mdb-react-ui-kit';
 
 export default class ResetVerify extends Component {
   handleSignIn = event => {
@@ -30,9 +30,9 @@ export default class ResetVerify extends Component {
               </div>
               <MDBInput
 
-                group
+                group='true'
 
-                validate
+                validate='true'
                 error="wrong"
                 success="right"
                 type="text"
@@ -43,9 +43,9 @@ export default class ResetVerify extends Component {
               />
                  <MDBInput
 
-group
+group='true'
 
-validate
+validate='true'
 error="wrong"
 success="right"
 type="text"
@@ -56,14 +56,14 @@ onChange={this.props.handleFormInput}
 />
               <MDBInput
                 label="Your password"
-                group
+                group='true'
                 type="password"
                 name="password"
                 value={this.props.password}
                 placeholder="Password"
                 onChange={this.props.handleFormInput}
-                validate
-                containerClass="mb-0"
+                validate='true'
+                className="mb-0"
 
               />
               <p className="font-small blue-text d-flex justify-content-end pb-3">
@@ -79,7 +79,7 @@ onChange={this.props.handleFormInput}
                   color="black lighten-1"
                   rounded
                   className="btn-block z-depth-1a"
-                  type="submit"
+
 
                   onClick={this.handleSignIn}
                 >

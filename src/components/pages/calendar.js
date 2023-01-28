@@ -4,7 +4,7 @@ import moment from "moment";
 import { API,  graphqlOperation } from "aws-amplify";
 import * as mutations from '../../graphql/mutations';
 import { listTrips } from '../../graphql/queries';
-import { MDBInput, MDBBadge, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter,MDBTable, MDBTableBody, MDBTableHead, MDBFormInline  } from "mdbreact";
+import { MDBInput, MDBBadge, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter,MDBTable, MDBTableBody, MDBTableHead,   } from 'mdb-react-ui-kit';
 
 import "./calendar.css";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -298,14 +298,14 @@ handleChange1 = () =>{
 
       </MDBTableBody>
     </MDBTable>
-    <MDBFormInline>
+    <form>
         <MDBInput
           onClick={this.onClick(1)}
           checked={this.state.radio === 1 ? true : false}
           label='Pending'
           type='radio'
           id='radio1'
-          containerClass='mr-5'
+          className='mr-5'
           onChange={this.handleChange}
         />
         <MDBInput
@@ -314,7 +314,7 @@ handleChange1 = () =>{
           label='Complete'
           type='radio'
           id='radio2'
-          containerClass='mr-5'
+          className='mr-5'
           onChange={this.handleChange1}
         />
         <MDBInput
@@ -323,10 +323,10 @@ handleChange1 = () =>{
           label='Canceled'
           type='radio'
           id='radio3'
-          containerClass='mr-5'
+          className='mr-5'
           onChange={this.handleChange2}
         />
-      </MDBFormInline>
+      </form>
         </MDBModalBody>
         <MDBModalFooter>
         <MDBBtn color="primary" rounded outline onClick={this.handleRowClick}>Update Status</MDBBtn>

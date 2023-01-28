@@ -1,5 +1,5 @@
 import React from 'react';
-import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDataTableV5,MDBFormInline, MDBInput } from 'mdbreact';
+import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDatatable, MDBInput } from 'mdb-react-ui-kit';
 import { API,  graphqlOperation } from "aws-amplify";
 import { listCustomers, listTrips } from '../../graphql/queries';
 import * as mutations from '../../graphql/mutations';
@@ -239,7 +239,7 @@ calculateAutofocus = (a) => {
             </Helmet>
 
         </div>
-    <MDBDataTableV5
+    <MDBDatatable
     hover entriesOptions={[5, 20, 25]} entries={5} pagesAmount={4}
     searchTop
     searching={true}

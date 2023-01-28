@@ -1,5 +1,5 @@
 import React from 'react';
-import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDataTable, MDBCol, MDBFormInline, MDBIcon, MDBInput, MDBRow, MDBDataTableV5 } from 'mdbreact';
+import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDataTable, MDBCol, MDBFormInline, MDBIcon, MDBInput, MDBRow, MDBDatatable } from 'mdb-react-ui-kit';
 import { API,  graphqlOperation } from "aws-amplify";
 import { listBrokers } from '../../graphql/queries';
 import * as mutations from '../../graphql/mutations';
@@ -266,7 +266,7 @@ return;
 <div className="text-center"> <MDBBtn onClick={this.toggle}>Add Broker</MDBBtn></div>
 
 
-    <MDBDataTableV5
+    <MDBDatatable
     hover entriesOptions={[5, 20, 25]} entries={5} pagesAmount={4}
     searchTop={true}
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDataTableV5, MDBFormInline, MDBInput } from 'mdbreact';
+import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter,  MDBDatatable,  MDBInput } from 'mdb-react-ui-kit';
 import { API, graphqlOperation } from 'aws-amplify';
 import { listEmployees } from '../../graphql/queries';
 import * as mutations from '../../graphql/mutations';
@@ -400,7 +400,7 @@ return;
               </MDBBtn>
             </MDBModalFooter>
           </MDBModal>
-          <MDBDataTableV5
+          <MDBDatatable
             hover
             data={data}
             entries={5}

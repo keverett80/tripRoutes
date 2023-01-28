@@ -1,31 +1,45 @@
 import React from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, useLocation,
+  useNavigate,
+  useParams } from 'react-router-dom';
 import {
   MDBNavbar,
   MDBNavbarBrand,
   MDBNavbarNav,
-  MDBNavItem,
-  MDBNavLink,
+  MDBNavbarItem,
   MDBNavbarToggler,
   MDBCollapse,
-  MDBMask,
+
   MDBRow,
   MDBCol,
   MDBIcon,
-  MDBBtn,
-  MDBView,
+
+
   MDBContainer,
   MDBCard,
   MDBCardBody,
-  MDBInput,
-  MDBFormInline,
+
   MDBAnimation
-} from 'mdbreact';
+} from 'mdb-react-ui-kit';
 import './main.css';
-import Logged from '../../components/pages/login';
-import RoutesLanding from '../../components/RoutesLanding';
-import { withRouter } from "react-router";
+
 import Login from "../auth/pageLogin"
+
+function withRouter(Component) {
+  function ComponentWithRouterProp(props) {
+    let location = useLocation();
+    let navigate = useNavigate();
+    let params = useParams();
+    return (
+      <Component
+        {...props}
+        router={{ location, navigate, params }}
+      />
+    );
+  }
+
+  return ComponentWithRouterProp;
+}
 
 class Main extends React.Component {
   state = {
@@ -56,7 +70,7 @@ class Main extends React.Component {
     );
     return (
       <div id='classicformpage'>
-        <Router>
+
           <div>
             <MDBNavbar
               dark
@@ -75,19 +89,19 @@ class Main extends React.Component {
                 <MDBCollapse id='navbarCollapse' isOpen={collapseID} navbar>
 
                   <MDBNavbarNav right>
-                  <MDBNavItem>
+                  <MDBNavbarItem>
 
-              </MDBNavItem>
+              </MDBNavbarItem>
                   </MDBNavbarNav>
                 </MDBCollapse>
               </MDBContainer>
             </MDBNavbar>
             {collapseID && overlay}
           </div>
-        </Router>
 
-        <MDBView>
-          <MDBMask className='d-flex justify-content-center align-items-center gradient' />
+
+        <div>
+        <div className='mask' style={{ backgroundColor: 'rgba(251, 251, 251, 0.6)' }}></div>
           <MDBContainer
             style={{ height: '100%', width: '100%', paddingTop: '10rem' }}
             className='mt-5  d-flex justify-content-center align-items-center'
@@ -124,7 +138,7 @@ class Main extends React.Component {
               </MDBCol>
             </MDBRow>
           </MDBContainer>
-        </MDBView>
+        </div>
 
         <MDBContainer>
           <MDBRow className='py-5'>

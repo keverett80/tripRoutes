@@ -1,8 +1,8 @@
 import React from 'react';
-import { MDBContainer, MDBDataTableV5,  MDBTabPane, MDBTabContent, MDBNav, MDBNavItem, MDBNavLink, MDBIcon } from 'mdbreact';
+import { MDBContainer, MDBDatatable,  MDBTabsPane, MDBTabsContent, MDBNavbar, MDBNavbarItem, MDBNavbarLink, MDBIcon } from 'mdb-react-ui-kit';
 import { API,  graphqlOperation } from "aws-amplify";
 import { listTrips, listEmployees} from '../../graphql/queries';
-import ReactTooltip from 'react-tooltip';
+import { Tooltip as ReactTooltip } from 'react-tooltip'
 
 
 
@@ -232,22 +232,22 @@ sortByDate =(b, a) => {
 
 
 <MDBContainer>
-<MDBNav tabs className="nav-justified" color='red'>
-          <MDBNavItem>
-            <MDBNavLink link to="#" active={this.state.activeItemJustified === "1"} onClick={this.toggleJustified("1")} role="tab" >
+<MDBNavbar tabs className="nav-justified" color='red'>
+          <MDBNavbarItem>
+            <MDBNavbarLink link to="#" active={this.state.activeItemJustified === "1"} onClick={this.toggleJustified("1")} role="tab" >
               <MDBIcon icon="user" /> Driver Status
-            </MDBNavLink>
-          </MDBNavItem>
+            </MDBNavbarLink>
+          </MDBNavbarItem>
 
 
-        </MDBNav>
+        </MDBNavbar>
 
-        <MDBTabContent
+        <MDBTabsContent
           className="card"
           activeItem={this.state.activeItemJustified}
         >
-          <MDBTabPane tabId="1" role="tabpanel">
-    <MDBDataTableV5
+          <MDBTabsPane tabId="1" role="tabpanel">
+    <MDBDatatable
     hover entriesOptions={[5, 20, 25]} entries={20} pagesAmount={4}
     searchTop
    btn
@@ -261,9 +261,9 @@ sortByDate =(b, a) => {
 />
 <ReactTooltip />
 
-</MDBTabPane>
+</MDBTabsPane>
 
-          </MDBTabContent>
+          </MDBTabsContent>
      </MDBContainer>
 
   );

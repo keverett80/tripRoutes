@@ -1,5 +1,5 @@
 import React from 'react';
-import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDataTableV5,MDBFormInline, MDBInput, MDBRow, MDBCol } from 'mdbreact';
+import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDatatable, MDBInput, MDBRow, MDBCol } from 'mdb-react-ui-kit';
 import { API,  graphqlOperation } from "aws-amplify";
 import { listTrips, listInvoice } from '../../graphql/queries';
 import * as mutations from '../../graphql/mutations';
@@ -334,7 +334,7 @@ setEndDate = (value) => {
   return (
 <MDBContainer>
 
-    <MDBDataTableV5
+    <MDBDatatable
      onPageChange={ value => console.log(value) }
 
     hover entriesOptions={[5, 20, 25]}
@@ -361,14 +361,14 @@ setEndDate = (value) => {
        <MDBModalHeader toggle={this.toggle} >Trip Status</MDBModalHeader>
        </div>
        <MDBModalBody>
-       <MDBFormInline>
+       <form>
         <MDBInput
           onClick={this.onClick(1)}
           checked={this.state.radio === 1 ? true : false}
           label='Pending'
           type='radio'
           id='radio1'
-          containerClass='mr-5'
+          className='mr-5'
           onChange={this.handleChange}
         />
         <MDBInput
@@ -377,7 +377,7 @@ setEndDate = (value) => {
           label='Complete'
           type='radio'
           id='radio2'
-          containerClass='mr-5'
+          className='mr-5'
           onChange={this.handleChange1}
         />
         <MDBInput
@@ -386,10 +386,10 @@ setEndDate = (value) => {
           label='Canceled'
           type='radio'
           id='radio3'
-          containerClass='mr-5'
+          className='mr-5'
           onChange={this.handleChange2}
         />
-      </MDBFormInline>
+      </form>
        </MDBModalBody>
        <MDBModalFooter>
          <MDBBtn rounded color="secondary" outline onClick={this.toggle}>Close</MDBBtn>

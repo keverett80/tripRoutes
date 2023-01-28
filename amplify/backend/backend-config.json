@@ -1,82 +1,116 @@
 {
   "api": {
-    "tranport": {
-      "service": "AppSync",
+    "api32780395": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "tranportab1a7f3a"
+        }
+      ],
       "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    },
+    "api77aadb89": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "tranport581cc7c7"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    },
+    "myinvoice": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "tranport581cc7c7"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    },
+    "tranport": {
       "output": {
         "authConfig": {
+          "additionalAuthenticationProviders": [],
           "defaultAuthentication": {
-            "authenticationType": "API_KEY",
             "apiKeyConfig": {
               "apiKeyExpirationDays": 365,
               "description": ""
-            }
-          },
-          "additionalAuthenticationProviders": []
+            },
+            "authenticationType": "API_KEY"
+          }
         }
-      }
-    },
-    "api32780395": {
-      "service": "API Gateway",
+      },
       "providerPlugin": "awscloudformation",
-      "dependsOn": [
-        {
-          "category": "function",
-          "resourceName": "tranportab1a7f3a",
-          "attributes": [
-            "Name",
-            "Arn"
-          ]
-        }
-      ]
-    },
-    "api77aadb89": {
-      "service": "API Gateway",
-      "providerPlugin": "awscloudformation",
-      "dependsOn": [
-        {
-          "category": "function",
-          "resourceName": "tranport581cc7c7",
-          "attributes": [
-            "Name",
-            "Arn"
-          ]
-        }
-      ]
-    },
-    "myinvoice": {
-      "service": "API Gateway",
-      "providerPlugin": "awscloudformation",
-      "dependsOn": [
-        {
-          "category": "function",
-          "resourceName": "tranport581cc7c7",
-          "attributes": [
-            "Name",
-            "Arn"
-          ]
-        }
-      ]
+      "service": "AppSync"
     }
   },
   "auth": {
     "tranport743f50b7": {
-      "service": "Cognito",
-      "providerPlugin": "awscloudformation",
+      "customAuth": false,
       "dependsOn": [],
-      "customAuth": false
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito"
     }
   },
   "function": {
-    "tranportab1a7f3a": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    },
     "tranport581cc7c7": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
+    },
+    "tranportab1a7f3a": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_tranport581cc7c7_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "tranport581cc7c7"
+        }
+      ]
+    },
+    "AMPLIFY_function_tranport581cc7c7_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "tranport581cc7c7"
+        }
+      ]
+    },
+    "AMPLIFY_function_tranportab1a7f3a_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "tranportab1a7f3a"
+        }
+      ]
+    },
+    "AMPLIFY_function_tranportab1a7f3a_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "tranportab1a7f3a"
+        }
+      ]
     }
   }
 }

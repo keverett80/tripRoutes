@@ -1,10 +1,10 @@
 import React from "react";
 import { API,  graphqlOperation } from "aws-amplify";
-import {createOrder } from 'square-connect';
+
 import * as mutations from '../../graphql/mutations';
 import * as queries from '../../graphql/queries';
 import { listCustomers } from '../../graphql/queries';
-import { MDBContainer, MDBRow, MDBTimePicker, MDBCol, MDBStepper, MDBStep, MDBBtn, MDBInput, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDataTableV5,MDBIcon, MDBDatePicker, MDBSelect, MDBTable, MDBTableBody, MDBTableHead, Spinner  } from "mdbreact";
+import { MDBContainer, MDBRow, MDBTimePicker, MDBCol, MDBStepper, MDBStepperStep, MDBBtn, MDBInput, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDatatable,MDBIcon, MDBDatePicker, MDBSelect, MDBTable, MDBTableBody, MDBTableHead, MDBSpinner  } from 'mdb-react-ui-kit';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import {Helmet} from "react-helmet";
 import DatePicker from "react-multi-date-picker"
@@ -901,15 +901,15 @@ render() {
         </div>
 
       <MDBStepper icon>
-        <MDBStep far icon="address-card" stepName="Basic Information" onClick={this.swapFormActive(1)(1)}></MDBStep>
-        <MDBStep  icon="map-marked" stepName="Personal Data" onClick={this.swapFormActive(1)(2)}></MDBStep>
-        <MDBStep  icon="map-marked-alt" stepName="Terms and Conditions" onClick={this.swapFormActive(1)(3)}></MDBStep>
-        <MDBStep icon="table" stepName="Trip" onClick={this.swapFormActive(1)(4)}></MDBStep>
-        <MDBStep icon="check" stepName="Finish" onClick={this.swapFormActive(1)(5)}></MDBStep>
+        <MDBStepperStep far icon="address-card" stepName="Basic Information" onClick={this.swapFormActive(1)(1)}></MDBStepperStep>
+        <MDBStepperStep  icon="map-marked" stepName="Personal Data" onClick={this.swapFormActive(1)(2)}></MDBStepperStep>
+        <MDBStepperStep  icon="map-marked-alt" stepName="Terms and Conditions" onClick={this.swapFormActive(1)(3)}></MDBStepperStep>
+        <MDBStepperStep icon="table" stepName="Trip" onClick={this.swapFormActive(1)(4)}></MDBStepperStep>
+        <MDBStepperStep icon="check" stepName="Finish" onClick={this.swapFormActive(1)(5)}></MDBStepperStep>
       </MDBStepper>
 {this.state.loading ? (
      <div className='d-flex justify-content-center'>
-    <Spinner color="primary" />
+    <MDBSpinner color="primary" />
     </div>
   ) : (
 
@@ -920,7 +920,7 @@ render() {
             <h3 className="font-weight-bold pl-0 my-4 text-center">
               <strong>Customer Information</strong></h3>
              <div className="text-center"> <MDBBtn onClick={this.toggle1}>Add Customer</MDBBtn></div>
-              <MDBDataTableV5
+              <MDBDatatable
       hover entriesOptions={[5, 20, 25]} entries={5} pagesAmount={4}
       searchTop searchBottom={false}
       barReverse
