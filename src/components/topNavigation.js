@@ -1,183 +1,157 @@
-import React from "react";
-import { BrowserRouter as Router } from "react-router-dom";
-import { MDBInput, MDBNavbar, MDBNavbarNav, MDBSideNavItem, MDBDropdown, MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem, MDBIcon, MDBSideNavLink, MDBSideNavMenu, MDBSideNav} from 'mdb-react-ui-kit';
+import React, { useState, useEffect } from 'react';
+import {
+  MDBSideNav,
+  MDBSideNavMenu,
+  MDBSideNavItem,
+  MDBSideNavLink,
+  MDBSideNavCollapse,
+  MDBBtn,
+  MDBIcon,
+  MDBNavbar,
+  MDBContainer,
+  MDBNavbarNav,
+  MDBNavbarItem,
+  MDBNavbarLink,
+  MDBNavbarToggler,
+  MDBCollapse,
+  MDBDropdown,
+  MDBDropdownMenu,
+  MDBDropdownToggle,
+  MDBDropdownItem,
+} from 'mdb-react-ui-kit';
+
 import { NavLink } from 'react-router-dom';
 import logo from "../assets/logo.png";
 import { Authenticator } from '@aws-amplify/ui-react';
 import { Auth } from '@aws-amplify/auth';
 
+export default function TopNavigation() {
+  const [darkOpen, setDarkOpen] = useState(true);
+  const [darkCollapse1, setDarkCollapse1] = useState(false);
+  const [darkCollapse2, setDarkCollapse2] = useState(false);
+  const [darkCollapse3, setDarkCollapse3] = useState(false);
+  const [darkCollapse4, setDarkCollapse4] = useState(false);
+  const [user, setUser] = useState('');
+  const [showNavRight, setShowNavRight] = useState(false);
 
-class TopNavigation extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      toggleStateA: false,
-      user:''
-    };
-    this.handleAuthStateChange = this.handleAuthStateChange.bind(this);
-  }
-
-  componentDidMount(){
-
-
-      Auth.currentUserInfo().then((userInfo) => {
-      //console.log(userInfo)
-      this.setState({
-        user: userInfo.attributes.email
-      });
+  useEffect(() => {
+    // Update the document title using the browser API
+    Auth.currentUserInfo().then((userInfo) => {
+      console.log(userInfo)
+      
+        setUser(userInfo.attributes.email)
+      
 
 
     }, [])
+  });
 
-  }
+  return (
+    <div className="mdb-skin">
+      <MDBNavbar  dark bgColor='dark' double expand="xl" fixed="top" scrolling>
+      <MDBContainer fluid>
+        <MDBNavbarToggler
+          type='button'
+          data-target='#navbarRightAlignExample'
+          aria-controls='navbarRightAlignExample'
+          aria-expanded='true'
+          aria-label='Toggle navigation'
+          onClick={() => setShowNavRight(!showNavRight)}
+        >
+          <MDBIcon icon='bars' fas />
+        </MDBNavbarToggler>
 
-  handleToggleClickA = () => {
-    this.setState({
-      toggleStateA: !this.state.toggleStateA
-    });
-  };
-
-  handleAuthStateChange(state) {
-
-
-
-    if(state === 'signedout')
-    {
-
-      localStorage.clear();
-      window.location.href = "/";
-
-    }
-}
-
-  render() {
-    const mainStyle = {
-      paddingTop: "5rem"
-    };
-
-    const specialCaseNavbarStyles = {
-      WebkitBoxOrient: "horizontal",
-      flexDirection: "row"
-    };
-
-    return (
-
-        <div className="mdb-skin">
-          <MDBSideNav
-            logo={logo}
-            triggerOpening={this.state.toggleStateA}
-
-            mask="strong"
-           fixed
-          >
-
-            <MDBSideNavMenu>
-
-            <MDBSideNavLink
-                name="Trips"
-                id="contact-me-cat"
-                icon="car"
-              >
-                <MDBSideNavItem href='/addTrips'>Add Trip</MDBSideNavItem>
-                <MDBSideNavItem href='/driversAssign'>Assign Drivers</MDBSideNavItem>
-                <MDBSideNavItem href='/tripReady'>Ready Pickup</MDBSideNavItem>
-                <MDBSideNavItem href='/driverStatus'>Driver Status</MDBSideNavItem>
-                <MDBSideNavItem href='/driverLocation'>Driver Location</MDBSideNavItem>
-                <MDBSideNavItem href='/import'>Import Trips</MDBSideNavItem>
-                <MDBSideNavItem href='/viewTrips'>Pending Trips</MDBSideNavItem>
-                <MDBSideNavItem href='/archived'>Archived Trips</MDBSideNavItem>
-
-
-              </MDBSideNavLink>
-
-              <MDBSideNavLink
-                name="Edits"
-                id="contact-me-cat"
-                icon="pen"
-              >
-                <MDBSideNavItem href='/editCustomer'>Edit Customers</MDBSideNavItem>
-                <MDBSideNavItem href='/editTrips'>Edit Trips</MDBSideNavItem>
-
-
-              </MDBSideNavLink>
-
-              <MDBSideNavLink
-                name="Invoices"
-                id="contact-me-cat"
-                icon="dollar-sign"
-              >
-
-                <MDBSideNavItem href='/invoice'>Invoices</MDBSideNavItem>
-
-
-
-              </MDBSideNavLink>
-
-
-              <MDBSideNavLink
-                name="Five G Info"
-                id="contact-me-cat"
-                icon="building"
-              >
-
-
-                <MDBSideNavItem href='/drivers'>Add Drivers</MDBSideNavItem>
-                <MDBSideNavItem href='/vehicles'>Add Vehicles</MDBSideNavItem>
-                <MDBSideNavItem href='/brokers'>Add Brokers</MDBSideNavItem>
-                <MDBSideNavItem href='/links'>Business Links</MDBSideNavItem>
-                <MDBSideNavItem href='/dash'>Dashboards</MDBSideNavItem>
-              </MDBSideNavLink>
-            </MDBSideNavMenu>
-          </MDBSideNav>
-          <MDBNavbar double expand="md" fixed="top" scrolling>
-            <MDBNavbarNav left>
-              <MDBSideNavItem>
-                <div
-                  onClick={this.handleToggleClickA}
-                  key="sideNavToggleA"
-                  style={{
-                    lineHeight: "32px",
-                    marginRight: "1em",
-                    verticalAlign: "middle"
-                  }}
-                >
-                  <MDBIcon icon="bars" color="white" size="2x" />
-                </div>
-              </MDBSideNavItem>
-
-            </MDBNavbarNav>
-            <MDBNavbarNav right style={specialCaseNavbarStyles}>
-            <MDBSideNavItem>
-                <MDBSideNavLink to="/calendar">
+        <MDBCollapse navbar show={showNavRight}>
+          <MDBNavbarNav right fullWidth={false} className='mb-2 mb-lg-0'>
+            <MDBNavbarItem>
+            <MDBNavbarLink to="/calendar">
                   <MDBIcon icon="calendar" className="d-inline-inline" />{" "}
                   <div className="d-none d-md-inline">Calendar</div>
-                </MDBSideNavLink>
-              </MDBSideNavItem>
+                </MDBNavbarLink>
+            </MDBNavbarItem>
+            <MDBNavbarItem>
+              <MDBNavbarLink href='#'>SignOut</MDBNavbarLink>
+            </MDBNavbarItem>
 
-              <MDBSideNavItem>
-                <MDBSideNavLink to="#!">
-                  <MDBIcon icon="user" className="d-inline-inline" />{" "}
-                  <div className="d-none d-md-inline">{this.state.user}</div>
-                </MDBSideNavLink>
-              </MDBSideNavItem>
-              <MDBSideNavItem>
-                <MDBDropdown>
-                  <MDBDropdownToggle nav caret>
-                    <div className="d-none d-md-inline">Sign Out</div>
-                  </MDBDropdownToggle>
-                  <MDBDropdownMenu right>
-                    <MDBDropdownItem href="#!"><Authenticator handleAuthStateChange={this.handleAuthStateChange} /></MDBDropdownItem>
-
-                  </MDBDropdownMenu>
-                </MDBDropdown>
-              </MDBSideNavItem>
-            </MDBNavbarNav>
-          </MDBNavbar>
-
+            
+          </MDBNavbarNav>
+        </MDBCollapse>
+      </MDBContainer>
+    </MDBNavbar>
+      <MDBSideNav
+        isOpen={darkOpen}
+        color='light'
+        bgColor='dark'
+        absolute
+        logo={logo}
+        getOpenState={(e) => setDarkOpen(e)}
+      >
+          <div className='text-center'>
+          <h3 className='py-4'><img
+      src={logo}
+      
+      alt='...'
+    /></h3>
+          <hr className='m-0' />
         </div>
+        <MDBSideNavMenu>
+       
+          <MDBSideNavItem>
+            <MDBSideNavLink icon='angle-down' shouldBeExpanded={darkCollapse1} onClick={() => setDarkCollapse1(!darkCollapse1)}>
+              <MDBIcon fas icon='car' className='fa-fw me-3' />
+              Trips 
+            </MDBSideNavLink>
+            <MDBSideNavCollapse show={darkCollapse1}>
+            <MDBSideNavLink href='/addTrips'>Add Trip</MDBSideNavLink>
+                <MDBSideNavLink href='/driversAssign'>Assign Drivers</MDBSideNavLink>
+                <MDBSideNavLink href='/tripReady'>Ready Pickup</MDBSideNavLink>
+                <MDBSideNavLink href='/driverStatus'>Driver Status</MDBSideNavLink>
+                <MDBSideNavLink href='/driverLocation'>Driver Location</MDBSideNavLink>
+                <MDBSideNavLink href='/import'>Import Trips</MDBSideNavLink>
+                <MDBSideNavLink href='/viewTrips'>Pending Trips</MDBSideNavLink>
+                <MDBSideNavLink href='/archived'>Archived Trips</MDBSideNavLink>
+            </MDBSideNavCollapse>
+          </MDBSideNavItem>
+          <MDBSideNavItem>
+            <MDBSideNavLink icon='angle-down' shouldBeExpanded={darkCollapse2} onClick={() => setDarkCollapse2(!darkCollapse2)}>
+              <MDBIcon fas icon='pencil' className='fa-fw me-3' />
+              Edits
+            </MDBSideNavLink>
+            <MDBSideNavCollapse show={darkCollapse2}>
+            <MDBSideNavLink href='/editCustomer'>Edit Customers</MDBSideNavLink>
+                <MDBSideNavLink href='/editTrips'>Edit Trips</MDBSideNavLink>
+            </MDBSideNavCollapse>
+          </MDBSideNavItem>
+          <MDBSideNavItem>
+            <MDBSideNavLink icon='angle-down' shouldBeExpanded={darkCollapse3} onClick={() => setDarkCollapse3(!darkCollapse3)}>
+              <MDBIcon fas icon='dollar' className='fa-fw me-3' />
+              Invoices
+            </MDBSideNavLink>
+            <MDBSideNavCollapse show={darkCollapse3}>
+            <MDBSideNavLink href='/invoice'>Invoices</MDBSideNavLink>
+            </MDBSideNavCollapse>
+          </MDBSideNavItem>
+          <MDBSideNavItem>
+            <MDBSideNavLink icon='angle-down' shouldBeExpanded={darkCollapse4} onClick={() => setDarkCollapse4(!darkCollapse4)}>
+              <MDBIcon fas icon='building' className='fa-fw me-3' />
+              Five G Info
+            </MDBSideNavLink>
+            <MDBSideNavCollapse show={darkCollapse4}>
+            <MDBSideNavLink href='/drivers'>Add Drivers</MDBSideNavLink>
+                <MDBSideNavLink href='/vehicles'>Add Vehicles</MDBSideNavLink>
+                <MDBSideNavLink href='/brokers'>Add Brokers</MDBSideNavLink>
+                <MDBSideNavLink href='/links'>Business Links</MDBSideNavLink>
+                <MDBSideNavLink href='/dash'>Dashboards</MDBSideNavLink>
+            </MDBSideNavCollapse>
+          </MDBSideNavItem>
+        </MDBSideNavMenu>
+      </MDBSideNav>
 
-    );
-  }
+      <div style={{ padding: '20px' }} className='text-center'>
+        <MDBBtn onClick={() => setDarkOpen(!darkOpen)}>
+          <MDBIcon fas icon='bars' />
+        </MDBBtn>
+      </div>
+    </div>
+  );
 }
-
-export default TopNavigation;

@@ -28,26 +28,26 @@ class SwitchRoutes extends React.Component {
   render() {
     return (
       <Routes>
-        <Route path='/' exact component={Calendars} />
-        <Route path='/addTrips' component={AddTrips} />
-        <Route path='/viewTrips' component={ViewTrips} />
-        <Route path='/archived' component={Archived} />
-        <Route path='/vehicles' component={Vehicles} />
-        <Route path='/drivers' component={Drivers} />
-        <Route path='/brokers' component={Broker} />
-        <Route path='/editCustomer' component={EditCustomer} />
-        <Route path='/links' component={Links} />
-        <Route path='/calendar' component={Calendars} />
-        <Route path='/editTrips' component={EditTrips} />
-        <Route path='/driversAssign' component={DriversAssign} />
-        <Route path='/tripReady' component={TripReady} />
-        <Route path='/invoice' component={Invoice} />
+        <Route path='/' exact element={<Calendars/>} />
+        <Route path='/addTrips' element={<AddTrips/>} />
+        <Route path='/viewTrips' element={<AddTrips/>} />
+        <Route path='/archived' element={<Archived/>} />
+        <Route path='/vehicles' element={<Vehicles/>} />
+        <Route path='/drivers'element={<Drivers/>} />
+        <Route path='/brokers' element={<Broker/>} />
+        <Route path='/editCustomer' element={<EditCustomer/>} />
+        <Route path='/links' element={<Links/>} />
+        <Route path='/calendar' element={<Calendars/>} />
+        <Route path='/editTrips' element={<EditTrips/>} />
+        <Route path='/driversAssign' element={<DriversAssign/>} />
+        <Route path='/tripReady' element={<TripReady/>} />
+        <Route path='/invoice' element={<Invoice/>} />
 
 
-        <Route path='/driverStatus' component={DriverStatus} />
+        <Route path='/driverStatus' element={<DriverStatus/>} />
 
 
-        <Route path='/dash' component={DashboardPage} />
+        <Route path='/dash' element={<DashboardPage/>} />
       </Routes>
     );
   }

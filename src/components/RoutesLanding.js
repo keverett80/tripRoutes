@@ -15,7 +15,7 @@ class RoutesLanding extends React.Component {
     return (
       <Routes>
 
-        <Route path='/login' component={Logged} />
+        <Route path='/login' element={<Logged/>} />
 
 
 
