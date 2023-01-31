@@ -25,6 +25,7 @@ import {
 function LoggedIn(props){
   return(
 
+
     <div className="flexible-content">
     <TopNavigation />
 

@@ -4,7 +4,7 @@ import moment from "moment";
 import { API,  graphqlOperation } from "aws-amplify";
 import * as mutations from '../../graphql/mutations';
 import { listTrips } from '../../graphql/queries';
-import { MDBInput, MDBBadge, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter,MDBTable, MDBTableBody, MDBTableHead,   } from 'mdb-react-ui-kit';
+import { MDBInput, MDBBadge, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter,MDBTable, MDBTableBody, MDBTableHead, MDBModalDialog, MDBModalContent,MDBRadio  } from 'mdb-react-ui-kit';
 
 import "./calendar.css";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -248,8 +248,10 @@ handleChange1 = () =>{
         />
 
 
-      <MDBModal isOpen={this.state.modal} toggle={this.toggle}>
-        <MDBModalHeader toggle={this.toggle}>{this.state.customer}</MDBModalHeader>
+      <MDBModal show={this.state.modal}  tabIndex='-1'>
+      <MDBModalDialog>
+          <MDBModalContent>
+        <MDBModalHeader>{this.state.customer}</MDBModalHeader>
         <MDBModalBody>
          <MDBTable>
       <MDBTableHead>
@@ -299,7 +301,7 @@ handleChange1 = () =>{
       </MDBTableBody>
     </MDBTable>
     <form>
-        <MDBInput
+        <MDBRadio inline
           onClick={this.onClick(1)}
           checked={this.state.radio === 1 ? true : false}
           label='Pending'
@@ -308,7 +310,7 @@ handleChange1 = () =>{
           className='mr-5'
           onChange={this.handleChange}
         />
-        <MDBInput
+        <MDBRadio inline
           onClick={this.onClick(2)}
           checked={this.state.radio === 2 ? true : false}
           label='Complete'
@@ -317,7 +319,7 @@ handleChange1 = () =>{
           className='mr-5'
           onChange={this.handleChange1}
         />
-        <MDBInput
+        <MDBRadio inline
           onClick={this.onClick(3)}
           checked={this.state.radio === 3 ? true : false}
           label='Canceled'
@@ -333,6 +335,9 @@ handleChange1 = () =>{
           <MDBBtn color="primary" rounded onClick={this.toggle}>Close</MDBBtn>
 
         </MDBModalFooter>
+
+          </MDBModalContent>
+          </MDBModalDialog>
       </MDBModal>
       </div>
     );

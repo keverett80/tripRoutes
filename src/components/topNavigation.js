@@ -38,9 +38,9 @@ export default function TopNavigation() {
     // Update the document title using the browser API
     Auth.currentUserInfo().then((userInfo) => {
       console.log(userInfo)
-      
+
         setUser(userInfo.attributes.email)
-      
+
 
 
     }, [])
@@ -48,7 +48,7 @@ export default function TopNavigation() {
 
   return (
     <div className="mdb-skin">
-      <MDBNavbar  dark bgColor='dark' double expand="xl" fixed="top" scrolling>
+      <MDBNavbar  dark bgColor='dark' double='true' expand="xl" fixed="top" scrolling>
       <MDBContainer fluid>
         <MDBNavbarToggler
           type='button'
@@ -73,7 +73,7 @@ export default function TopNavigation() {
               <MDBNavbarLink href='#'>SignOut</MDBNavbarLink>
             </MDBNavbarItem>
 
-            
+
           </MDBNavbarNav>
         </MDBCollapse>
       </MDBContainer>
@@ -89,17 +89,17 @@ export default function TopNavigation() {
           <div className='text-center'>
           <h3 className='py-4'><img
       src={logo}
-      
+
       alt='...'
     /></h3>
           <hr className='m-0' />
         </div>
         <MDBSideNavMenu>
-       
+
           <MDBSideNavItem>
             <MDBSideNavLink icon='angle-down' shouldBeExpanded={darkCollapse1} onClick={() => setDarkCollapse1(!darkCollapse1)}>
               <MDBIcon fas icon='car' className='fa-fw me-3' />
-              Trips 
+              Trips
             </MDBSideNavLink>
             <MDBSideNavCollapse show={darkCollapse1}>
             <MDBSideNavLink href='/addTrips'>Add Trip</MDBSideNavLink>

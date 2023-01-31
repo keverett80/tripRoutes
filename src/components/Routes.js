@@ -30,7 +30,7 @@ class SwitchRoutes extends React.Component {
       <Routes>
         <Route path='/' exact element={<Calendars/>} />
         <Route path='/addTrips' element={<AddTrips/>} />
-        <Route path='/viewTrips' element={<AddTrips/>} />
+        <Route path='/viewTrips' exact element={<AddTrips/>} />
         <Route path='/archived' element={<Archived/>} />
         <Route path='/vehicles' element={<Vehicles/>} />
         <Route path='/drivers'element={<Drivers/>} />

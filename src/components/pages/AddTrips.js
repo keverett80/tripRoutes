@@ -21,6 +21,7 @@ import DatePanel from "react-multi-date-picker/plugins/date_panel";
 //const google = window.google
 
 
+
 var today = new Date();
 var dd = String(today.getDate()).padStart(2, '0');
 var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -33,6 +34,7 @@ class AddTrips extends React.Component {
     super(props)
     this.createInvoice = this.createInvoice.bind(this);
 this.state = {
+  mapsLoaded: false,
   editModalOpen: false,
   invoiceNumber: '',
   weekends:'',
@@ -171,6 +173,9 @@ this.handleChange = this.handleChange.bind(this)
 
   closeEditModal() {
     this.setState({editModalOpen: false});
+  }
+  componentDidMount() {
+    window.initMap = this.initMap;
   }
   componentDidUpdate(prevProps, prevState) {
     if (this.state.fname !== prevState.fname) {
@@ -883,29 +888,31 @@ sendText = _ => {
   .catch(err => console.error(err))
 }
 
+initMap = () => {
+  this.setState({ mapsLoaded: true });
+};
 
 render() {
   return (
+
+
+    <div className="application">
+    <Helmet>
+    <script
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAdnS_bTUUA8hlPRJkr0tDPBZ_vdA4hH9Y&libraries=places,distancematrix" type="text/javascript" async
+defer ></script>
+    </Helmet>
+
+</div>,
     <MDBContainer >
 
 
-        <div className="application">
-
-            <Helmet>
-            <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAdnS_bTUUA8hlPRJkr0tDPBZ_vdA4hH9Y&libraries=places,distancematrix" type="text/javascript" />
-
-
-            </Helmet>
-
-        </div>
-
-      <MDBStepper icon>
-        <MDBStepperStep far icon="address-card" stepName="Basic Information" onClick={this.swapFormActive(1)(1)}></MDBStepperStep>
-        <MDBStepperStep  icon="map-marked" stepName="Personal Data" onClick={this.swapFormActive(1)(2)}></MDBStepperStep>
-        <MDBStepperStep  icon="map-marked-alt" stepName="Terms and Conditions" onClick={this.swapFormActive(1)(3)}></MDBStepperStep>
-        <MDBStepperStep icon="table" stepName="Trip" onClick={this.swapFormActive(1)(4)}></MDBStepperStep>
-        <MDBStepperStep icon="check" stepName="Finish" onClick={this.swapFormActive(1)(5)}></MDBStepperStep>
+      <MDBStepper >
+        <MDBStepperStep far='true' icon="address-card" headText="Basic Information" onClick={this.swapFormActive(1)(1)}></MDBStepperStep>
+        <MDBStepperStep  icon="map-marked" headText="Personal Data" onClick={this.swapFormActive(1)(2)}></MDBStepperStep>
+        <MDBStepperStep  icon="map-marked-alt" headText="Terms and Conditions" onClick={this.swapFormActive(1)(3)}></MDBStepperStep>
+        <MDBStepperStep icon="table" headText="Trip" onClick={this.swapFormActive(1)(4)}></MDBStepperStep>
+        <MDBStepperStep icon="check" headText="Finish" onClick={this.swapFormActive(1)(5)}></MDBStepperStep>
       </MDBStepper>
 {this.state.loading ? (
      <div className='d-flex justify-content-center'>
@@ -921,9 +928,9 @@ render() {
               <strong>Customer Information</strong></h3>
              <div className="text-center"> <MDBBtn onClick={this.toggle1}>Add Customer</MDBBtn></div>
               <MDBDatatable
-      hover entriesOptions={[5, 20, 25]} entries={5} pagesAmount={4}
-      searchTop searchBottom={false}
-      barReverse
+      hover entriesOptions={[5, 20, 25]} entries={5}
+      search
+
 
       //onClick={this.handleNextPrevClick(1)(2)}
    data={this.state.customers}
@@ -1032,19 +1039,19 @@ render() {
           (<MDBCol md="12">
 
             <h2 className="text-center font-weight-bold my-4">Trip Details</h2>
-< MDBInput label="Weekend/After Hours"  type="checkbox" id="checkbox2" checked={this.state.weekends} getValue={this.getCheck3Value} />
+< MDBInput label="Weekend/After Hours"  type="checkbox" id="checkbox2" checked={this.state.weekends} onChange={this.getCheck3Value} />
       <MDBSelect
           options={this.state.optionsTrip}
           selected="Choose trip type"
           label="Trip type "
-           value={this.state.roundTrip} getValue={this.getCheck2Value}
+           value={this.state.roundTrip} onValueChange={this.getCheck2Value}
         />
 
           <MDBSelect
           options={this.state.optionsPatient}
           selected="Choose patient type"
           label="Patient Type "
-          value={this.state.wheelchair} getValue={this.getCheckValue}
+          value={this.state.wheelchair} onValueChange={this.getCheckValue}
         />
 
 
@@ -1067,7 +1074,7 @@ render() {
 
 
 
-        <MDBInput type="textarea" getValue={this.getNotesValue} label="Trip Notes" background />
+        <MDBInput type="textarea" onChange={this.getNotesValue} label="Trip Notes" background />
 
 
 
@@ -1109,7 +1116,7 @@ render() {
         </div>
  )}
 
-      <MDBModal isOpen={this.state.modal} toggle={this.toggle}>
+      <MDBModal show={this.state.modal}>
 
         <MDBModalBody>
         <h4 className="my-4">Details:<div className='red-text'> {this.state.address}</div></h4>
@@ -1124,13 +1131,13 @@ render() {
         </MDBModalFooter>
       </MDBModal>
 
-      <MDBModal isOpen={this.state.modal1} toggle={this.toggle1}>
-        <MDBModalHeader toggle={this.toggle1}>New Customer</MDBModalHeader>
+      <MDBModal show={this.state.modal1} >
+        <MDBModalHeader >New Customer</MDBModalHeader>
         <MDBModalBody><div className="text-left">
-        <MDBInput icon='user' getValue={this.getFNValue} label="First Name" className="mt-4 text-uppercase" autoFocus={this.calculateAutofocus(1)} />
-            <MDBInput icon='user' getValue={this.getLNValue} label="Last Name" className="mt-4 text-uppercase" />
-            <MDBInput icon='phone' getValue={this.getPhoneValue} label="Phone Number" className="mt-4" />
-            <MDBInput icon='envelope-open' getValue={this.getEmailValue} label="Email Address" className="mt-4" />
+        <MDBInput icon='user' onChange={this.getFNValue} label="First Name" className="mt-4 text-uppercase" autoFocus={this.calculateAutofocus(1)} />
+            <MDBInput icon='user' onChange={this.getLNValue} label="Last Name" className="mt-4 text-uppercase" />
+            <MDBInput icon='phone' onChange={this.getPhoneValue} label="Phone Number" className="mt-4" />
+            <MDBInput icon='envelope-open' onChange={this.getEmailValue} label="Email Address" className="mt-4" />
             <PlacesAutocomplete
         value={this.state.address}
         onChange={this.handleChange}
@@ -1179,8 +1186,8 @@ render() {
         </MDBModalFooter>
       </MDBModal>
 
-      <MDBModal isOpen={this.state.editModalOpen} toggle={this.closeEditModal}>
-  <MDBModalHeader toggle={this.closeEditModal}>Edit Customer</MDBModalHeader>
+      <MDBModal show={this.state.editModalOpen} >
+  <MDBModalHeader >Edit Customer</MDBModalHeader>
   <MDBModalBody>
     <div className="text-left">
     <MDBInput icon='user' value={this.state.fname} onChange={event => this.setState({fname: event.target.value})} label="First Name" className="mt-4 text-uppercase" autoFocus={this.calculateAutofocus(1)} />
