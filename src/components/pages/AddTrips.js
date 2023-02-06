@@ -4,7 +4,7 @@ import { API,  graphqlOperation } from "aws-amplify";
 import * as mutations from '../../graphql/mutations';
 import * as queries from '../../graphql/queries';
 import { listCustomers } from '../../graphql/queries';
-import { MDBContainer, MDBRow, MDBTimePicker, MDBCol, MDBStepper, MDBStepperStep, MDBBtn, MDBInput, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDatatable,MDBIcon, MDBDatePicker, MDBSelect, MDBTable, MDBTableBody, MDBTableHead, MDBSpinner  } from 'mdb-react-ui-kit';
+import { MDBContainer, MDBRow, MDBModalDialog, MDBCol, MDBStepper, MDBStepperStep, MDBBtn, MDBInput, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDatatable,MDBIcon, MDBCheckbox, MDBSelect, MDBTable, MDBTableBody, MDBTableHead, MDBSpinner, MDBTextArea, MDBModalContent  } from 'mdb-react-ui-kit';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import {Helmet} from "react-helmet";
 import DatePicker from "react-multi-date-picker"
@@ -58,10 +58,11 @@ this.state = {
   status:'pending',
   price: '',
   modal: false,
+  modal1: false,
   queryData: '',
   appointmentTime:'',
   appointmentDate:'',
-  appointmentDate1:{},
+  appointmentDate1:'',
   REACT_APP_AWS_LAMBDA_INVOKE_ENDPOINT:
   'https://ct4utd523c.execute-api.us-east-2.amazonaws.com/default/createCustomer',
   customersID: '',
@@ -69,6 +70,7 @@ this.state = {
   counter:0,
 
   optionsTrip: [
+    {defaultSelected: true},
       {
         text: "One way",
         value: "One way"
@@ -81,6 +83,7 @@ this.state = {
     ],
 
       optionsPatient: [
+        {defaultSelected: true},
       {
         text: "Wheelchair",
         value: "Wheelchair"
@@ -137,12 +140,12 @@ this.state = {
     },
     {
 
-      label: 'Select',
+      label: 'Edit',
       field: 'editButton'
     },
     {
 
-      label: 'Select',
+      label: 'Delete',
       field: 'deleteButton'
     }
 
@@ -232,12 +235,46 @@ this.handleChange = this.handleChange.bind(this)
 
 
 
+    updateSelectPatientType = (selectedValue) => {
+      if (selectedValue === undefined) {
+        return;
+      }
+      const updatedData = this.state.optionsPatient.map(item => {
+        if (item.value === selectedValue) {
+          return { ...item, defaultSelected: true };
+        } else if (item.defaultSelected) {
+          return { ...item, defaultSelected: false };
+        } else {
+          return item;
+        }
+      });
+      console.log(updatedData)
+      this.setState({ optionsPatient: updatedData });
+    };
+
+    updateSelectTripType = (selectedValue) => {
+      if (selectedValue === undefined) {
+        return;
+      }
+      const updatedData = this.state.optionsTrip.map(item => {
+        if (item.value === selectedValue) {
+          return { ...item, defaultSelected: true };
+        } else if (item.defaultSelected) {
+          return { ...item, defaultSelected: false };
+        } else {
+          return item;
+        }
+      });
+      console.log(updatedData)
+      this.setState({ optionsTrip: updatedData });
+    };
 
 
 
 
 
   toggle = () => {
+
     this.calcDistance();
 
 
@@ -248,7 +285,7 @@ this.handleChange = this.handleChange.bind(this)
       fname: data.fname,
       lname: data.lname,
       phone: data.phoneNumber,
-      email: data.email,
+      email: data.email || '',
       address: data.address
     }, this.handleNextPrevClick(1)(2));
  }
@@ -307,31 +344,13 @@ this.setState({
     this.setState({ appointmentDate1: value });
     //og(value.length);
   };
-  getFNValue = value => {
-    //console.log(value);
-    this.setState({fname: value.toUpperCase()});
 
-  };
 
   getNotesValue = value =>{
     this.setState({notes: value});
 
   }
-  getLNValue = value => {
-    //console.log(value);
-    this.setState({lname: value.toUpperCase()});
 
-  };
-  getPhoneValue = value => {
-    //console.log(value);
-    this.setState({phone: value});
-
-  };
-  getEmailValue = value => {
-    //console.log(value);
-    this.setState({email:value});
-
-  };
 handleChange = address => {
 
 
@@ -352,75 +371,61 @@ toggle1 = () => {
   });
 }
 calcPrice = ()=>{
-
-  if(this.state.wheelchair == 'Wheelchair' && this.state.roundTrip == 'Roundtrip')
+console.log(this.state.wheelchair)
+  if(this.state.roundTrip == 'Roundtrip')
 {
+  console.log('roundtrip wheelchair')
+  this.setState({
 
-this.state.price = (this.state.distance * 2) * 2 + 80
+    price: (this.state.distance * 2) * 2 + 80
+  });
+
 this.setState({
   modal: !this.state.modal
 });
 }
-else if(this.state.wheelchair == 'Ambulatory' && this.state.roundTrip == 'One way'){
+else if(this.state.roundTrip == 'One way'){
+  console.log('one way wheelchair')
+  this.setState({
+    price: (this.state.distance * 2) + 40
+  });
 
-this.state.price = (this.state.distance * 2) + 40
 this.setState({
   modal: !this.state.modal
 });
 
 
 }
-else if(this.state.wheelchair == 'Wheelchair' && this.state.roundTrip == 'One way'){
 
-this.state.price = (this.state.distance * 2) + 40
-this.setState({
-  modal: !this.state.modal
-});
-}
-else if(this.state.wheelchair == 'Ambulatory' && this.state.roundTrip == 'Roundtrip'){
-this.state.price = (this.state.distance * 2) * 2 + 80
-this.setState({
-  modal: !this.state.modal
-});
-
-}
 
  }
 
 
  calcPrice2 = ()=>{
 
-  if(this.state.wheelchair == 'Wheelchair' && this.state.roundTrip == 'Roundtrip')
+  if(this.state.roundTrip == 'Roundtrip')
 {
+  this.setState({
+    price: (this.state.distance * 3) * 2 + 120
+  });
 
-this.state.price = (this.state.distance * 3) * 2 + 120
 this.setState({
   modal: !this.state.modal
 });
 }
-else if(this.state.wheelchair == 'Ambulatory' && this.state.roundTrip == 'One way'){
+else if( this.state.roundTrip == 'One way'){
 
-this.state.price = (this.state.distance * 3) + 60
+  this.setState({
+    price: (this.state.distance * 3) + 60
+  });
+
 this.setState({
   modal: !this.state.modal
 });
 
 
 }
-else if(this.state.wheelchair == 'Wheelchair' && this.state.roundTrip == 'One way'){
 
-this.state.price = (this.state.distance * 3) + 60
-this.setState({
-  modal: !this.state.modal
-});
-}
-else if(this.state.wheelchair == 'Ambulatory' && this.state.roundTrip == 'Roundtrip'){
-this.state.price = (this.state.distance * 3) * 2 + 120
-this.setState({
-  modal: !this.state.modal
-});
-
-}
 
  }
 
@@ -428,6 +433,7 @@ this.setState({
 
 
    calcDistance =()=> {
+
      if(this.state.address == '' || this.state.address2 == '' || this.state.address == null || this.state.address2 == null)
      {
        alert('Please add a to and from destination. ')
@@ -453,6 +459,7 @@ this.setState({
       if(mythis.state.weekends == true)
       {
       mythis.calcPrice2();
+
       }else{
 
          mythis.calcPrice();
@@ -530,13 +537,13 @@ newCustomer = event =>{
     given_name: this.state.fname,
     family_name: this.state.lname,
     phone_number: this.formatPhoneNumber(this.state.phone),
-    email_address: this.state.email,
+    email_address: this.state.email || '',
     address: {
       address_line_1: this.state.address,
     },
 
   };
-console.log(JSON.stringify(payload))
+console.log(payload)
   fetch(this.state.REACT_APP_AWS_LAMBDA_INVOKE_ENDPOINT, {
     method: 'POST',
     mode: 'no-cors', // no-cors, *cors, same-origin
@@ -644,6 +651,7 @@ editCustomer = (customerId, updatedInfo) => {
 
 
 deleteCustomer = (customerId) => {
+  if (window.confirm('Are you sure you want to delete this customer?')) {
   API.graphql({
     query: mutations.deleteCustomer,
     variables: { input: { id: customerId } }
@@ -651,6 +659,7 @@ deleteCustomer = (customerId) => {
 
     location.reload()
   });
+}
 }
 
 submitTrip = () =>{
@@ -898,9 +907,7 @@ render() {
 
     <div className="application">
     <Helmet>
-    <script
-src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAdnS_bTUUA8hlPRJkr0tDPBZ_vdA4hH9Y&libraries=places,distancematrix" type="text/javascript" async
-defer ></script>
+
     </Helmet>
 
 </div>,
@@ -926,17 +933,24 @@ defer ></script>
           (<MDBCol md="12">
             <h3 className="font-weight-bold pl-0 my-4 text-center">
               <strong>Customer Information</strong></h3>
-             <div className="text-center"> <MDBBtn onClick={this.toggle1}>Add Customer</MDBBtn></div>
-              <MDBDatatable
-      hover entriesOptions={[5, 20, 25]} entries={5}
-      search
+             <div className="text-center p-md-3"> <MDBBtn className='p-md-3' onClick={this.toggle1}>Add Customer</MDBBtn></div>
+             <MDBDatatable
+  data={this.state.customers}
+  advancedSearch={(value) => {
 
+    const string = value.split(' in:').map(str => str.trim());
+    const phrase = string[0].toString();
+    let columns = string[1];
+    if (columns) {
+        columns = columns.split(',').map(str => str.toLowerCase().trim());
+    } else {
+        columns = [];
+    }
+console.log(phrase, columns)
+    return { phrase, columns };
+}}
+/>
 
-      //onClick={this.handleNextPrevClick(1)(2)}
-   data={this.state.customers}
-
-
-    />
 
           </MDBCol>)}
 
@@ -944,7 +958,7 @@ defer ></script>
           (<MDBCol md="12">
             <h3 className="font-weight-bold pl-0 my-4 text-center"><strong>Pickup Address</strong></h3>
             <PlacesAutocomplete
-        value={this.state.address}
+        value={this.state.address }
         onChange={this.handleChange}
 
 
@@ -983,9 +997,10 @@ defer ></script>
           </div>
         )}
       </PlacesAutocomplete>
-
-            <MDBBtn color="mdb-color" rounded className="float-left" onClick={this.handleNextPrevClick(1)(1)}>previous</MDBBtn>
-            <MDBBtn color="mdb-color" rounded className="float-right" onClick={this.handleNextPrevClick(1)(3)}>next</MDBBtn>
+      <div className="d-grid gap-2 d-md-block text-center">
+            <MDBBtn color="mdb-color" rounded className='m-3' onClick={this.handleNextPrevClick(1)(1)}>previous</MDBBtn>
+            <MDBBtn color="mdb-color" rounded className='m-3' onClick={this.handleNextPrevClick(1)(3)}>next</MDBBtn>
+            </div>
           </MDBCol>)}
 
           {this.state.formActivePanel1 == 3 &&
@@ -1030,57 +1045,72 @@ defer ></script>
           </div>
         )}
       </PlacesAutocomplete>
-            <MDBBtn color="mdb-color" rounded className="float-left" onClick={this.handleNextPrevClick(1)(2)}>previous</MDBBtn>
-            <MDBBtn color="mdb-color" rounded className="float-right"  onClick={this.handleNextPrevClick(1)(4)}>next</MDBBtn>
+      <div className="d-grid gap-2 d-md-block text-center">
+            <MDBBtn color="mdb-color" rounded className='m-3' onClick={this.handleNextPrevClick(1)(2)}>previous</MDBBtn>
+            <MDBBtn color="mdb-color" rounded className='m-3'  onClick={this.handleNextPrevClick(1)(4)}>next</MDBBtn></div>
           </MDBCol>)}
 
 
           {this.state.formActivePanel1 == 4 &&
-          (<MDBCol md="12">
 
+          (<><MDBRow start>
+            <MDBCol md="12" className='p-md-3'>
             <h2 className="text-center font-weight-bold my-4">Trip Details</h2>
-< MDBInput label="Weekend/After Hours"  type="checkbox" id="checkbox2" checked={this.state.weekends} onChange={this.getCheck3Value} />
-      <MDBSelect
-          options={this.state.optionsTrip}
-          selected="Choose trip type"
-          label="Trip type "
-           value={this.state.roundTrip} onValueChange={this.getCheck2Value}
-        />
+            </MDBCol >
+            </MDBRow>
+            <MDBRow start><MDBCol md="4" className='p-md-3'>
+< MDBCheckbox name='flexCheck' label="Weekend/After Hours" id="checkbox2" checked={this.state.weekends} onChange={event => this.setState({weekends: event.target.value})} />
+</MDBCol>
+<MDBCol md="4" className='p-md-3'>
 
-          <MDBSelect
-          options={this.state.optionsPatient}
-          selected="Choose patient type"
-          label="Patient Type "
-          value={this.state.wheelchair} onValueChange={this.getCheckValue}
-        />
+        <MDBSelect
+  data={this.state.optionsTrip}
+  selected="Choose patient type"
+  label="Trip Type"
+  value={this.state.roundTrip}
+  onValueChange={selected => this.setState({ roundTrip: selected.value }, this.updateSelectTripType(selected.value))}
 
+/>
+</MDBCol><MDBCol md="4" className='p-md-3'>
+<MDBSelect
+  data={this.state.optionsPatient}
+  selected="Choose patient type"
+  label="Patient Type"
+  onValueChange={selected => this.setState({ wheelchair: selected.value },this.updateSelectPatientType(selected.value))}
+  value={this.state.wheelchair}
 
-<div className='text-center red-text'>  <label htmlFor="formGroupExampleInput">Appointment Date: </label>
-
-
-<DatePicker
+/>
+</MDBCol>
+</MDBRow>
+<MDBRow start>
+<MDBCol md="3" className='p-md-3'></MDBCol>
+  <MDBCol md="6" className='p-md-3'>
+ <label htmlFor="formGroupExampleInput">Appointment Date: </label>
+ <DatePicker
       multiple
-      value={this.state.appointmentDate1}
-      onChange={this.getPickerDateValue1}
+      value={this.state.appointmentDate1 }
+      onChange={this.getPickerDateValue1 }
       format="MM/DD/YYYY HH:mm"
       plugins={[
         <TimePicker position="bottom" />,
         <DatePanel markFocused />
       ]}
     />
-
-</div>
-
-
-
-
-        <MDBInput type="textarea" onChange={this.getNotesValue} label="Trip Notes" background />
+</MDBCol>
+<MDBCol md="3" className='p-md-3'></MDBCol>
+</MDBRow>
 
 
+<MDBRow start className='p-md-3'>
+  <MDBCol md="12">       <MDBTextArea value={this.state.notes} onChange={event => this.setState({notes: event.target.value})} label="Trip Notes"  rows={4} /></MDBCol>
 
-            <MDBBtn color="mdb-color" rounded className="float-left" onClick={this.handleNextPrevClick(1)(3)}>previous</MDBBtn>
-            <MDBBtn color="mdb-color" rounded className="float-right"  onClick={this.handleNextPrevClick(1)(5)} >Next</MDBBtn>
-          </MDBCol>)}
+</MDBRow>
+
+
+<div className="d-grid gap-2 d-md-block text-center"> <MDBBtn color="mdb-color" className='m-3' rounded onClick={this.handleNextPrevClick(1)(3)}>previous</MDBBtn>
+
+ <MDBBtn color="mdb-color" className='m-3' rounded   onClick={this.handleNextPrevClick(1)(5)} >Next</MDBBtn></div>
+          </>)}
 
           {this.state.formActivePanel1 == 5 &&
           (<MDBCol md="12">
@@ -1109,14 +1139,17 @@ defer ></script>
 
       </MDBTableBody>
     </MDBTable>
-            <MDBBtn color="mdb-color" rounded className="float-left" onClick={this.handleNextPrevClick(1)(4)}>previous</MDBBtn>
-            <MDBBtn color="success" rounded className="float-right" onClick={this.submitTrip}>submit</MDBBtn>
+    <div className="d-grid gap-2 d-md-block text-center">
+            <MDBBtn color="mdb-color" rounded className='m-5' onClick={this.handleNextPrevClick(1)(4)}>previous</MDBBtn>
+            <MDBBtn color="success" rounded className='m-5' onClick={this.submitTrip}>submit</MDBBtn></div>
           </MDBCol>)}
         </MDBRow>
         </div>
  )}
 
       <MDBModal show={this.state.modal}>
+      <MDBModalDialog>
+          <MDBModalContent>
 
         <MDBModalBody>
         <h4 className="my-4">Details:<div className='red-text'> {this.state.address}</div></h4>
@@ -1129,19 +1162,27 @@ defer ></script>
           <MDBBtn rounded color="primary" onClick={this.toggle}>Close</MDBBtn>
 
         </MDBModalFooter>
+
+          </MDBModalContent>
+          </MDBModalDialog>
       </MDBModal>
 
-      <MDBModal show={this.state.modal1} >
+      <MDBModal show={this.state.modal1}  tabIndex='-1'>
+      <MDBModalDialog>
+      <MDBModalContent>
         <MDBModalHeader >New Customer</MDBModalHeader>
         <MDBModalBody><div className="text-left">
-        <MDBInput icon='user' onChange={this.getFNValue} label="First Name" className="mt-4 text-uppercase" autoFocus={this.calculateAutofocus(1)} />
-            <MDBInput icon='user' onChange={this.getLNValue} label="Last Name" className="mt-4 text-uppercase" />
-            <MDBInput icon='phone' onChange={this.getPhoneValue} label="Phone Number" className="mt-4" />
-            <MDBInput icon='envelope-open' onChange={this.getEmailValue} label="Email Address" className="mt-4" />
-            <PlacesAutocomplete
-        value={this.state.address}
-        onChange={this.handleChange}
+        <MDBInput icon='user' onChange={event => this.setState({fname: event.target.value})} label="First Name" className="mt-4 text-uppercase" autoFocus={this.calculateAutofocus(1)} />
+            <MDBInput icon='user' onChange={event => this.setState({lname: event.target.value})} label="Last Name" className="mt-4 text-uppercase" />
+            <MDBInput icon='phone'  onChange={event => this.setState({phone: event.target.value})} label="Phone Number" className="mt-4" />
+            <MDBInput icon='envelope-open' onChange={event => this.setState({email: event.target.value})} label="Email" className="mt-4" />
+     <div className="pt-md-3">    <PlacesAutocomplete
 
+
+        onChange={this.handleChange}
+        selectProps={{
+          placeholder: 'here is the placeholder text'
+        }}
 
       >
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
@@ -1149,7 +1190,7 @@ defer ></script>
             <MDBInput icon='address-book'
               {...getInputProps({
 
-                placeholder: 'Customer Address',
+                label: 'Customer Address',
                 className: 'location-search-input',
               })}
             />
@@ -1178,15 +1219,20 @@ defer ></script>
           </div>
         )}
       </PlacesAutocomplete>
+      </div>
             </div>
         </MDBModalBody>
         <MDBModalFooter>
           <MDBBtn color="secondary" onClick={this.toggle1}>Close</MDBBtn>
           <MDBBtn color="primary" onClick= {this.newCustomer}>Save changes</MDBBtn>
         </MDBModalFooter>
+        </MDBModalContent>
+        </MDBModalDialog>
       </MDBModal>
 
       <MDBModal show={this.state.editModalOpen} >
+      <MDBModalDialog>
+          <MDBModalContent>
   <MDBModalHeader >Edit Customer</MDBModalHeader>
   <MDBModalBody>
     <div className="text-left">
@@ -1194,7 +1240,7 @@ defer ></script>
             <MDBInput icon='user' value={this.state.lname} onChange={event => this.setState({lname: event.target.value})} label="Last Name" className="mt-4 text-uppercase" />
             <MDBInput icon='phone' value={this.state.phone} onChange={event => this.setState({phone: event.target.value})} label="Phone Number" className="mt-4" />
             <MDBInput icon='envelope-open' value={this.state.email} onChange={event => this.setState({email: event.target.value})} label="Email" className="mt-4" />
-
+            <div className="pt-md-3">
       <PlacesAutocomplete
         value={this.state.address}
         onChange={this.handleChange}
@@ -1232,12 +1278,15 @@ defer ></script>
           </div>
         )}
       </PlacesAutocomplete>
+      </div>
     </div>
   </MDBModalBody>
   <MDBModalFooter>
     <MDBBtn color="secondary" onClick={this.closeEditModal}>Close</MDBBtn>
     <MDBBtn color="primary" onClick={this.saveChanges}>Save Changes</MDBBtn>
   </MDBModalFooter>
+  </MDBModalContent>
+          </MDBModalDialog>
 </MDBModal>
 
     </MDBContainer>

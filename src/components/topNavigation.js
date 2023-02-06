@@ -12,17 +12,12 @@ import {
   MDBNavbarNav,
   MDBNavbarItem,
   MDBNavbarLink,
-  MDBNavbarToggler,
+
   MDBCollapse,
-  MDBDropdown,
-  MDBDropdownMenu,
-  MDBDropdownToggle,
-  MDBDropdownItem,
+
 } from 'mdb-react-ui-kit';
 
-import { NavLink } from 'react-router-dom';
-import logo from "../assets/logo.png";
-import { Authenticator } from '@aws-amplify/ui-react';
+
 import { Auth } from '@aws-amplify/auth';
 
 export default function TopNavigation() {
@@ -50,23 +45,14 @@ export default function TopNavigation() {
     <div className="mdb-skin">
       <MDBNavbar  dark bgColor='dark' double='true' expand="xl" fixed="top" scrolling>
       <MDBContainer fluid>
-        <MDBNavbarToggler
-          type='button'
-          data-target='#navbarRightAlignExample'
-          aria-controls='navbarRightAlignExample'
-          aria-expanded='true'
-          aria-label='Toggle navigation'
-          onClick={() => setShowNavRight(!showNavRight)}
-        >
-          <MDBIcon icon='bars' fas />
-        </MDBNavbarToggler>
+
 
         <MDBCollapse navbar show={showNavRight}>
           <MDBNavbarNav right fullWidth={false} className='mb-2 mb-lg-0'>
             <MDBNavbarItem>
             <MDBNavbarLink to="/calendar">
                   <MDBIcon icon="calendar" className="d-inline-inline" />{" "}
-                  <div className="d-none d-md-inline">Calendar</div>
+                  <div className="d-none d-md-inline ">Calendar</div>
                 </MDBNavbarLink>
             </MDBNavbarItem>
             <MDBNavbarItem>
@@ -79,19 +65,16 @@ export default function TopNavigation() {
       </MDBContainer>
     </MDBNavbar>
       <MDBSideNav
+
         isOpen={darkOpen}
         color='light'
         bgColor='dark'
-        absolute
-        logo={logo}
+        backdrop={false}
+        mode='side'
         getOpenState={(e) => setDarkOpen(e)}
       >
           <div className='text-center'>
-          <h3 className='py-4'><img
-      src={logo}
-
-      alt='...'
-    /></h3>
+          <h3 className='py-4'>Five G Trips</h3>
           <hr className='m-0' />
         </div>
         <MDBSideNavMenu>
@@ -147,8 +130,8 @@ export default function TopNavigation() {
         </MDBSideNavMenu>
       </MDBSideNav>
 
-      <div style={{ padding: '20px' }} className='text-center'>
-        <MDBBtn onClick={() => setDarkOpen(!darkOpen)}>
+      <div className="d-grid gap-2 d-md-flex justify-content-md-end p-md-5">
+      <MDBBtn className='m-1' style={{ backgroundColor: '#333333' }} floating onClick={() => setDarkOpen(!darkOpen)}>
           <MDBIcon fas icon='bars' />
         </MDBBtn>
       </div>

@@ -27,6 +27,7 @@ function LoggedIn(props){
 
 
     <div className="flexible-content">
+
     <TopNavigation />
 
     <main id="content" className="p-5">
