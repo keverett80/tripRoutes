@@ -1,10 +1,11 @@
 import React from 'react';
-import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDatatable,MDBFormInline, MDBTimepicker, MDBSelect, MDBCol } from 'mdb-react-ui-kit';
+import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDatatable,MDBFormInline, MDBTimepicker, MDBSelect,  MDBModalDialog,
+  MDBModalContent } from 'mdb-react-ui-kit';
 import { API,  graphqlOperation } from "aws-amplify";
 import { listTrips, listEmployees } from '../../graphql/queries';
 import * as mutations from '../../graphql/mutations';
 import { confirmAlert } from 'react-confirm-alert'; // Import
-import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+import './timePicker.css'; // Import css
 
 
 class AddDriver extends React.Component {
@@ -35,54 +36,32 @@ class AddDriver extends React.Component {
       {
         label: 'First Name',
         field: 'fname',
-        width: 100,
+        width: 50,
 
       },
       {
         label: 'Last Name',
         field: 'lname',
-        width: 100,
+        width: 50,
       },
       {
         label: 'Pickup Address',
         field: 'address',
         width: 200,
       },
-      {
-        label: 'Destination Address',
-        field: 'address2',
 
-        width: 200,
-      },
-      {
-        label: 'Phone Number',
-        field: 'phone',
 
-        width: 100,
-      },
-      {
-        label: 'Wheelchair',
-        field: 'wheelchair',
-
-        width: 100,
-      },
-      {
-        label: 'Round Trip',
-        field: 'roundtrip',
-        sort: 'disabled',
-        width: 100,
-      },
       {
         label: 'Appointment Date',
         field: 'appointmentDate',
         sort: 'disabled',
-        width: 100,
+        width: 50,
       },
       {
         label: 'Appointment Time',
         field: 'appointmentTime',
         sort: 'disabled',
-        width: 100,
+        width: 50,
       },
       {
         label: 'Pickup Time',
@@ -133,9 +112,10 @@ this.handleRowClick = this.handleRowClick.bind(this)
     //console.log(this.state.queryData)
 
     this.state.queryData.sort(this.sortByTime).sort(this.sortByDate).map((customer) => {
+      const x = new Date(customer.appointmentDate).toLocaleDateString();
+      const y = new Date().toLocaleDateString();
 
-      //console.log(customer.wheelchair)
-      if(customer.appointmentTime !== 'Will Call'){
+      if(x >= y){
       myCustomers.push({
       id: customer.id,
       fname: customer.fname,
@@ -171,7 +151,6 @@ this.handleRowClick = this.handleRowClick.bind(this)
 
 var myThis = this;
 
-
 API.graphql(graphqlOperation(listEmployees)).then(function(results)
   {
 
@@ -202,34 +181,43 @@ employee: myEmployee
   }
 
   fetchToken = async () =>{
-
+    console.log(this.state.driver )
     let filter = {
       emailAddress: {
-          eq: this.state.driver[0] // filter priority = 1
+          eq: this.state.driver // filter priority = 1
       }
   };
    const employeeData  = await API.graphql({ query: listEmployees, variables: { filter: filter}});
-   //console.log(employeeData)
+
 const employeePhone = employeeData.data.listEmployees.items[0].phoneNumber
-this.setState({employeePhone:employeePhone})
 
 
-this.handleRowClick();
+
+this.handleRowClick(employeePhone);
 
 
   }
 
 
 
-  handleRowClick  = () =>{
+  handleRowClick  = (employeePhone) =>{
+    const appLink = encodeURIComponent('com.fivegservices.fivegtrips://');
+    fetch(`https://vsji3ei487.execute-api.us-east-2.amazonaws.com/dev/items?recipient=${employeePhone}&textmessage=A%20new%20Five%20G%20Trip%20is%20in%20your%20portal.%20`)
+      .then(response => {
+        // handle response
+        console.log(response)
+      })
+      .catch(error => {
+        // handle error
+        console.log(error);
+      });
 
-    fetch(`https://vsji3ei487.execute-api.us-east-2.amazonaws.com/dev/items?recipient=${this.state.employeePhone}&textmessage=A new Five G Trip is in your portal. `)
-  .catch(err => console.error(err))
+
 
 
     var updateTrip = {
       id: this.state.localData.id,
-      driver: this.state.driver[0],
+      driver: this.state.driver,
       pickupTime: this.state.pickupTime,
       trip: '1'
     };
@@ -268,7 +256,7 @@ this.handleRowClick();
 
   toggle = (data) => {
 
-    //console.log(this.state.employee[0].emailAddress)
+    //console.log(data)
 
     this.setState({
       modal: !this.state.modal
@@ -304,7 +292,7 @@ handleChange1 = () =>{
     handleAssign = value => {
 
 
-  this.setState({ driver: value});
+  this.setState({ driver: value.value});
 
 };
 
@@ -320,16 +308,16 @@ sortByTime =(b, a) => {
 
 sortByDate =(b, a) => {
   if (a.appointmentDate < b.appointmentDate) {
-      return 1;
+      return  1;
   }
   if (a.appointmentDate > b.appointmentDate) {
-      return -1;
+      return  -1;
   }
   return 0;
 }
 
 getPickerValue = value => {
-  //console.log(value);
+  console.log(value);
 
   this.setState({ pickupTime: value});
 };
@@ -339,21 +327,15 @@ getPickerValue = value => {
   return (
 <MDBContainer>
     <MDBDatatable
-    hover entriesOptions={[5, 20, 25]} entries={5} pagesAmount={4}
-    searchTop
-   btn
-
-    searchBottom={false}
-    barReverse
-    noBottomColumns
-
 
     data={this.state.data}
 />
 
-     <MDBModal isOpen={this.state.modal} toggle={this.toggle}>
+     <MDBModal nonInvasive={true} staticBackdrop show={this.state.modal}>
+     <MDBModalDialog>
+          <MDBModalContent>
        <div className='text-center'>
-       <MDBModalHeader toggle={this.toggle} >Assign Driver</MDBModalHeader>
+       <MDBModalHeader >Assign Driver</MDBModalHeader>
        </div>
 
        <MDBModalBody>
@@ -362,14 +344,14 @@ getPickerValue = value => {
        <div className='text-center'>
        <div className='text-primary'><a>Employee</a></div>
         <MDBSelect
-          options={this.state.employee}
+          data={this.state.employee}
           selected="Assign Employee"
 
-          getValue={this.handleAssign}
+          onValueChange={this.handleAssign}
         />
 <div className='text-primary'><a>Pickup Time</a></div>
 
-        <MDBTimepicker id="timePicker" getValue={this.getPickerValue} />
+        <MDBTimepicker  increment  inputID="timePicker" customIconSize='2x' customIcon='fa fa-business-time'  onChange={this.getPickerValue} />
 
         </div>
        </MDBModalBody>
@@ -378,6 +360,8 @@ getPickerValue = value => {
          <MDBBtn rounded color="secondary" outline onClick={this.toggle}>Close</MDBBtn>
          <MDBBtn color="primary" rounded outline onClick={this.fetchToken}>Save changes</MDBBtn>
        </MDBModalFooter>
+       </MDBModalContent>
+        </MDBModalDialog>
      </MDBModal>
      </MDBContainer>
 

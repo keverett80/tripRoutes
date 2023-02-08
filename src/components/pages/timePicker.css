@@ -1,0 +1,8 @@
+#timePicker {
+    z-index: 999;
+}
+
+.timepicker-modal.animation {
+    animation-fill-mode: none !important;
+    animation-name: none !important;
+}

@@ -2,7 +2,7 @@ import React from "react";
 import { API,  graphqlOperation } from "aws-amplify";
 import * as mutations from '../../graphql/mutations';
 import { listBrokers, listInvoices, listTrips } from '../../graphql/queries';
-import { MDBContainer, MDBRow,  MDBCol, MDBStepper, MDBStepperStep, MDBBtn, MDBInput, MDBModal, MDBModalBody,  MDBModalFooter, MDBDatatable,MDBIcon, MDBDatepicker, MDBSelect, MDBTable, MDBTableBody, MDBTableHead   } from 'mdb-react-ui-kit';;
+import { MDBContainer, MDBRow, MDBModalDialog, MDBCol, MDBStepper, MDBStepperStep, MDBBtn, MDBInput, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDatatable,MDBIcon, MDBCheckbox, MDBSelect, MDBTable, MDBTableBody, MDBTableHead, MDBSpinner, MDBTextArea, MDBModalContent  } from 'mdb-react-ui-kit';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import {Helmet} from "react-helmet";
 
@@ -640,24 +640,19 @@ render() {
       </MDBStepper>
 
 
-
-        <div className='text-left'>
+      <div className='text-left'>
         <MDBRow>
           {this.state.formActivePanel1 == 1 &&
           (<MDBCol md="12">
             <h3 className="font-weight-bold pl-0 my-4 text-center">
-              <strong>Edit Trips</strong></h3>
+              <strong>Customer Information</strong></h3>
+             <div className="text-center p-md-3"> <MDBBtn className='p-md-3' onClick={this.toggle1}>Add Customer</MDBBtn></div>
+             <MDBDatatable
+             search={true}
+  data={this.state.customers}
 
-              <MDBDatatable
-      hover entriesOptions={[5, 20, 25]} entries={5} pagesAmount={4}
-      searchTop searchBottom={false}
-      barReverse
+/>
 
-      onClick={this.handleNextPrevClick(1)(2)}
-   data={this.state.customers}
-
-
-    />
 
           </MDBCol>)}
 
@@ -665,7 +660,7 @@ render() {
           (<MDBCol md="12">
             <h3 className="font-weight-bold pl-0 my-4 text-center"><strong>Pickup Address</strong></h3>
             <PlacesAutocomplete
-        value={this.state.address}
+        value={this.state.address }
         onChange={this.handleChange}
 
 
@@ -704,9 +699,10 @@ render() {
           </div>
         )}
       </PlacesAutocomplete>
-
-            <MDBBtn color="mdb-color" rounded className="float-left" onClick={this.handleNextPrevClick(1)(1)}>previous</MDBBtn>
-            <MDBBtn color="mdb-color" rounded className="float-right" onClick={this.handleNextPrevClick(1)(3)}>next</MDBBtn>
+      <div className="d-grid gap-2 d-md-block text-center">
+            <MDBBtn color="mdb-color" rounded className='m-3' onClick={this.handleNextPrevClick(1)(1)}>previous</MDBBtn>
+            <MDBBtn color="mdb-color" rounded className='m-3' onClick={this.handleNextPrevClick(1)(3)}>next</MDBBtn>
+            </div>
           </MDBCol>)}
 
           {this.state.formActivePanel1 == 3 &&
@@ -751,60 +747,78 @@ render() {
           </div>
         )}
       </PlacesAutocomplete>
-            <MDBBtn color="mdb-color" rounded className="float-left" onClick={this.handleNextPrevClick(1)(2)}>previous</MDBBtn>
-            <MDBBtn color="mdb-color" rounded className="float-right"  onClick={this.handleNextPrevClick(1)(4)}>next</MDBBtn>
+      <div className="d-grid gap-2 d-md-block text-center">
+            <MDBBtn color="mdb-color" rounded className='m-3' onClick={this.handleNextPrevClick(1)(2)}>previous</MDBBtn>
+            <MDBBtn color="mdb-color" rounded className='m-3'  onClick={this.handleNextPrevClick(1)(4)}>next</MDBBtn></div>
           </MDBCol>)}
 
 
           {this.state.formActivePanel1 == 4 &&
-          (<MDBCol md="12">
 
+          (<><MDBRow start>
+            <MDBCol md="12" className='p-md-3'>
             <h2 className="text-center font-weight-bold my-4">Trip Details</h2>
-< MDBInput label="Weekend/After Hours"  type="checkbox" id="checkbox2" checked={this.state.weekends} getValue={this.getCheck3Value} />
-      <MDBSelect
-          options={this.state.optionsTrip}
-          selected={this.state.roundTrip}
-           value={this.state.roundTrip}
-           getValue={this.getCheck2Value}
-        />
-
-          <MDBSelect
-          options={this.state.optionsPatient}
-          selected={this.state.wheelchair}
-          value={this.state.wheelchair}
-          getValue={this.getCheckValue}
-        />
-
-<div className='text-center red-text'>  <label htmlFor="formGroupExampleInput">Appointment Date</label>
-
-<MDBDatepicker  id="datePicker" value={this.state.appointmentDate}  getValue={this.getPickerDateValue} />
-</div>
-
-            <MDBInput label='Appointment Time'  id="timePicker" value={this.state.appointmentTime}    getValue={this.getPickerValue} />
+            </MDBCol >
+            </MDBRow>
+            <MDBRow start><MDBCol md="4" className='p-md-3'>
+< MDBCheckbox name='flexCheck' label="Weekend/After Hours" id="checkbox2" checked={this.state.weekends} onChange={event => this.setState({weekends: event.target.value})} />
+</MDBCol>
+<MDBCol md="4" className='p-md-3'>
 
         <MDBSelect
-          options={this.state.broker}
-            value={this.state.broker}
-            selected={this.state.brokers}
+  data={this.state.optionsTrip}
+  selected="Choose patient type"
+  label="Trip Type"
+  value={this.state.roundTrip}
+  onValueChange={selected => this.setState({ roundTrip: selected.value }, this.updateSelectTripType(selected.value))}
+
+/>
+</MDBCol><MDBCol md="4" className='p-md-3'>
+<MDBSelect
+  data={this.state.optionsPatient}
+  selected="Choose patient type"
+  label="Patient Type"
+  onValueChange={selected => this.setState({ wheelchair: selected.value },this.updateSelectPatientType(selected.value))}
+  value={this.state.wheelchair}
+
+/>
+</MDBCol>
+</MDBRow>
+<MDBRow start>
+<MDBCol md="3" className='p-md-3'></MDBCol>
+  <MDBCol md="6" className='p-md-3'>
+ <label htmlFor="formGroupExampleInput">Appointment Date: </label>
+ <DatePicker
+      multiple
+      value={this.state.appointmentDate1 }
+      onChange={this.getPickerDateValue1 }
+      format="MM/DD/YYYY HH:mm"
+      plugins={[
+        <TimePicker position="bottom" />,
+        <DatePanel markFocused />
+      ]}
+    />
+</MDBCol>
+<MDBCol md="3" className='p-md-3'></MDBCol>
+</MDBRow>
 
 
-          getValue={this.handleAssign}
-        />
-        <MDBInput type="textarea"  value={this.state.notes} getValue={this.getNotesValue} label="Trip Notes" background />
+<MDBRow start className='p-md-3'>
+  <MDBCol md="12">       <MDBTextArea value={this.state.notes} onChange={event => this.setState({notes: event.target.value})} label="Trip Notes"  rows={4} /></MDBCol>
+
+</MDBRow>
 
 
+<div className="d-grid gap-2 d-md-block text-center"> <MDBBtn color="mdb-color" className='m-3' rounded onClick={this.handleNextPrevClick(1)(3)}>previous</MDBBtn>
 
-            <MDBBtn color="mdb-color" rounded className="float-left" onClick={this.handleNextPrevClick(1)(3)}>previous</MDBBtn>
-            <MDBBtn color="mdb-color" rounded className="float-right" onClick={this.handleNextPrevClick(1)(5)}>Next</MDBBtn>
-          </MDBCol>)}
+ <MDBBtn color="mdb-color" className='m-3' rounded   onClick={this.handleNextPrevClick(1)(5)} >Next</MDBBtn></div>
+          </>)}
 
           {this.state.formActivePanel1 == 5 &&
           (<MDBCol md="12">
 
             <h2 className="text-center font-weight-bold my-4">Trip Summary</h2>
             <div className="text-center"><MDBBtn color="primary" rounded  onClick={this.toggle}><MDBIcon icon="info" /> Calculate</MDBBtn></div>
-
-
                 <MDBTable>
       <MDBTableHead>
         <tr>
@@ -827,27 +841,33 @@ render() {
 
       </MDBTableBody>
     </MDBTable>
-            <MDBBtn color="mdb-color" rounded className="float-left" onClick={this.handleNextPrevClick(1)(4)}>previous</MDBBtn>
-            <MDBBtn color="success" rounded className="float-right" onClick={this.submitTrip}>submit</MDBBtn>
+    <div className="d-grid gap-2 d-md-block text-center">
+            <MDBBtn color="mdb-color" rounded className='m-5' onClick={this.handleNextPrevClick(1)(4)}>previous</MDBBtn>
+            <MDBBtn color="success" rounded className='m-5' onClick={this.submitTrip}>submit</MDBBtn></div>
           </MDBCol>)}
         </MDBRow>
         </div>
 
 
-        <MDBModal isOpen={this.state.modal} toggle={this.toggle}>
+        <MDBModal staticBackdrop show={this.state.modal}>
+      <MDBModalDialog>
+          <MDBModalContent>
 
-<MDBModalBody>
-<h4 className="my-4">Details:<div className='red-text'> {this.state.address}</div></h4>
-    <h4 className="my-4 ">Destination Address:<div className='red-text'> {this.state.address2}</div></h4>
-    <h4 className="my-4">Est Time: <div className='red-text'>{this.state.duration}</div></h4>
-    <h4 className="my-4">Est Miles: <div className='red-text'>{(this.state.roundTrip === 'Roundtrip') ? this.state.distance * 2 : this.state.distance}</div></h4>
-    <h4 className="my-4">Est Cost: <div className='red-text'>${this.state.price}</div></h4>
-</MDBModalBody>
-<MDBModalFooter>
-  <MDBBtn rounded color="primary" onClick={this.toggle}>Close</MDBBtn>
+        <MDBModalBody>
+        <h4 className="my-4">Details:<div className='red-text'> {this.state.address}</div></h4>
+            <h4 className="my-4 ">Destination Address:<div className='red-text'> {this.state.address2}</div></h4>
+            <h4 className="my-4">Est Time: <div className='red-text'>{this.state.duration}</div></h4>
+            <h4 className="my-4">Est Miles: <div className='red-text'>{(this.state.roundTrip === 'Roundtrip') ? this.state.distance * 2 : this.state.distance}</div></h4>
+            <h4 className="my-4">Est Cost: <div className='red-text'>${ Math.round(this.state.price * 100)/100}</div></h4>
+        </MDBModalBody>
+        <MDBModalFooter>
+          <MDBBtn rounded color="primary" onClick={this.toggle}>Close</MDBBtn>
 
-</MDBModalFooter>
-</MDBModal>
+        </MDBModalFooter>
+
+          </MDBModalContent>
+          </MDBModalDialog>
+      </MDBModal>
 
 
 

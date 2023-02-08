@@ -114,12 +114,7 @@ this.state = {
         sort: 'asc',
         width: 150,
       },
-      {
-        label: 'Email',
-        field: 'email',
-        sort: 'asc',
-        width: 150,
-      },
+
       {
         label: 'Phone',
         field: 'phone',
@@ -198,7 +193,7 @@ this.handleChange = this.handleChange.bind(this)
         fname: customer.fname,
         lname: customer.lname,
         phone: customer.phoneNumber,
-        email: customer.emailAddress,
+
         address: customer.address,
         selectButton: <MDBBtn outline rounded  color="success" onClick={() => this.handleRowClick(customer)}>Select</MDBBtn>,
         editButton: <MDBBtn outline rounded  color="warning" onClick={() => this.editCustomer(customer.id)}>Edit</MDBBtn>,
@@ -207,18 +202,18 @@ this.handleChange = this.handleChange.bind(this)
     });
     this.setState({
       customers: {
-        ...this.state.customers,
+         ...this.state.customers,
         rows: this.state.customers.rows.concat(myCustomers)
-      }
-    }, () => {
-      this.setState({
-        fname: myCustomers[0].fname,
-        lname: myCustomers[0].lname,
-        phone: myCustomers[0].phone,
-        email: myCustomers[0].email,
-        address: myCustomers[0].address
-      });
+      },
+      fname: myCustomers[0].fname,
+      lname: myCustomers[0].lname,
+      phone: myCustomers[0].phone,
+
+      address: myCustomers[0].address,
     });
+  } catch (error) {
+    console.error(error);
+
   }
 
 
@@ -935,20 +930,9 @@ render() {
               <strong>Customer Information</strong></h3>
              <div className="text-center p-md-3"> <MDBBtn className='p-md-3' onClick={this.toggle1}>Add Customer</MDBBtn></div>
              <MDBDatatable
+             search={true}
   data={this.state.customers}
-  advancedSearch={(value) => {
 
-    const string = value.split(' in:').map(str => str.trim());
-    const phrase = string[0].toString();
-    let columns = string[1];
-    if (columns) {
-        columns = columns.split(',').map(str => str.toLowerCase().trim());
-    } else {
-        columns = [];
-    }
-console.log(phrase, columns)
-    return { phrase, columns };
-}}
 />
 
 
@@ -1147,7 +1131,7 @@ console.log(phrase, columns)
         </div>
  )}
 
-      <MDBModal show={this.state.modal}>
+      <MDBModal staticBackdrop show={this.state.modal}>
       <MDBModalDialog>
           <MDBModalContent>
 
@@ -1167,7 +1151,7 @@ console.log(phrase, columns)
           </MDBModalDialog>
       </MDBModal>
 
-      <MDBModal show={this.state.modal1}  tabIndex='-1'>
+      <MDBModal staticBackdrop show={this.state.modal1}  tabIndex='-1'>
       <MDBModalDialog>
       <MDBModalContent>
         <MDBModalHeader >New Customer</MDBModalHeader>
@@ -1230,7 +1214,7 @@ console.log(phrase, columns)
         </MDBModalDialog>
       </MDBModal>
 
-      <MDBModal show={this.state.editModalOpen} >
+      <MDBModal staticBackdrop show={this.state.editModalOpen} >
       <MDBModalDialog>
           <MDBModalContent>
   <MDBModalHeader >Edit Customer</MDBModalHeader>

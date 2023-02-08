@@ -248,7 +248,7 @@ handleChange1 = () =>{
         />
 
 
-      <MDBModal show={this.state.modal}  tabIndex='-1'>
+      <MDBModal staticBackdrop show={this.state.modal}  tabIndex='-1'>
       <MDBModalDialog>
           <MDBModalContent>
         <MDBModalHeader>{this.state.customer}</MDBModalHeader>
