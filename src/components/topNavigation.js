@@ -85,46 +85,31 @@ export default function TopNavigation() {
               Trips
             </MDBSideNavLink>
             <MDBSideNavCollapse show={darkCollapse1}>
+            <MDBSideNavLink href='/viewTrips'>All Trips</MDBSideNavLink>
             <MDBSideNavLink href='/addTrips'>Add Trip</MDBSideNavLink>
+            <MDBSideNavLink href='/editTrips'>Edit Trips</MDBSideNavLink>
                 <MDBSideNavLink href='/driversAssign'>Assign Drivers</MDBSideNavLink>
                 <MDBSideNavLink href='/tripReady'>Ready Pickup</MDBSideNavLink>
                 <MDBSideNavLink href='/driverStatus'>Driver Status</MDBSideNavLink>
-                <MDBSideNavLink href='/driverLocation'>Driver Location</MDBSideNavLink>
-                <MDBSideNavLink href='/import'>Import Trips</MDBSideNavLink>
-                <MDBSideNavLink href='/viewTrips'>Pending Trips</MDBSideNavLink>
                 <MDBSideNavLink href='/archived'>Archived Trips</MDBSideNavLink>
+              
+               
+                
             </MDBSideNavCollapse>
           </MDBSideNavItem>
-          <MDBSideNavItem>
-            <MDBSideNavLink icon='angle-down' shouldBeExpanded={darkCollapse2} onClick={() => setDarkCollapse2(!darkCollapse2)}>
-              <MDBIcon fas icon='pencil' className='fa-fw me-3' />
-              Edits
-            </MDBSideNavLink>
-            <MDBSideNavCollapse show={darkCollapse2}>
-            <MDBSideNavLink href='/editCustomer'>Edit Customers</MDBSideNavLink>
-                <MDBSideNavLink href='/editTrips'>Edit Trips</MDBSideNavLink>
-            </MDBSideNavCollapse>
-          </MDBSideNavItem>
-          <MDBSideNavItem>
-            <MDBSideNavLink icon='angle-down' shouldBeExpanded={darkCollapse3} onClick={() => setDarkCollapse3(!darkCollapse3)}>
-              <MDBIcon fas icon='dollar' className='fa-fw me-3' />
-              Invoices
-            </MDBSideNavLink>
-            <MDBSideNavCollapse show={darkCollapse3}>
-            <MDBSideNavLink href='/invoice'>Invoices</MDBSideNavLink>
-            </MDBSideNavCollapse>
-          </MDBSideNavItem>
+       
           <MDBSideNavItem>
             <MDBSideNavLink icon='angle-down' shouldBeExpanded={darkCollapse4} onClick={() => setDarkCollapse4(!darkCollapse4)}>
               <MDBIcon fas icon='building' className='fa-fw me-3' />
               Five G Info
             </MDBSideNavLink>
             <MDBSideNavCollapse show={darkCollapse4}>
+            <MDBSideNavLink href='/invoice'>Invoices</MDBSideNavLink>
             <MDBSideNavLink href='/drivers'>Add Drivers</MDBSideNavLink>
                 <MDBSideNavLink href='/vehicles'>Add Vehicles</MDBSideNavLink>
                 <MDBSideNavLink href='/brokers'>Add Brokers</MDBSideNavLink>
                 <MDBSideNavLink href='/links'>Business Links</MDBSideNavLink>
-                <MDBSideNavLink href='/dash'>Dashboards</MDBSideNavLink>
+             
             </MDBSideNavCollapse>
           </MDBSideNavItem>
         </MDBSideNavMenu>

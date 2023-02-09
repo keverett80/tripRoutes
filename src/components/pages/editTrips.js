@@ -1,10 +1,13 @@
 import React from "react";
 import { API,  graphqlOperation } from "aws-amplify";
 import * as mutations from '../../graphql/mutations';
-import { listBrokers, listInvoices, listTrips } from '../../graphql/queries';
+import {   listTrips } from '../../graphql/queries';
 import { MDBContainer, MDBRow, MDBModalDialog, MDBCol, MDBStepper, MDBStepperStep, MDBBtn, MDBInput, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDatatable,MDBIcon, MDBCheckbox, MDBSelect, MDBTable, MDBTableBody, MDBTableHead, MDBSpinner, MDBTextArea, MDBModalContent  } from 'mdb-react-ui-kit';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import {Helmet} from "react-helmet";
+import DatePicker from "react-multi-date-picker"
+import TimePicker from "react-multi-date-picker/plugins/time_picker";
+import DatePanel from "react-multi-date-picker/plugins/date_panel";
 
 
 
@@ -29,8 +32,7 @@ class EditTrips extends React.Component {
 this.state = {
   dataId:'',
   notes: '',
-  broker:[],
-  brokers:'',
+  loading: false,
   formActivePanel1: 1,
   formActivePanel1Changed: false,
   fname: '',
@@ -146,31 +148,32 @@ this.handleChange = this.handleChange.bind(this)
     this.state.queryData  = apiData.data.listTrips.items;
 
     var myCustomers = [];
-    this.getBroker();
+   
     this.state.queryData.sort(this.sortByDate).map((customer) => {
 
-      //console.log(customer.address)
+    
       if(customer.status == 'pending' || customer.status == 'new'){
+
       myCustomers.push({
+
  weekends:'',
         id: customer.id,
-        fname: customer.fname,
-        lname: customer.lname,
-        address: customer.address,
-        address2: customer.address2,
-        wheelchair: customer.wheelchair,
-        roundtrip: customer.roundtrip,
-        driver: customer.driver,
+        fname: customer.fname || '',
+        lname: customer.lname|| '',
+        address: customer.address|| '',
+        address2: customer.address2|| '',
+        wheelchair: customer.wheelchair|| '',
+        roundtrip: customer.roundtrip|| '',
+        driver: customer.driver|| '',
         appointmentDate: customer.appointmentDate.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
-        year: 'numeric'}),
-        appointmentTime: customer.appointmentTime,
-        status:customer.status,
-        phone: customer.phoneNumber,
-        broker: customer.broker,
-        notes: customer.notes,
-        invoiceNumber: customer.invoiceNumber,
-        clickEvent: (data) => this.handleRowClick(data),
-        button: <MDBBtn outline rounded>Select</MDBBtn>
+        year: 'numeric'})|| '',
+        appointmentTime: customer.appointmentTime|| '',
+        status:customer.status|| '',
+        phone: customer.phoneNumber|| '',
+    
+        notes: customer.notes|| '',
+        invoiceNumber: customer.invoiceNumber|| '',
+        button: <MDBBtn outline rounded  color="success" onClick={() => this.handleRowClick(customer)}>Select</MDBBtn>,
 
       });
     }
@@ -178,14 +181,19 @@ this.handleChange = this.handleChange.bind(this)
   })
   this.setState({
     customers: {
-      ...this.state.customers, // merge with the original `state.items`
+       ...this.state.customers,
       rows: this.state.customers.rows.concat(myCustomers)
-    }
+    },
+    fname: myCustomers[0].fname,
+    lname: myCustomers[0].lname,
+    phone: myCustomers[0].phone,
+
+    address: myCustomers[0].address,
   });
+} catch (error) {
+  console.error(error);
 
-
-
-    }
+}
 
 
    sortByDate = (b, a)=> {
@@ -198,31 +206,7 @@ this.handleChange = this.handleChange.bind(this)
       return 0;
   }
 
-    getBroker = () =>{
-
-      var myThis = this;
-      var myEmployee= [];
-
-       API.graphql(graphqlOperation(listBrokers)).then(function(results)
-        {
-
-
-          results.data.listBrokers.items.map((customer) => {
-
-            //console.log(customer.emailAddress)
-            myEmployee.push({
-            text: customer.name,
-            value: customer.name,
-
-            });
-
-
-        })
-
-
-        })
-       this.setState({broker: myEmployee});
-        }
+  
 
 
 
@@ -238,28 +222,31 @@ this.handleChange = this.handleChange.bind(this)
   }
  handleRowClick = (data) =>
  {
-  this.state.dataId = data.id
-   this.state.fname = data.fname;
-   this.state.lname = data.lname;
-   this.state.phone = data.phone;
-   this.state.email = data.email;
-   this.state.address = data.address;
-   this.state.address2 = data.address2;
-   this.state.wheelchair =  data.wheelchair
-   this.state.roundTrip =  data.roundtrip
-   this.state.driver =  data.driver
-   this.state.appointmentDate =  new Date(data.appointmentDate)
+  console.log(data)
+  this.setState({dataId: data.id,
+ fname: data.fname,
+   lname: data.lname,
+   phone: data.phone,
+   email: data.email,
+   address: data.address,
+   address2: data.address2,
+   wheelchair:  data.wheelchair,
+   roundTrip:  data.roundtrip,
+   driver:  data.driver,
+   appointmentDate: data.appointmentDate,
 
-   this.state.appointmentTime = data.appointmentTime
-   this.state.status =  data.status
-   this.state.phone = data.phone
-   this.state.brokers = data.broker
-   this.state.notes = data.notes
-    this.state.distance = data.distance
-    this.state.invoiceNumber = data.invoiceNumber
+   appointmentTime: data.appointmentTime,
+   status:  data.status,
+   phone: data.phone,
+   
+   notes: data.notes,
+    distance: data.distance,
+    invoiceNumber: data.invoiceNumber,
+    
 
   //console.log(data)
- }
+ }, this.handleNextPrevClick(1)(2))
+}
 
   getCheckValue = value => {
 
@@ -300,7 +287,7 @@ this.setState({
   };
   getPickerDateValue = value => {
     this.setState({ appointmentDate: value });
-    //console.log(value);
+    console.log(value);
   };
   getFNValue = value => {
     //console.log(value);
@@ -418,59 +405,9 @@ this.setState({
 
  }
 
- getPoNumber = async () =>{
-// Query with filters, limits, and pagination
-let filter = {
-  poNumber: {
-      eq: this.state.invoiceNumber // filter priority = 1
-  }
-};
-const poNumber = await API.graphql(graphqlOperation(listInvoices,
-  { filter: filter,limit: 1000 }));
+ 
 
 
-  console.log(poNumber.data.listInvoices.items[0].id)
-  this.setState({poId: poNumber.data.listInvoices.items[0].id})
-  this.generateInvoice()
-
- }
-
-
- generateInvoice = async () =>{
-
-
-
-  const invoiceDetails = {
-  id: this.state.poId,
-  poNumber: this.state.invoiceNumber,
-  name: this.state.fname + ' ' + this.state.lname,
-  broker: this.state.brokers[0],
-  date: this.state.appointmentDate.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
-  year: 'numeric'}),
-  product: this.state.roundTrip + ' ' + this.state.wheelchair,
-  cost: this.state.price,
-  distance: this.state.distance,
-  address: this.state.address,
-  };
-
-  const newInvoice = await API.graphql({ query: mutations.updateInvoice, variables: {input: invoiceDetails}}).then(( )=> {
-
-
-
-
-   alert('New Trip Added! ')
-   window.location.reload();
-
-
-
-  })
-
-
-
-
-
-
-    }
 
 
 
@@ -573,7 +510,7 @@ submitTrip = event =>{
   }
 
 
-  const newTrips = {
+  const updateTrips = {
     id: this.state.dataId,
     fname: this.state.fname.toUpperCase(),
     lname: this.state.lname.toUpperCase(),
@@ -588,29 +525,24 @@ submitTrip = event =>{
     phoneNumber: this.state.phone,
      cost: Math.round(this.state.price * 100)/100,
     driver: this.state.driver,
-    broker: this.state.brokers,
+  
     notes: this.state.notes,
     distance: (this.state.roundTrip === 'Roundtrip') ? this.state.distance * 2 : this.state.distance,
 
 
   };
 
-  API.graphql({ query: mutations.updateTrip, variables: {input: newTrips , limit: 1000 }}).then(()=>{
+  API.graphql({ query: mutations.updateTrip, variables: {input: updateTrips , limit: 1000 }}).then(()=>{
 
-
-    this.getPoNumber()
+    this.setState({ loading: false });
+    alert('The trip has been updated. ')
+    window.location.reload();
 
 
 } );
 
 }
-handleAssign = value => {
 
-
-  this.setState({ brokers: value[0]});
-
-
-};
 
 
 
@@ -638,7 +570,11 @@ render() {
         <MDBStepperStep icon="table" stepName="Trip" onClick={this.swapFormActive(1)(4)}></MDBStepperStep>
         <MDBStepperStep icon="check" stepName="Finish" onClick={this.swapFormActive(1)(5)}></MDBStepperStep>
       </MDBStepper>
-
+{this.state.loading ? (
+     <div className='d-flex justify-content-center'>
+    <MDBSpinner color="primary" />
+    </div>
+  ) : (
 
       <div className='text-left'>
         <MDBRow>
@@ -790,8 +726,8 @@ render() {
  <label htmlFor="formGroupExampleInput">Appointment Date: </label>
  <DatePicker
       multiple
-      value={this.state.appointmentDate1 }
-      onChange={this.getPickerDateValue1 }
+      value={this.state.appointmentDate }
+      onChange={this.getPickerDateValue }
       format="MM/DD/YYYY HH:mm"
       plugins={[
         <TimePicker position="bottom" />,
@@ -847,7 +783,7 @@ render() {
           </MDBCol>)}
         </MDBRow>
         </div>
-
+)}
 
         <MDBModal staticBackdrop show={this.state.modal}>
       <MDBModalDialog>
