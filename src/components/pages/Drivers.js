@@ -1,5 +1,6 @@
 import React from 'react';
-import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter,  MDBDatatable,  MDBInput } from 'mdb-react-ui-kit';
+import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter,  MDBDatatable,  MDBInput,  MDBModalDialog,
+  MDBModalContent, } from 'mdb-react-ui-kit';
 import { API, graphqlOperation } from 'aws-amplify';
 import { listEmployees } from '../../graphql/queries';
 import * as mutations from '../../graphql/mutations';
@@ -25,12 +26,7 @@ class Drivers extends React.Component {
       modalAdd: false,
       data: {
         columns: [
-          {
-            label: 'ID',
-            field: 'id',
-            sort: 'asc',
-            width: 100,
-          },
+
           {
             label: 'Employee First Name',
             field: 'fname',
@@ -52,16 +48,12 @@ class Drivers extends React.Component {
             field: 'phone',
             width: 100,
           },
-          {
-            label: 'Pay',
-            field: 'payButton',
-            width: 100,
-        },
-          {
-            label: 'Edit ',
-            field: 'editButton',
-            width: 100,
-          },
+
+
+
+
+
+
           {
             label: 'Delete ',
             field: 'myButton',
@@ -75,44 +67,33 @@ class Drivers extends React.Component {
   }
 
   async componentDidMount() {
-   this.setState({payData: JSON.parse(localStorage.getItem("payData")) || []});
-    //this.setState({payData: {pay: JSON.parse(localStorage.getItem("payData"))}})
-    console.log(JSON.parse(localStorage.getItem("payData")))
-
     const apiData = await API.graphql(graphqlOperation(listEmployees));
-    this.setState({ queryData: apiData.data.listEmployees.items });
+    this.state.queryData = apiData.data.listEmployees.items;
 
     var myEmployee = [];
+    //console.log(this.state.queryData)
 
-    this.state.queryData.map(customer => {
+    this.state.queryData.map((customer) => {
+
+
       myEmployee.push({
-        id: customer.id,
-        fname: customer.firstName,
-        lname: customer.lastName,
-        phone: customer.phoneNumber,
-        email: customer.emailAddress,
-        payButton: (<MDBBtn rounded outline color="success" onClick={this.toggleModalPay}>Pay</MDBBtn>
-        ),
-        editButton: (
+      id: customer.id,
+      fname: customer.firstName,
+      lname: customer.lastName,
+      phone: customer.phoneNumber,
+      email: customer.emailAddress,
+      myButton: <MDBBtn rounded outline color='danger' onClick={this.getCellValue}>Delete</MDBBtn>
 
-          <MDBBtn rounded outline color="warning" onClick={() => this.editEmployee(customer.id)}>
-            Edit
-          </MDBBtn>
-        ),
-        myButton: (
-          <MDBBtn rounded outline color="danger" onClick={this.getCellValue}>
-            Delete
-          </MDBBtn>
-        ),
       });
-    });
 
-    this.setState({
-      data: {
-        ...this.state.data,
-        rows: myEmployee,
-      },
-    });
+
+  })
+  this.setState({
+    data: {
+      ...this.state.data, // merge with the original `state.items`
+      rows: this.state.data.rows.concat(myEmployee)
+    }
+  });
   }
 
 
@@ -312,63 +293,14 @@ return;
     return (
       <div>
         <MDBContainer>
-        <MDBModal isOpen={this.state.modalPay} toggle={this.toggleModalPay}>
-  <MDBModalHeader toggle={this.toggleModalPay}>Add Pay</MDBModalHeader>
-  <MDBModalBody>
-    <table>
-      <thead>
-        <tr>
-          <th>M</th>
-          <th>T</th>
-          <th>W</th>
-          <th>Th</th>
-          <th>F</th>
-          <th>S</th>
-          <th>Sn</th>
-        </tr>
-        <tr>
-          <td>
-
-            <MDBInput name="pay" value={this.state.payData.pay} label="Pay" type="text" onChange={this.handleChangePay} />
-
-          </td>
-          <td>
-          <MDBInput name="pay" value={this.state.payData.pay} label="Pay" type="text" onChange={this.handleChangePay} />
-
-          </td>
-          <td>
-          <MDBInput name="pay" value={this.state.payData.pay} label="Pay" type="text" onChange={this.handleChangePay} />
-
-          </td>
-          <td>
-          <MDBInput name="pay" value={this.state.payData.pay} label="Pay" type="text" onChange={this.handleChangePay} />
-
-          </td>
-          <td>
-          <MDBInput name="pay" value={this.state.payData.pay} label="Pay" type="text" onChange={this.handleChangePay} />
-
-          </td>
-          <td>
-          <MDBInput name="pay" value={this.state.payData.pay} label="Pay" type="text" onChange={this.handleChangePay} />
-
-          </td>
-          <td>
-          <MDBInput name="pay" value={this.state.payData.pay} label="Pay" type="text" onChange={this.handleChangePay} />
-
-          </td>
-        </tr>
-      </thead>
-      </table>
-    <MDBBtn color="primary" onClick={this.handlePay}>Add</MDBBtn>
-    <MDBBtn color="danger" onClick={this.toggleModalPay}>Cancel</MDBBtn>
-  </MDBModalBody>
-</MDBModal>
 
 
 
         <MDBBtn onClick={() => this.setState({ modal: true })}>Add Employee</MDBBtn>
-          <MDBModal isOpen={this.state.modal} toggle={this.handleModalClose}>
-            <MDBModalHeader toggle={this.handleModalClose}>Edit Employee</MDBModalHeader>
+          <MDBModal show={this.state.modal} >
+          <MDBModalDialog>
+          <MDBModalContent>
+            <MDBModalHeader>Edit Employee</MDBModalHeader>
             <MDBModalBody>
               <MDBInput
                 label="First Name"
@@ -399,14 +331,13 @@ return;
                 Save changes
               </MDBBtn>
             </MDBModalFooter>
+            </MDBModalContent>
+        </MDBModalDialog>
           </MDBModal>
           <MDBDatatable
-            hover
+
             data={data}
-            entries={5}
-            entriesOptions={[5, 10, 15]}
-            pagesAmount={4}
-           // activePage={1}
+
           />
 
         </MDBContainer>

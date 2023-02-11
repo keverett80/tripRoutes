@@ -25,12 +25,7 @@ class AddDriver extends React.Component {
     data:{
     columns: [
 
-      {
-        label: 'ID',
-        field: 'id',
-        width: 100,
 
-      },
 
 
       {
@@ -117,21 +112,20 @@ this.handleRowClick = this.handleRowClick.bind(this)
 
       if(x >= y){
       myCustomers.push({
-      id: customer.id,
-      fname: customer.fname,
-      lname: customer.lname,
-      address: customer.address,
-      address2: customer.address2,
-      phone: customer.phoneNumber,
-      wheelchair: customer.wheelchair,
-      roundtrip: customer.roundtrip,
-      driver: customer.driver,
+      id: customer.id||'',
+      fname: customer.fname||'',
+      lname: customer.lname||'',
+      address: customer.address||'',
+      address2: customer.address2||'',
+      phone: customer.phoneNumber||'',
+      wheelchair: customer.wheelchair||'',
+      roundtrip: customer.roundtrip||'',
+      driver: customer.driver||'',
       appointmentDate: customer.appointmentDate.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
-      year: 'numeric'}),
-      appointmentTime: customer.appointmentTime,
-      status:customer.pickupTime,
-      clickEvent: (data) => this.toggle(data),
-      button: <MDBBtn color='success'  outline rounded>Assign Employee</MDBBtn>
+      year: 'numeric'})||'',
+      appointmentTime: customer.appointmentTime||'',
+      status:customer.pickupTime||'',
+      button: <MDBBtn color='success' onClick={() => this.toggle(customer)} outline rounded>Assign Employee</MDBBtn>
 
       });
     }
@@ -327,7 +321,7 @@ getPickerValue = value => {
   return (
 <MDBContainer>
     <MDBDatatable
-
+search
     data={this.state.data}
 />
 

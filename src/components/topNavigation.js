@@ -19,8 +19,9 @@ import {
 
 
 import { Auth } from '@aws-amplify/auth';
+import { withAuthenticator } from '@aws-amplify/ui-react';
 
-export default function TopNavigation() {
+  function TopNavigation({ signOut }) {
   const [darkOpen, setDarkOpen] = useState(true);
   const [darkCollapse1, setDarkCollapse1] = useState(false);
   const [darkCollapse2, setDarkCollapse2] = useState(false);
@@ -29,17 +30,35 @@ export default function TopNavigation() {
   const [user, setUser] = useState('');
   const [showNavRight, setShowNavRight] = useState(false);
 
+
+
   useEffect(() => {
     // Update the document title using the browser API
     Auth.currentUserInfo().then((userInfo) => {
       console.log(userInfo)
 
-        setUser(userInfo.attributes.email)
-
-
-
     }, [])
   });
+  useEffect(() => {
+    const handleSignOutWrapper = () => {
+      setTimeout(() => {
+        handleSignOut();
+      }, 200);
+    };
+
+    const handleSignOut = () => {
+      // Perform some action when the sign out button is clicked
+      window.location.reload();
+    };
+    const button = document.querySelector('#sign-out-button');
+    button.addEventListener('click', handleSignOutWrapper);
+
+    return () => {
+      button.removeEventListener('click', handleSignOutWrapper);
+    };
+  }, []);
+
+
 
   return (
     <div className="mdb-skin">
@@ -50,13 +69,14 @@ export default function TopNavigation() {
         <MDBCollapse navbar show={showNavRight}>
           <MDBNavbarNav right fullWidth={false} className='mb-2 mb-lg-0'>
             <MDBNavbarItem>
-            <MDBNavbarLink to="/calendar">
+            <MDBNavbarLink href="/calendar">
                   <MDBIcon icon="calendar" className="d-inline-inline" />{" "}
                   <div className="d-none d-md-inline ">Calendar</div>
                 </MDBNavbarLink>
             </MDBNavbarItem>
             <MDBNavbarItem>
-              <MDBNavbarLink href='#'>SignOut</MDBNavbarLink>
+            <MDBNavbarLink id="sign-out-button" onClick={signOut}>Sign Out</MDBNavbarLink>
+
             </MDBNavbarItem>
 
 
@@ -88,16 +108,16 @@ export default function TopNavigation() {
             <MDBSideNavLink href='/viewTrips'>All Trips</MDBSideNavLink>
             <MDBSideNavLink href='/addTrips'>Add Trip</MDBSideNavLink>
             <MDBSideNavLink href='/editTrips'>Edit Trips</MDBSideNavLink>
+            <MDBSideNavLink href='/archived'>Archived Trips</MDBSideNavLink>
                 <MDBSideNavLink href='/driversAssign'>Assign Drivers</MDBSideNavLink>
-                <MDBSideNavLink href='/tripReady'>Ready Pickup</MDBSideNavLink>
                 <MDBSideNavLink href='/driverStatus'>Driver Status</MDBSideNavLink>
-                <MDBSideNavLink href='/archived'>Archived Trips</MDBSideNavLink>
-              
-               
-                
+
+
+
+
             </MDBSideNavCollapse>
           </MDBSideNavItem>
-       
+
           <MDBSideNavItem>
             <MDBSideNavLink icon='angle-down' shouldBeExpanded={darkCollapse4} onClick={() => setDarkCollapse4(!darkCollapse4)}>
               <MDBIcon fas icon='building' className='fa-fw me-3' />
@@ -107,9 +127,8 @@ export default function TopNavigation() {
             <MDBSideNavLink href='/invoice'>Invoices</MDBSideNavLink>
             <MDBSideNavLink href='/drivers'>Add Drivers</MDBSideNavLink>
                 <MDBSideNavLink href='/vehicles'>Add Vehicles</MDBSideNavLink>
-                <MDBSideNavLink href='/brokers'>Add Brokers</MDBSideNavLink>
                 <MDBSideNavLink href='/links'>Business Links</MDBSideNavLink>
-             
+
             </MDBSideNavCollapse>
           </MDBSideNavItem>
         </MDBSideNavMenu>
@@ -123,3 +142,4 @@ export default function TopNavigation() {
     </div>
   );
 }
+export default withAuthenticator(TopNavigation);

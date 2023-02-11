@@ -1,23 +1,14 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import DashboardPage from './pages/DashboardPage';
-
-
-
 import AddTrips from './pages/AddTrips';
 import ViewTrips from './pages/ViewTrips';
 import Vehicles from './pages/Vehicles';
 import Drivers from './pages/Drivers';
 import DriversAssign from './pages/addDriver';
-import TripReady from './pages/tripReady';
-import Broker from './pages/addBrokers';
-import EditCustomer from './pages/editCustomer';
 import Links from './pages/links';
 import Calendars from './pages/calendar';
 import EditTrips from './pages/editTrips';
 import Invoice from './pages/invoice';
-
-
 import Archived from './pages/archived';
 import DriverStatus from './pages/driverStatus';
 
@@ -30,12 +21,12 @@ class SwitchRoutes extends React.Component {
       <Routes>
         <Route path='/' exact element={<Calendars/>} />
         <Route path='/addTrips' element={<AddTrips/>} />
-        <Route path='/viewTrips' exact element={<AddTrips/>} />
+        <Route path='/viewTrips' exact element={<ViewTrips/>} />
         <Route path='/archived' element={<Archived/>} />
         <Route path='/vehicles' element={<Vehicles/>} />
         <Route path='/drivers'element={<Drivers/>} />
-        <Route path='/brokers' element={<Broker/>} />
-        <Route path='/editCustomer' element={<EditCustomer/>} />
+
+
         <Route path='/links' element={<Links/>} />
         <Route path='/calendar' element={<Calendars/>} />
         <Route path='/editTrips' element={<EditTrips/>} />
@@ -47,7 +38,7 @@ class SwitchRoutes extends React.Component {
         <Route path='/driverStatus' element={<DriverStatus/>} />
 
 
-        <Route path='/dash' element={<DashboardPage/>} />
+
       </Routes>
     );
   }

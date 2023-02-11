@@ -1,5 +1,6 @@
 import React from 'react';
-import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDatatable,MDBFormInline, MDBInput } from 'mdb-react-ui-kit';
+import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDatatable,MDBFormInline, MDBInput,MDBModalDialog,
+  MDBModalContent, } from 'mdb-react-ui-kit';
 import { API,  graphqlOperation } from "aws-amplify";
 import { listEmployees, listVehicles } from '../../graphql/queries';
 import * as mutations from '../../graphql/mutations';
@@ -23,13 +24,7 @@ class Vehicles extends React.Component {
     data:{
     columns: [
 
-      {
-        label: 'ID',
-        field: 'id',
-        sort: 'asc',
-        width: 100,
 
-      },
 
       {
         label: 'Make',
@@ -193,26 +188,7 @@ return;
 
   }
 
-  getMakeValue = value => {
-    //console.log(value);
-    this.setState({make: value});
 
-  };
-  getModelValue = value => {
-    //console.log(value);
-    this.setState({model: value});
-
-  };
-  getColorValue = value => {
-    //console.log(value);
-    this.setState({color: value});
-
-  };
-  getTagValue = value => {
-    //console.log(value);
-    this.setState({tag:value});
-
-  };
   calculateAutofocus = (a) => {
     if (this.state['formActivePanel' + a + 'Changed']) {
       return true
@@ -227,32 +203,31 @@ return;
 <MDBContainer>
 <div className="text-center"> <MDBBtn onClick={this.toggle}>Add Vehicle</MDBBtn></div>
     <MDBDatatable
-    hover entriesOptions={[5, 20, 25]} entries={5} pagesAmount={4}
-    searchTop
 
-
-    searchBottom={false}
-    barReverse
-    noBottomColumns
 data={this.state.data}
 />
 
-     <MDBModal isOpen={this.state.modal} toggle={this.toggle}>
+     <MDBModal show={this.state.modal} >
+     <MDBModalDialog>
+          <MDBModalContent>
+
        <div className='text-center'>
-       <MDBModalHeader toggle={this.toggle} >Add Employee</MDBModalHeader>
+       <MDBModalHeader >Add Employee</MDBModalHeader>
        </div>
        <MDBModalBody>
        <div className="text-left">
-        <MDBInput  getValue={this.getMakeValue} label="Make" className="mt-4" autoFocus={this.calculateAutofocus(1)} />
-            <MDBInput  getValue={this.getModelValue} label="Model" className="mt-4" />
-            <MDBInput  getValue={this.getTagValue} label="Tag" className="mt-4" />
-            <MDBInput getValue={this.getColorValue} label="Color" className="mt-4" />
+        <MDBInput  value={this.state.make} onChange={event => this.setState({phone: event.target.value})}  label="Make" className="mt-4" autoFocus={this.calculateAutofocus(1)} />
+            <MDBInput value={this.state.model} onChange={event => this.setState({phone: event.target.value})}   label="Model" className="mt-4" />
+            <MDBInput value={this.state.tagNumber} onChange={event => this.setState({phone: event.target.value})}    label="Tag" className="mt-4" />
+            <MDBInput value={this.state.color} onChange={event => this.setState({phone: event.target.value})}  label="Color" className="mt-4" />
             </div>
        </MDBModalBody>
        <MDBModalFooter>
          <MDBBtn rounded color="secondary" outline onClick={this.toggle}>Close</MDBBtn>
          <MDBBtn color="primary" rounded outline onClick={this.addVehicle}>Add Vehicle</MDBBtn>
        </MDBModalFooter>
+       </MDBModalContent>
+        </MDBModalDialog>
      </MDBModal>
      </MDBContainer>
 

@@ -30,6 +30,7 @@ class EditTrips extends React.Component {
   constructor(props) {
     super(props)
 this.state = {
+  weekends: false,
   dataId:'',
   notes: '',
   loading: false,
@@ -82,12 +83,7 @@ this.state = {
     ],
   customers: {
     columns: [
-      {
-        label: 'ID',
-        field: 'id',
-        sort: 'asc',
-        width: 150,
-      },
+
       {
         label: 'First Name',
         field: 'fname',
@@ -148,15 +144,15 @@ this.handleChange = this.handleChange.bind(this)
     this.state.queryData  = apiData.data.listTrips.items;
 
     var myCustomers = [];
-   
+
     this.state.queryData.sort(this.sortByDate).map((customer) => {
 
-    
-      if(customer.status == 'pending' || customer.status == 'new'){
 
+      if(customer.status == 'pending' || customer.status == 'new'){
+//console.log(customer)
       myCustomers.push({
 
- weekends:'',
+        afterHours:this.state.weekends,
         id: customer.id,
         fname: customer.fname || '',
         lname: customer.lname|| '',
@@ -170,7 +166,7 @@ this.handleChange = this.handleChange.bind(this)
         appointmentTime: customer.appointmentTime|| '',
         status:customer.status|| '',
         phone: customer.phoneNumber|| '',
-    
+
         notes: customer.notes|| '',
         invoiceNumber: customer.invoiceNumber|| '',
         button: <MDBBtn outline rounded  color="success" onClick={() => this.handleRowClick(customer)}>Select</MDBBtn>,
@@ -191,7 +187,7 @@ this.handleChange = this.handleChange.bind(this)
     address: myCustomers[0].address,
   });
 } catch (error) {
-  console.error(error);
+  //console.error(error);
 
 }
 
@@ -206,7 +202,7 @@ this.handleChange = this.handleChange.bind(this)
       return 0;
   }
 
-  
+
 
 
 
@@ -222,7 +218,7 @@ this.handleChange = this.handleChange.bind(this)
   }
  handleRowClick = (data) =>
  {
-  console.log(data)
+  //console.log(data)
   this.setState({dataId: data.id,
  fname: data.fname,
    lname: data.lname,
@@ -234,86 +230,33 @@ this.handleChange = this.handleChange.bind(this)
    roundTrip:  data.roundtrip,
    driver:  data.driver,
    appointmentDate: data.appointmentDate,
-
+  weekends: data.afterHours,
    appointmentTime: data.appointmentTime,
    status:  data.status,
    phone: data.phone,
-   
+
    notes: data.notes,
     distance: data.distance,
     invoiceNumber: data.invoiceNumber,
-    
+
 
   //console.log(data)
  }, this.handleNextPrevClick(1)(2))
 }
 
-  getCheckValue = value => {
-
-    this.setState({ wheelchair: value[0] });
-
-      this.setState({
-  price: 0
-});
-
-  };
-  getCheck2Value = value => {
-
-
-      this.setState({ roundTrip: value[0] });
-
-      this.setState({
-  price: 0
-});
-
-  };
-
-      getCheck3Value = value => {
-
-this.setState({ weekends: value });
-this.setState({
-  price: 0
-});
 
 
 
-
-  };
-
-
-  getPickerValue = value => {
-    this.setState({ appointmentTime: value });
-    //console.log(value);
-  };
   getPickerDateValue = value => {
     this.setState({ appointmentDate: value });
-    console.log(value);
-  };
-  getFNValue = value => {
     //console.log(value);
-    this.setState({fname: value});
-
   };
 
-  getNotesValue = value =>{
-    this.setState({notes: value});
 
-  }
-  getLNValue = value => {
-    //console.log(value);
-    this.setState({lname: value});
 
-  };
-  getPhoneValue = value => {
-    //console.log(value);
-    this.setState({phone: value});
 
-  };
-  getEmailValue = value => {
-    //console.log(value);
-    this.setState({email:value});
 
-  };
+
 handleChange = address => {
 
 
@@ -333,41 +276,21 @@ toggle1 = () => {
     modal1: !this.state.modal1
   });
 }
-calcPrice = ()=>{
+calcPrice = () => {
+  const isRoundTrip = this.state.roundTrip === 'Roundtrip';
+  const appointmentDate = new Date(this.state.appointmentDate);
+  const appointmentTime = new Date(appointmentDate.toISOString());
+  const isEarlyOrLate = appointmentTime.getHours() < 6 || appointmentTime.getHours() >= 19;
+  const isWeekend = [0, 6].includes(appointmentDate.getDay()) || (appointmentTime.getHours() >= 19 || appointmentTime.getHours() < 6);
+  const exceeds30Miles = this.state.distance > 30;
+  const basePrice = this.state.distance * (exceeds30Miles || isWeekend || isEarlyOrLate ? 3 : 2);
+  const price = isRoundTrip ? basePrice * 2 + (isWeekend ? 120 : 80) : basePrice + (isWeekend ? 60 : 40);
 
-  if(this.state.wheelchair == 'Wheelchair' && this.state.roundTrip == 'Roundtrip')
-{
-
-this.state.price = (this.state.distance * 2) * 2 + 80
-this.setState({
-  modal: !this.state.modal
-});
+  this.setState({
+    price,
+    modal: !this.state.modal
+  });
 }
-else if(this.state.wheelchair == 'Ambulatory' && this.state.roundTrip == 'One way'){
-
-this.state.price = (this.state.distance * 2) + 40
-this.setState({
-  modal: !this.state.modal
-});
-
-
-}
-else if(this.state.wheelchair == 'Wheelchair' && this.state.roundTrip == 'One way'){
-
-this.state.price = (this.state.distance * 2) + 40
-this.setState({
-  modal: !this.state.modal
-});
-}
-else if(this.state.wheelchair == 'Ambulatory' && this.state.roundTrip == 'Roundtrip'){
-this.state.price = (this.state.distance * 2) * 2 + 80
-this.setState({
-  modal: !this.state.modal
-});
-
-}
-
- }
 
 calcPrice2 = ()=>{
 
@@ -405,7 +328,7 @@ this.setState({
 
  }
 
- 
+
 
 
 
@@ -452,7 +375,13 @@ this.setState({
 
   }
 
-
+  getCheckBoxValue = () => {
+    if (this.state.weekends === true) {
+     this.setState({weekends: false})
+    } else {
+      this.setState({weekends: true})
+    }
+  }
 
 
 swapFormActive = (a) => (param) => (e) => {
@@ -525,7 +454,7 @@ submitTrip = event =>{
     phoneNumber: this.state.phone,
      cost: Math.round(this.state.price * 100)/100,
     driver: this.state.driver,
-  
+    afterHours:this.state.weekends,
     notes: this.state.notes,
     distance: (this.state.roundTrip === 'Roundtrip') ? this.state.distance * 2 : this.state.distance,
 
@@ -555,20 +484,19 @@ render() {
 
         <div className="application">
             <Helmet>
-            <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAdnS_bTUUA8hlPRJkr0tDPBZ_vdA4hH9Y&libraries=places,distancematrix" type="text/javascript" />
+
 
 
             </Helmet>
 
         </div>
 
-        <MDBStepper icon>
-        <MDBStepperStep far icon="address-card" stepName="Basic Information" onClick={this.swapFormActive(1)(1)}></MDBStepperStep>
-        <MDBStepperStep  icon="map-marked" stepName="Personal Data" onClick={this.swapFormActive(1)(2)}></MDBStepperStep>
-        <MDBStepperStep  icon="map-marked-alt" stepName="Terms and Conditions" onClick={this.swapFormActive(1)(3)}></MDBStepperStep>
-        <MDBStepperStep icon="table" stepName="Trip" onClick={this.swapFormActive(1)(4)}></MDBStepperStep>
-        <MDBStepperStep icon="check" stepName="Finish" onClick={this.swapFormActive(1)(5)}></MDBStepperStep>
+        <MDBStepper >
+        <MDBStepperStep icon="address-card" headText="Basic Information" onClick={this.swapFormActive(1)(1)}></MDBStepperStep>
+        <MDBStepperStep  icon="map-marked" headText="Personal Data" onClick={this.swapFormActive(1)(2)}></MDBStepperStep>
+        <MDBStepperStep  icon="map-marked-alt" headText="Terms and Conditions" onClick={this.swapFormActive(1)(3)}></MDBStepperStep>
+        <MDBStepperStep icon="table" headText="Trip" onClick={this.swapFormActive(1)(4)}></MDBStepperStep>
+        <MDBStepperStep icon="check" headText="Finish" onClick={this.swapFormActive(1)(5)}></MDBStepperStep>
       </MDBStepper>
 {this.state.loading ? (
      <div className='d-flex justify-content-center'>
@@ -696,10 +624,8 @@ render() {
             <h2 className="text-center font-weight-bold my-4">Trip Details</h2>
             </MDBCol >
             </MDBRow>
-            <MDBRow start><MDBCol md="4" className='p-md-3'>
-< MDBCheckbox name='flexCheck' label="Weekend/After Hours" id="checkbox2" checked={this.state.weekends} onChange={event => this.setState({weekends: event.target.value})} />
-</MDBCol>
-<MDBCol md="4" className='p-md-3'>
+            <MDBRow start>
+<MDBCol md="6" className='p-md-3'>
 
         <MDBSelect
   data={this.state.optionsTrip}
@@ -709,7 +635,7 @@ render() {
   onValueChange={selected => this.setState({ roundTrip: selected.value }, this.updateSelectTripType(selected.value))}
 
 />
-</MDBCol><MDBCol md="4" className='p-md-3'>
+</MDBCol><MDBCol md="6" className='p-md-3'>
 <MDBSelect
   data={this.state.optionsPatient}
   selected="Choose patient type"
@@ -723,14 +649,14 @@ render() {
 <MDBRow start>
 <MDBCol md="3" className='p-md-3'></MDBCol>
   <MDBCol md="6" className='p-md-3'>
- <label htmlFor="formGroupExampleInput">Appointment Date: </label>
+ <label >Appointment Date: </label>
  <DatePicker
-      multiple
+
       value={this.state.appointmentDate }
       onChange={this.getPickerDateValue }
       format="MM/DD/YYYY HH:mm"
       plugins={[
-        <TimePicker position="bottom" />,
+        <TimePicker position="top" />,
         <DatePanel markFocused />
       ]}
     />

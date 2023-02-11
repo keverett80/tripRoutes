@@ -1,5 +1,5 @@
 import React from 'react';
-import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDatatable, MDBInput, MDBRow, MDBCol } from 'mdb-react-ui-kit';
+import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDatatable, MDBInput, MDBModalDialog, MDBModalContent, MDBCheckbox, MDBRadio  } from 'mdb-react-ui-kit';
 import { API,  graphqlOperation } from "aws-amplify";
 import { listTrips, listInvoice } from '../../graphql/queries';
 import * as mutations from '../../graphql/mutations';
@@ -38,12 +38,7 @@ class ViewTrips extends React.Component {
     data:{
     columns: [
 
-      {
-        label: 'ID',
-        field: 'id',
-        width: 100,
 
-      },
 
       {
 
@@ -55,7 +50,7 @@ class ViewTrips extends React.Component {
         label: 'Status',
         field: 'status',
 
-        width: 100,
+        width: 150,
       },
 
       {
@@ -80,18 +75,8 @@ class ViewTrips extends React.Component {
 
         width: 200,
       },
-      {
-        label: 'Phone Number',
-        field: 'phone',
 
-        width: 100,
-      },
-      {
-        label: 'Wheelchair',
-        field: 'wheelchair',
-        sort: 'disabled',
-        width: 100,
-      },
+
       {
         label: 'Round Trip',
         field: 'roundtrip',
@@ -147,24 +132,23 @@ this.handleRowClick = this.handleRowClick.bind(this)
 
       if(customer.status !== 'pending'){
       myCustomers.push({
-      id: customer.id,
-      fname: customer.fname,
-      lname: customer.lname,
-      address: customer.address,
-      address2: customer.address2,
-      phone: customer.phoneNumber,
-      wheelchair: customer.wheelchair,
-      roundtrip: customer.roundtrip,
-      driver: customer.driver,
-      appointmentDate: customer.appointmentDate,
-      appointmentTime: customer.appointmentTime,
-      status:customer.status,
-      cost: customer.cost,
-      broker:customer.broker,
-      distance: customer.distance,
-      trip: customer.trip,
-      clickEvent: (data) => this.toggle(data),
-      button: <MDBBtn color='danger'  outline rounded>Status</MDBBtn>
+      id: customer.id||'',
+      fname: customer.fname||'',
+      lname: customer.lname||'',
+      address: customer.address||'',
+      address2: customer.address2||'',
+      phone: customer.phoneNumber||'',
+      wheelchair: customer.wheelchair||'',
+      roundtrip: customer.roundtrip||'',
+      driver: customer.driver||'',
+      appointmentDate: customer.appointmentDate||'',
+      appointmentTime: customer.appointmentTime||'',
+      status:customer.status||'',
+      cost: customer.cost||'',
+      broker:customer.broker||'',
+      distance: customer.distance||'',
+      trip: customer.trip||'',
+      button: <MDBBtn color='danger' onClick={() => this.toggle(customer)}  outline rounded>Status</MDBBtn>
 
       });
     }
@@ -369,58 +353,45 @@ setEndDate = (value) => {
 <MDBContainer>
 
     <MDBDatatable
-     onPageChange={ value => console.log(value) }
-
-    hover entriesOptions={[5, 20, 25]}
-    entries={10}
-    pagesAmount={4}
-
-    searchTop
-    searchBottom={false}
-
-   exportToCSV
-
-
-
-
-    noBottomColumns
-    order={['status', 'asc' ]}
+search
    data={this.state.data}
 
 
 />
 
-     <MDBModal isOpen={this.state.modal} toggle={this.toggle}>
+     <MDBModal show={this.state.modal} >
+     <MDBModalDialog>
+          <MDBModalContent>
        <div className='text-center'>
-       <MDBModalHeader toggle={this.toggle} >Trip Status</MDBModalHeader>
+       <MDBModalHeader >Trip Status</MDBModalHeader>
        </div>
        <MDBModalBody>
        <form>
-        <MDBInput
+        <MDBRadio
           onClick={this.onClick(1)}
           checked={this.state.radio === 1 ? true : false}
           label='Pending'
           type='radio'
           id='radio1'
-          className='mr-5'
+          inline
           onChange={this.handleChange}
         />
-        <MDBInput
+        <MDBRadio
           onClick={this.onClick(2)}
           checked={this.state.radio === 2 ? true : false}
           label='Complete'
           type='radio'
           id='radio2'
-          className='mr-5'
+          inline
           onChange={this.handleChange1}
         />
-        <MDBInput
+        <MDBRadio
           onClick={this.onClick(3)}
           checked={this.state.radio === 3 ? true : false}
           label='Canceled'
           type='radio'
           id='radio3'
-          className='mr-5'
+          inline
           onChange={this.handleChange2}
         />
       </form>
@@ -429,6 +400,8 @@ setEndDate = (value) => {
          <MDBBtn rounded color="secondary" outline onClick={this.toggle}>Close</MDBBtn>
          <MDBBtn color="primary" rounded outline onClick={this.handleRowClick}>Save changes</MDBBtn>
        </MDBModalFooter>
+       </MDBModalContent>
+          </MDBModalDialog>
      </MDBModal>
      </MDBContainer>
 

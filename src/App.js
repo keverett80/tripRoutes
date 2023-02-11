@@ -3,7 +3,7 @@ import Routes from '../src/components/Routes';
 import RoutesLanding from '../src/components/RoutesLanding';
 import TopNavigation from './components/topNavigation';
 
-import Footer from './components/Footer';
+
 import './index.css';
 
 import { Amplify } from 'aws-amplify';
@@ -12,10 +12,6 @@ import Main from './components/pages/main'
 import config from './aws-exports';
 
 
-import {
-  BrowserRouter as Router
-
-} from "react-router-dom";
 
 
 
@@ -47,14 +43,14 @@ return(
 
 
 
-<Router >
+<>
 <Main/>
 
     <RoutesLanding />
 
+    </>
 
 
-</Router>
 
 
 

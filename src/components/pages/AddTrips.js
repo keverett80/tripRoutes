@@ -37,7 +37,7 @@ this.state = {
   mapsLoaded: false,
   editModalOpen: false,
   invoiceNumber: '',
-  weekends:'',
+  weekends:false,
   notes: '',
   loading: false,
   formActivePanel1: 1,
@@ -96,12 +96,7 @@ this.state = {
     ],
   customers: {
     columns: [
-      {
-        label: 'ID',
-        field: 'id',
-        sort: 'asc',
-        width: 150,
-      },
+
       {
         label: 'First Name',
         field: 'fname',
@@ -228,6 +223,14 @@ this.handleChange = this.handleChange.bind(this)
     }
 
 
+    getCheckBoxValue = () => {
+      if (this.state.weekends === true) {
+       this.setState({weekends: false})
+      } else {
+        this.setState({weekends: true})
+      }
+    }
+
 
 
     updateSelectPatientType = (selectedValue) => {
@@ -326,7 +329,10 @@ this.setState({
     //console.log(value);
   };
   getPickerDateValue = value => {
-    this.setState({ appointmentDate: value });
+    this.setState({ appointmentDate: value,
+      appointmentTime:  this.state.appointmentDate1[this.state.counter].hour.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}) + ':' + this.state.appointmentDate1[this.state.counter].minute.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
+
+    });
    // console.log(this.state.appointmentDate1[0].month.number + '/' + this.state.appointmentDate1[0].day.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}) + '/' + this.state.appointmentDate1[0].year);
 
   //  console.log(this.state.appointmentDate1[0].hour.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}) + ':' + this.state.appointmentDate1[0].minute.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}) );
@@ -337,6 +343,7 @@ this.setState({
 
 
     this.setState({ appointmentDate1: value });
+
     //og(value.length);
   };
 
@@ -365,35 +372,26 @@ toggle1 = () => {
     modal1: !this.state.modal1
   });
 }
-calcPrice = ()=>{
-console.log(this.state.wheelchair)
-  if(this.state.roundTrip == 'Roundtrip')
-{
-  console.log('roundtrip wheelchair')
+calcPrice = () => {
+  const isRoundTrip = this.state.roundTrip === 'Roundtrip';
+  const appointmentDate = new Date(this.state.appointmentDate1);
+  const appointmentTime = new Date(appointmentDate.toISOString());
+  const isEarlyOrLate = appointmentTime.getHours() < 6 || appointmentTime.getHours() >= 19;
+  const isWeekend = [0, 6].includes(appointmentDate.getDay()) || (appointmentTime.getHours() >= 19 || appointmentTime.getHours() < 6);
+  const exceeds30Miles = this.state.distance > 30;
+  const basePrice = this.state.distance * (exceeds30Miles || isWeekend || isEarlyOrLate ? 3 : 2);
+  const price = isRoundTrip ? basePrice * 2 + (isWeekend ? 120 : 80) : basePrice + (isWeekend ? 60 : 40);
+
   this.setState({
-
-    price: (this.state.distance * 2) * 2 + 80
+    price,
+    modal: !this.state.modal
   });
-
-this.setState({
-  modal: !this.state.modal
-});
-}
-else if(this.state.roundTrip == 'One way'){
-  console.log('one way wheelchair')
-  this.setState({
-    price: (this.state.distance * 2) + 40
-  });
-
-this.setState({
-  modal: !this.state.modal
-});
-
-
 }
 
 
- }
+
+
+
 
 
  calcPrice2 = ()=>{
@@ -723,6 +721,7 @@ console.log(orderId)
   phoneNumber: this.state.phone,
   orderId: orderId,
   appointmentDate: this.state.appointmentDate1[this.state.counter].month.number + '/' + this.state.appointmentDate1[this.state.counter].day.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}) + '/' + this.state.appointmentDate1[this.state.counter].year,
+  notes: this.state.notes + ' ' + this.state.address + ' ' + this.state.address2 + ' Miles ' + this.state.distance
   }
 console.log(JSON.stringify(payload));
 console.log(this.state.phone);
@@ -971,7 +970,7 @@ render() {
                     {...getSuggestionItemProps(suggestion, {
                       className,
                       style,
-                    })}
+                    })}key={suggestion.placeId}
                   >
                     <span>{suggestion.description}</span>
                   </div>
@@ -1019,7 +1018,7 @@ render() {
                     {...getSuggestionItemProps(suggestion, {
                       className,
                       style,
-                    })}
+                    })}key={suggestion.placeId}
                   >
                     <span>{suggestion.description}</span>
                   </div>
@@ -1042,10 +1041,8 @@ render() {
             <h2 className="text-center font-weight-bold my-4">Trip Details</h2>
             </MDBCol >
             </MDBRow>
-            <MDBRow start><MDBCol md="4" className='p-md-3'>
-< MDBCheckbox name='flexCheck' label="Weekend/After Hours" id="checkbox2" checked={this.state.weekends} onChange={event => this.setState({weekends: event.target.value})} />
-</MDBCol>
-<MDBCol md="4" className='p-md-3'>
+            <MDBRow start>
+<MDBCol md="6" className='p-md-3'>
 
         <MDBSelect
   data={this.state.optionsTrip}
@@ -1055,7 +1052,7 @@ render() {
   onValueChange={selected => this.setState({ roundTrip: selected.value }, this.updateSelectTripType(selected.value))}
 
 />
-</MDBCol><MDBCol md="4" className='p-md-3'>
+</MDBCol><MDBCol md="6" className='p-md-3'>
 <MDBSelect
   data={this.state.optionsPatient}
   selected="Choose patient type"
@@ -1069,14 +1066,14 @@ render() {
 <MDBRow start>
 <MDBCol md="3" className='p-md-3'></MDBCol>
   <MDBCol md="6" className='p-md-3'>
- <label htmlFor="formGroupExampleInput">Appointment Date: </label>
+  <label >Appointment Date: </label>
  <DatePicker
-      multiple
-      value={this.state.appointmentDate1 }
-      onChange={this.getPickerDateValue1 }
+
+      value={this.state.appointmentDate }
+      onChange={this.getPickerDateValue }
       format="MM/DD/YYYY HH:mm"
       plugins={[
-        <TimePicker position="bottom" />,
+        <TimePicker position="top" />,
         <DatePanel markFocused />
       ]}
     />
@@ -1162,7 +1159,7 @@ render() {
             <MDBInput icon='envelope-open' onChange={event => this.setState({email: event.target.value})} label="Email" className="mt-4" />
      <div className="pt-md-3">    <PlacesAutocomplete
 
-
+value={this.state.address}
         onChange={this.handleChange}
         selectProps={{
           placeholder: 'here is the placeholder text'
@@ -1193,7 +1190,7 @@ render() {
                     {...getSuggestionItemProps(suggestion, {
                       className,
                       style,
-                    })}
+                    })}key={suggestion.placeId}
                   >
                     <span>{suggestion.description}</span>
                   </div>
@@ -1252,7 +1249,7 @@ render() {
                     {...getSuggestionItemProps(suggestion, {
                       className,
                       style,
-                    })}
+                    }) }key={suggestion.placeId}
                   >
                     <span>{suggestion.description}</span>
                   </div>

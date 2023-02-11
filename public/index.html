@@ -14,8 +14,11 @@
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
 
   <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAdnS_bTUUA8hlPRJkr0tDPBZ_vdA4hH9Y&libraries=places,distancematrix"
-    type="text/javascript" async defer></script>
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAdnS_bTUUA8hlPRJkr0tDPBZ_vdA4hH9Y&libraries=places&callback=initMap"
+    type="text/javascript" async defer>
+
+    </script>
+  <script> function initMap() { console.log("map loaded") }</script>
 
 
   <!--

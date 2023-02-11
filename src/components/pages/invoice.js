@@ -69,7 +69,7 @@ import { Container } from 'react-bootstrap';
         <MDBTable align='middle' striped>
           <MDBTableHead>
             <tr>
-              <th scope='col'>Name</th>
+
               <th scope='col'>Name</th>
               <th scope='col'>Amount</th>
               <th scope='col'>Status</th>

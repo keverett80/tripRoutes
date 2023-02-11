@@ -29,25 +29,16 @@ class DriverStatus extends React.Component {
     data:{
     columns: [
 
-      {
-        label: 'ID',
-        field: 'id',
-        width: 100,
 
-      },
 
 
       {
         label: <p data-tip="First Name">FN</p>,
         field: 'fname',
-        width: 100,
+        width: 300,
 
       },
-      {
-        label: <p data-tip="Last Name">LN</p>,
-        field: 'lname',
-        width: 100,
-      },
+
       {
         label: <p data-tip="Pickup Address">PA</p>,
         field: 'address',
@@ -59,18 +50,7 @@ class DriverStatus extends React.Component {
 
         width: 200,
       },
-      {
-        label: <p data-tip="Phone Number">PN</p>,
-        field: 'phone',
 
-        width: 100,
-      },
-      {
-        label: <p data-tip="Type">TY</p>,
-        field: 'wheelchair',
-
-        width: 100,
-      },
 
 
       {
@@ -232,38 +212,17 @@ sortByDate =(b, a) => {
 
 
 <MDBContainer>
-<MDBNavbar tabs className="nav-justified" color='red'>
-          <MDBNavbarItem>
-            <MDBNavbarLink link to="#" active={this.state.activeItemJustified === "1"} onClick={this.toggleJustified("1")} role="tab" >
-              <MDBIcon icon="user" /> Driver Status
-            </MDBNavbarLink>
-          </MDBNavbarItem>
 
 
-        </MDBNavbar>
 
-        <MDBTabsContent
-          className="card"
-          activeItem={this.state.activeItemJustified}
-        >
-          <MDBTabsPane tabId="1" role="tabpanel">
     <MDBDatatable
-    hover entriesOptions={[5, 20, 25]} entries={20} pagesAmount={4}
-    searchTop
-   btn
-
-    searchBottom={false}
-    barReverse
-    noBottomColumns
-
+search
 
     data={this.state.data}
 />
 <ReactTooltip />
 
-</MDBTabsPane>
 
-          </MDBTabsContent>
      </MDBContainer>
 
   );
