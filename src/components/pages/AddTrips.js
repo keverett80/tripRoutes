@@ -330,7 +330,7 @@ this.setState({
   };
   getPickerDateValue = value => {
     this.setState({ appointmentDate: value,
-      appointmentTime:  this.state.appointmentDate1[this.state.counter].hour.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}) + ':' + this.state.appointmentDate1[this.state.counter].minute.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
+      appointmentTime:  this.state.appointmentDate1.hour.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}) + ':' + this.state.appointmentDate1.minute.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
 
     });
    // console.log(this.state.appointmentDate1[0].month.number + '/' + this.state.appointmentDate1[0].day.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}) + '/' + this.state.appointmentDate1[0].year);
