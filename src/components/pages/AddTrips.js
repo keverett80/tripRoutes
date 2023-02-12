@@ -67,7 +67,7 @@ this.state = {
   'https://ct4utd523c.execute-api.us-east-2.amazonaws.com/default/createCustomer',
   customersID: '',
   orderId:'',
-  counter:0,
+
 
   optionsTrip: [
     {defaultSelected: true},
@@ -160,7 +160,7 @@ this.handleChange = this.handleChange.bind(this)
   }
 
   openEditModal() {
-    console.log(this.state.fname + 'test')
+    //console.log(this.state.fname + 'test')
     this.setState({editModalOpen: true});
   }
 
@@ -246,7 +246,7 @@ this.handleChange = this.handleChange.bind(this)
           return item;
         }
       });
-      console.log(updatedData)
+      //console.log(updatedData)
       this.setState({ optionsPatient: updatedData });
     };
 
@@ -263,7 +263,7 @@ this.handleChange = this.handleChange.bind(this)
           return item;
         }
       });
-      console.log(updatedData)
+      //console.log(updatedData)
       this.setState({ optionsTrip: updatedData });
     };
 
@@ -324,28 +324,16 @@ this.setState({
   };
 
 
-  getPickerValue = value => {
-    this.setState({ appointmentTime: value });
-    //console.log(value);
-  };
   getPickerDateValue = value => {
-    this.setState({ appointmentDate: value,
-      appointmentTime:  this.state.appointmentDate1.hour.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}) + ':' + this.state.appointmentDate1.minute.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
 
-    });
-   // console.log(this.state.appointmentDate1[0].month.number + '/' + this.state.appointmentDate1[0].day.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}) + '/' + this.state.appointmentDate1[0].year);
+    this.setState({ appointmentDate1: value})
 
-  //  console.log(this.state.appointmentDate1[0].hour.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}) + ':' + this.state.appointmentDate1[0].minute.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}) );
-    //console.log(value);
+    this.setState({ appointmentTime: value });
+
+
+
   };
 
-  getPickerDateValue1 = value => {
-
-
-    this.setState({ appointmentDate1: value });
-
-    //og(value.length);
-  };
 
 
   getNotesValue = value =>{
@@ -380,7 +368,7 @@ calcPrice = () => {
   const isWeekend = [0, 6].includes(appointmentDate.getDay()) || (appointmentTime.getHours() >= 19 || appointmentTime.getHours() < 6);
   const exceeds30Miles = this.state.distance > 30;
   const basePrice = this.state.distance * (exceeds30Miles || isWeekend || isEarlyOrLate ? 3 : 2);
-  const price = isRoundTrip ? basePrice * 2 + (isWeekend ? 120 : 80) : basePrice + (isWeekend ? 60 : 40);
+  const price = isRoundTrip ? basePrice * 2 + (exceeds30Miles || isWeekend || isEarlyOrLate ? 120 : 80) : basePrice + (exceeds30Miles || isWeekend || isEarlyOrLate ? 60 : 40);
 
   this.setState({
     price,
@@ -536,7 +524,7 @@ newCustomer = event =>{
     },
 
   };
-console.log(payload)
+//console.log(payload)
   fetch(this.state.REACT_APP_AWS_LAMBDA_INVOKE_ENDPOINT, {
     method: 'POST',
     mode: 'no-cors', // no-cors, *cors, same-origin
@@ -605,7 +593,7 @@ editCustomer = (customerId, updatedInfo) => {
 
       }
 
-      console.log(this.state.address)
+     // console.log(this.state.address)
 
 
 
@@ -683,8 +671,8 @@ submitTrip = () =>{
     address2: this.state.address2,
     wheelchair: this.state.wheelchair,
     roundtrip: this.state.roundTrip,
-    appointmentTime: this.state.appointmentDate1[this.state.counter].hour.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}) + ':' + this.state.appointmentDate1[this.state.counter].minute.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}),
-    appointmentDate: this.state.appointmentDate1[this.state.counter].month.number + '/' + this.state.appointmentDate1[this.state.counter].day.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}) + '/' + this.state.appointmentDate1[this.state.counter].year,
+    appointmentTime: new Date(this.state.appointmentTime).toLocaleTimeString(),
+    appointmentDate: new Date(this.state.appointmentDate1).toLocaleDateString(),
     status: this.state.status,
     phoneNumber: this.state.phone,
     cost: Math.round(this.state.price * 100)/100,
@@ -720,11 +708,11 @@ console.log(orderId)
   const payload = {
   phoneNumber: this.state.phone,
   orderId: orderId,
-  appointmentDate: this.state.appointmentDate1[this.state.counter].month.number + '/' + this.state.appointmentDate1[this.state.counter].day.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}) + '/' + this.state.appointmentDate1[this.state.counter].year,
+  appointmentDate: new Date(this.state.appointmentDate1).toLocaleDateString(),
   notes: this.state.notes + ' ' + this.state.address + ' ' + this.state.address2 + ' Miles ' + this.state.distance
   }
-console.log(JSON.stringify(payload));
-console.log(this.state.phone);
+//console.log(JSON.stringify(payload));
+//console.log(this.state.phone);
 
 
   fetch('https://j17q5uhse6.execute-api.us-east-2.amazonaws.com/default/createInvoice', {
@@ -747,18 +735,12 @@ console.log(this.state.phone);
 
       this.sendText();
 
+   // console.log(response)
 
-      if((this.state.appointmentDate1.length-1) !== this.state.counter){
-        this.state.counter++
-
-        this.submitTrip();
-
-
-      }else {
       alert('New Trip Added! ')
       this.setState({ loading: false });
       window.location.reload();
-      }
+
 
 
 
@@ -790,7 +772,7 @@ createOrder = () => {
   const integerPrice = parseInt(formattedPrice);
 
 
-console.log(integerPrice)
+//console.log(integerPrice)
   const creds = {
     accessToken: 'EAAAEZZ7JGXz14aktzcwX5LxUnrYDHoC6LvsTkyu2TAT7AHpB0CF1QKaIP4YMNKm',
     locationId: 'LB25KA4492SBQ'
@@ -836,7 +818,7 @@ console.log(integerPrice)
     // Do something with the response
     const orderId = response.orderId;
     if (orderId) {
-      console.log(orderId);
+     // console.log(orderId);
       this.createInvoice(orderId);
     }
 
@@ -861,7 +843,7 @@ submitTripRound = () =>{
     wheelchair: this.state.wheelchair,
     roundtrip: this.state.roundTrip,
     appointmentTime: 'Will Call' ,
-    appointmentDate: this.state.appointmentDate1[this.state.counter].month.number + '/' + this.state.appointmentDate1[this.state.counter].day.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}) + '/' + this.state.appointmentDate1[this.state.counter].year ,
+    appointmentDate: new Date(this.state.appointmentDate1).toLocaleDateString(),
     status: this.state.status,
     phoneNumber: this.state.phone,
     cost: Math.round(this.state.price * 100)/100,
@@ -887,7 +869,7 @@ submitTripRound = () =>{
 
 sendText = _ => {
 
-  fetch(`https://vsji3ei487.execute-api.us-east-2.amazonaws.com/dev/items?recipient=${this.state.phone}&textmessage=Transportation has been scheduled with Five G Transportation. Date: ${this.state.appointmentDate1[this.state.counter].month.number + '/' + this.state.appointmentDate1[this.state.counter].day.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}) + '/' + this.state.appointmentDate1[this.state.counter].year} Time: ${this.state.appointmentDate1[this.state.counter].hour.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false}) + ':' + this.state.appointmentDate1[this.state.counter].minute.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}`)
+  fetch(`https://vsji3ei487.execute-api.us-east-2.amazonaws.com/dev/items?recipient=${this.state.phone}&textmessage=Transportation has been scheduled with Five G Transportation. Date: ${new Date(this.state.appointmentDate1).toLocaleDateString()} Time: ${new Date(this.state.appointmentTime).toLocaleTimeString()}}`)
   .catch(err => console.error(err))
 }
 
@@ -1069,7 +1051,7 @@ render() {
   <label >Appointment Date: </label>
  <DatePicker
 
-      value={this.state.appointmentDate }
+      value={this.state.appointmentDate1 }
       onChange={this.getPickerDateValue }
       format="MM/DD/YYYY HH:mm"
       plugins={[

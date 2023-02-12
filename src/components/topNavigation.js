@@ -62,28 +62,7 @@ import { withAuthenticator } from '@aws-amplify/ui-react';
 
   return (
     <div className="mdb-skin">
-      <MDBNavbar  dark bgColor='dark' double='true' expand="xl" fixed="top" scrolling>
-      <MDBContainer fluid>
 
-
-        <MDBCollapse navbar show={showNavRight}>
-          <MDBNavbarNav right fullWidth={false} className='mb-2 mb-lg-0'>
-            <MDBNavbarItem>
-            <MDBNavbarLink href="/calendar">
-                  <MDBIcon icon="calendar" className="d-inline-inline" />{" "}
-                  <div className="d-none d-md-inline ">Calendar</div>
-                </MDBNavbarLink>
-            </MDBNavbarItem>
-            <MDBNavbarItem>
-            <MDBNavbarLink id="sign-out-button" onClick={signOut}>Sign Out</MDBNavbarLink>
-
-            </MDBNavbarItem>
-
-
-          </MDBNavbarNav>
-        </MDBCollapse>
-      </MDBContainer>
-    </MDBNavbar>
       <MDBSideNav
 
         isOpen={darkOpen}
@@ -128,6 +107,8 @@ import { withAuthenticator } from '@aws-amplify/ui-react';
             <MDBSideNavLink href='/drivers'>Add Drivers</MDBSideNavLink>
                 <MDBSideNavLink href='/vehicles'>Add Vehicles</MDBSideNavLink>
                 <MDBSideNavLink href='/links'>Business Links</MDBSideNavLink>
+                <MDBSideNavLink href='/calendar'>Calendar</MDBSideNavLink>
+                <MDBSideNavLink id="sign-out-button" onClick={signOut}>SignOut</MDBSideNavLink>
 
             </MDBSideNavCollapse>
           </MDBSideNavItem>

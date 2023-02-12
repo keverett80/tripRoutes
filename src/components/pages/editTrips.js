@@ -161,7 +161,7 @@ this.handleChange = this.handleChange.bind(this)
         wheelchair: customer.wheelchair|| '',
         roundtrip: customer.roundtrip|| '',
         driver: customer.driver|| '',
-        appointmentDate: customer.appointmentDate.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
+        appointmentDate: new Date(customer.appointmentDate).toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
         year: 'numeric'})|| '',
         appointmentTime: customer.appointmentTime|| '',
         status:customer.status|| '',
@@ -247,10 +247,11 @@ this.handleChange = this.handleChange.bind(this)
 
 
 
-  getPickerDateValue = value => {
-    this.setState({ appointmentDate: value });
-    //console.log(value);
-  };
+getPickerDateValue = value => {
+  this.setState({ appointmentDate: new Date(value).toLocaleDateString(), appointmentTime: new Date(value).toLocaleTimeString() });
+
+
+};
 
 
 
@@ -284,7 +285,7 @@ calcPrice = () => {
   const isWeekend = [0, 6].includes(appointmentDate.getDay()) || (appointmentTime.getHours() >= 19 || appointmentTime.getHours() < 6);
   const exceeds30Miles = this.state.distance > 30;
   const basePrice = this.state.distance * (exceeds30Miles || isWeekend || isEarlyOrLate ? 3 : 2);
-  const price = isRoundTrip ? basePrice * 2 + (isWeekend ? 120 : 80) : basePrice + (isWeekend ? 60 : 40);
+  const price = isRoundTrip ? basePrice * 2 + (exceeds30Miles || isWeekend || isEarlyOrLate ? 120 : 80) : basePrice + (exceeds30Miles || isWeekend || isEarlyOrLate ? 60 : 40);
 
   this.setState({
     price,
@@ -448,7 +449,7 @@ submitTrip = event =>{
     wheelchair: this.state.wheelchair,
     roundtrip: this.state.roundTrip,
     appointmentTime: this.state.appointmentTime,
-    appointmentDate: this.state.appointmentDate.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
+    appointmentDate: new Date(this.state.appointmentDate).toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
     year: 'numeric'}),
     status: this.state.status,
     phoneNumber: this.state.phone,
