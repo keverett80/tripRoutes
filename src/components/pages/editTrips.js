@@ -2,7 +2,7 @@ import React from "react";
 import { API,  graphqlOperation } from "aws-amplify";
 import * as mutations from '../../graphql/mutations';
 import {   listTrips } from '../../graphql/queries';
-import { MDBContainer, MDBRow, MDBModalDialog, MDBCol, MDBStepper, MDBStepperStep, MDBBtn, MDBInput, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDatatable,MDBIcon, MDBCheckbox, MDBSelect, MDBTable, MDBTableBody, MDBTableHead, MDBSpinner, MDBTextArea, MDBModalContent  } from 'mdb-react-ui-kit';
+import { MDBContainer, MDBRow, MDBModalDialog, MDBCol, MDBStepper, MDBStepperStep, MDBBtn, MDBInput, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBDatatable,MDBIcon, MDBCheckbox, MDBSelect, MDBTable, MDBTableBody, MDBTableHead, MDBSpinner, MDBTextArea, MDBModalContent,  MDBDatepicker, MDBTimepicker  } from 'mdb-react-ui-kit';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import {Helmet} from "react-helmet";
 import DatePicker from "react-multi-date-picker"
@@ -248,13 +248,49 @@ this.handleChange = this.handleChange.bind(this)
 
 
 getPickerDateValue = value => {
-  this.setState({ appointmentDate: new Date(value).toLocaleDateString(), appointmentTime: new Date(value).toLocaleTimeString() });
+  this.setState({ appointmentDate:value });
+
+
+};
+getPickerTimeValue = value => {
+  this.setState({  appointmentTime: value });
 
 
 };
 
+updateSelectTripType = (selectedValue) => {
+  if (selectedValue === undefined) {
+    return;
+  }
+  const updatedData = this.state.optionsTrip.map(item => {
+    if (item.value === selectedValue) {
+      return { ...item, defaultSelected: true };
+    } else if (item.defaultSelected) {
+      return { ...item, defaultSelected: false };
+    } else {
+      return item;
+    }
+  });
+  //console.log(updatedData)
+  this.setState({ optionsTrip: updatedData });
+};
 
-
+updateSelectPatientType = (selectedValue) => {
+  if (selectedValue === undefined) {
+    return;
+  }
+  const updatedData = this.state.optionsPatient.map(item => {
+    if (item.value === selectedValue) {
+      return { ...item, defaultSelected: true };
+    } else if (item.defaultSelected) {
+      return { ...item, defaultSelected: false };
+    } else {
+      return item;
+    }
+  });
+  //console.log(updatedData)
+  this.setState({ optionsPatient: updatedData });
+};
 
 
 
@@ -448,7 +484,7 @@ submitTrip = event =>{
     address2: this.state.address2,
     wheelchair: this.state.wheelchair,
     roundtrip: this.state.roundTrip,
-    appointmentTime: this.state.appointmentTime,
+    appointmentTime: new Date(this.state.appointmentTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
     appointmentDate: new Date(this.state.appointmentDate).toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
     year: 'numeric'}),
     status: this.state.status,
@@ -648,21 +684,15 @@ render() {
 </MDBCol>
 </MDBRow>
 <MDBRow start>
-<MDBCol md="3" className='p-md-3'></MDBCol>
-  <MDBCol md="6" className='p-md-3'>
- <label >Appointment Date: </label>
- <DatePicker
 
-      value={this.state.appointmentDate }
-      onChange={this.getPickerDateValue }
-      format="MM/DD/YYYY HH:mm"
-      plugins={[
-        <TimePicker position="top" />,
-        <DatePanel markFocused />
-      ]}
-    />
+  <MDBCol md="6" className='p-md-3'>
+
+ <MDBDatepicker  id="datePicker" value={this.state.appointmentDate}  onChange={this.getPickerDateValue} />
 </MDBCol>
-<MDBCol md="3" className='p-md-3'></MDBCol>
+<MDBCol md="6" className='p-md-3'>
+
+ <MDBTimepicker inline defaultValue={this.state.appointmentTime} onChange={this.getPickerTimeValue} />
+</MDBCol>
 </MDBRow>
 
 
