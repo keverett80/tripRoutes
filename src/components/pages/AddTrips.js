@@ -10,6 +10,7 @@ import {Helmet} from "react-helmet";
 import DatePicker from "react-multi-date-picker"
 import TimePicker from "react-multi-date-picker/plugins/time_picker";
 import DatePanel from "react-multi-date-picker/plugins/date_panel";
+import { v4 as uuidv4 } from 'uuid';
 
 
 
@@ -36,7 +37,7 @@ class AddTrips extends React.Component {
 this.state = {
   mapsLoaded: false,
   editModalOpen: false,
-  invoiceNumber: '',
+
   weekends:false,
   notes: '',
   loading: false,
@@ -177,7 +178,7 @@ this.handleChange = this.handleChange.bind(this)
     }
   }
   async componentDidMount() {
-    this.setState({invoiceNumber: (new Date().getTime()).toString(36)});
+
     const apiData = await API.graphql(graphqlOperation(listCustomers, { limit: 1000 }));
 
     var myCustomers = [];
@@ -642,66 +643,105 @@ deleteCustomer = (customerId) => {
   });
 }
 }
-
-submitTrip = () =>{
-
-  this.setState({ loading: true });
-  if(this.state.price === '' || this.state.price === null || this.state.price === 0)
-  {
- alert('Please calculate total. ')
- this.setState({ loading: false });
- return;
-
-
-  }
-
-  if(this.state.appointmentDate1 === '' || this.state.appointmentDate1 === null )
-  {
- alert('Please select your date. ')
- this.setState({ loading: false });
- return;
-
-
-  }
-
-  const newTrips = {
-    fname: this.state.fname,
-    lname: this.state.lname,
-    address: this.state.address,
-    address2: this.state.address2,
-    wheelchair: this.state.wheelchair,
-    roundtrip: this.state.roundTrip,
-    appointmentTime: new Date(this.state.appointmentTime).toLocaleTimeString(),
-    appointmentDate: new Date(this.state.appointmentDate1).toLocaleDateString(),
-    status: this.state.status,
-    phoneNumber: this.state.phone,
-    cost: Math.round(this.state.price * 100)/100,
-    driver: '',
-    notes: this.state.notes,
-    distance: (this.state.roundTrip === 'Roundtrip') ? this.state.distance * 2 : this.state.distance,
-    trip: '1',
-    invoiceNumber: this.state.invoiceNumber,
-
+createTripObject = (fname, lname, address, address2, wheelchair, roundTrip, appointmentTime, appointmentDate, status, phoneNumber, cost, driver, notes, distance, trip, invoiceNumber='' ) => {
+  return {
+    fname,
+    lname,
+    address,
+    address2,
+    wheelchair,
+    roundtrip: roundTrip,
+    appointmentTime: new Date(appointmentTime).toLocaleTimeString(),
+    appointmentDate: new Date(appointmentDate).toLocaleDateString(),
+    status,
+    phoneNumber,
+    cost: Math.round(cost * 100) / 100,
+    driver,
+    notes,
+    distance: roundTrip === 'Roundtrip' ? distance * 2 : distance,
+    trip,
+    invoiceNumber,
 
   };
+};
 
-  API.graphql({ query: mutations.createTrip, variables: {input: newTrips}}).then(()=>{
+submitTrip = () => {
+  this.setState({ loading: true });
+  if (this.state.price === '' || this.state.price === null || this.state.price === 0) {
+    alert('Please calculate total. ');
+    this.setState({ loading: false });
+    return;
+  }
 
+  if (this.state.appointmentDate1 === '' || this.state.appointmentDate1 === null) {
+    alert('Please select your date. ');
+    this.setState({ loading: false });
+    return;
+  }
 
+  let invoiceNumber = '';
+  if (this.state.roundTrip === 'Roundtrip') {
+    invoiceNumber = uuidv4();
+  }
 
-    if(this.state.roundTrip =='Roundtrip')
-    {
- this.submitTripRound();
+  const newTrip = this.createTripObject(
+    this.state.fname,
+    this.state.lname,
+    this.state.address,
+    this.state.address2,
+    this.state.wheelchair,
+    this.state.roundTrip,
+    this.state.appointmentTime,
+    this.state.appointmentDate1,
+    this.state.status,
+    this.state.phone,
+    this.state.price,
+    '',
+    this.state.notes,
+    this.state.distance,
+    '1',
+    invoiceNumber,
 
-    }else{
+  );
 
+  API.graphql({ query: mutations.createTrip, variables: { input: newTrip } }).then(() => {
+    if (this.state.roundTrip === 'Roundtrip') {
+      this.submitTripRound(invoiceNumber);
+    } else {
       this.createOrder();
     }
+  });
+};
+
+submitTripRound = (invoiceNumber) => {
+  const newTrip = this.createTripObject(
+    this.state.fname,
+    this.state.lname,
+    this.state.address2,
+    this.state.address,
+    this.state.wheelchair,
+    this.state.roundTrip,
+    'Will Call',
+    this.state.appointmentDate1,
+    this.state.status,
+    this.state.phone,
+    this.state.price,
+    '',
+    this.state.notes,
+    (this.state.roundTrip === 'Roundtrip') ? this.state.distance * 2 : this.state.distance,
+    '2',
+    invoiceNumber,
+
+    );
+
+    API.graphql({ query: mutations.createTrip, variables: {input: newTrip}}).then(()=>{
+      this.createOrder();
+    });
+  };
 
 
-} );
 
-}
+
 
 createInvoice = (orderId) => {
 console.log(orderId)
@@ -832,40 +872,7 @@ createOrder = () => {
 
 
 
-submitTripRound = () =>{
 
-
-  const newTrips = {
-    fname: this.state.fname,
-    lname: this.state.lname,
-    address: this.state.address2,
-    address2: this.state.address,
-    wheelchair: this.state.wheelchair,
-    roundtrip: this.state.roundTrip,
-    appointmentTime: 'Will Call' ,
-    appointmentDate: new Date(this.state.appointmentDate1).toLocaleDateString(),
-    status: this.state.status,
-    phoneNumber: this.state.phone,
-    cost: Math.round(this.state.price * 100)/100,
-    driver: '',
-    notes: this.state.notes,
-    distance: (this.state.roundTrip === 'Roundtrip') ? this.state.distance * 2 : this.state.distance,
-    trip: '2',
-    invoiceNumber: this.state.invoiceNumber,
-
-
-  };
-
-  API.graphql({ query: mutations.createTrip, variables: {input: newTrips}}).then(()=>{
-
-    this.createOrder();
-
-
-
-} );
-
-
-}
 
 sendText = _ => {
 
