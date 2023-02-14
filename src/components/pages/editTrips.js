@@ -57,13 +57,16 @@ this.state = {
   appointmentDate:'',
   invoiceNumber: '',
   poId: '',
+  secondId: '',
 
   optionsTrip: [
+
       {
         text: "One way",
         value: "One way"
       },
       {
+
         text: "Roundtrip",
         value: "Roundtrip"
       },
@@ -71,6 +74,7 @@ this.state = {
     ],
 
       optionsPatient: [
+
       {
         text: "Wheelchair",
         value: "Wheelchair"
@@ -140,15 +144,18 @@ this.state = {
 this.handleChange = this.handleChange.bind(this)
   }
   async componentDidMount(){
-    const apiData = await API.graphql(graphqlOperation( listTrips, { limit: 1000 }))
-    this.state.queryData  = apiData.data.listTrips.items;
+    const apiData = await API.graphql(graphqlOperation(listTrips, { limit: 1000 }));
+    this.state.queryData = apiData.data.listTrips.items;
+
+
+
 
     var myCustomers = [];
 
     this.state.queryData.sort(this.sortByDate).map((customer) => {
 
 
-      if(customer.status == 'pending' || customer.status == 'new'){
+      if((customer.status == 'pending' || customer.status == 'new') && customer.appointmentTime !== 'Will Call'){
 //console.log(customer)
       myCustomers.push({
 
@@ -218,7 +225,7 @@ this.handleChange = this.handleChange.bind(this)
   }
  handleRowClick = (data) =>
  {
-  //console.log(data)
+  console.log(data)
   this.setState({dataId: data.id,
  fname: data.fname,
    lname: data.lname,
@@ -241,11 +248,28 @@ this.handleChange = this.handleChange.bind(this)
 
 
   //console.log(data)
- }, this.handleNextPrevClick(1)(2))
+ }, this.handleNextPrevClick(1)(2)), this.getSecondTripId();
 }
 
 
 
+async getSecondTripId() {
+  try {
+    const apiData = await API.graphql(graphqlOperation(listTrips, { limit: 1000 }));
+    const queryData = apiData.data.listTrips.items;
+    let secondId;
+    for (let i = 0; i < queryData.length; i++) {
+      if (queryData[i].invoiceNumber === this.state.invoiceNumber && queryData[i].id !== this.state.dataId) {
+        secondId = queryData[i].id;
+        break;
+      }
+    }
+    this.setState({ secondId: secondId });
+    console.log(secondId);
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 getPickerDateValue = value => {
   this.setState({ appointmentDate:value });
@@ -316,8 +340,10 @@ toggle1 = () => {
 calcPrice = () => {
   const isRoundTrip = this.state.roundTrip === 'Roundtrip';
   const appointmentDate = new Date(this.state.appointmentDate);
-  const appointmentTime = new Date(appointmentDate.toISOString());
+
+  const appointmentTime = new Date(`${this.state.appointmentDate} ${this.state.appointmentTime}`);
   const isEarlyOrLate = appointmentTime.getHours() < 6 || appointmentTime.getHours() >= 19;
+
   const isWeekend = [0, 6].includes(appointmentDate.getDay()) || (appointmentTime.getHours() >= 19 || appointmentTime.getHours() < 6);
   const exceeds30Miles = this.state.distance > 30;
   const basePrice = this.state.distance * (exceeds30Miles || isWeekend || isEarlyOrLate ? 3 : 2);
@@ -463,18 +489,13 @@ formatPhoneNumber = (phoneNumberString) => {
 
 
 
-submitTrip = event =>{
+submitTrip = event => {
   event.preventDefault();
 
-  if(this.state.price === '' || this.state.price === null || this.state.price === 0)
-  {
- alert('Please calculate total. ')
-
- return;
-
-
+  if (this.state.price === '' || this.state.price === null || this.state.price === 0) {
+    alert('Please calculate total.');
+    return;
   }
-
 
   const updateTrips = {
     id: this.state.dataId,
@@ -484,30 +505,58 @@ submitTrip = event =>{
     address2: this.state.address2,
     wheelchair: this.state.wheelchair,
     roundtrip: this.state.roundTrip,
-    appointmentTime: new Date(this.state.appointmentTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
+    appointmentTime: this.state.appointmentTime,
     appointmentDate: new Date(this.state.appointmentDate).toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
     year: 'numeric'}),
     status: this.state.status,
     phoneNumber: this.state.phone,
-     cost: Math.round(this.state.price * 100)/100,
+    cost: Math.round(this.state.price * 100) / 100,
     driver: this.state.driver,
-    afterHours:this.state.weekends,
+    afterHours: this.state.weekends,
     notes: this.state.notes,
     distance: (this.state.roundTrip === 'Roundtrip') ? this.state.distance * 2 : this.state.distance,
-
-
   };
 
-  API.graphql({ query: mutations.updateTrip, variables: {input: updateTrips , limit: 1000 }}).then(()=>{
+  // Update the first entry in the database
+  API.graphql({ query: mutations.updateTrip, variables: {input: updateTrips, limit: 1000}})
+    .then(() => {
+      // Update the second entry in the database based on the invoiceID
+      if(this.state.roundTrip === 'Roundtrip'){
+      const updateSecondTrip = {
+        id: this.state.secondId,
+        fname: this.state.fname.toUpperCase(),
+        lname: this.state.lname.toUpperCase(),
+        address: this.state.address,
+        address2: this.state.address2,
+        wheelchair: this.state.wheelchair,
+        roundtrip: this.state.roundTrip,
+        appointmentTime: 'Will Call',
+        appointmentDate: new Date(this.state.appointmentDate).toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
+        year: 'numeric'}),
+        status: this.state.status,
+        phoneNumber: this.state.phone,
+        cost: Math.round(this.state.price * 100) / 100,
+        driver: this.state.driver,
+        afterHours: this.state.weekends,
+        notes: this.state.notes,
+        distance: (this.state.roundTrip === 'Roundtrip') ? this.state.distance * 2 : this.state.distance,
+      };
+      API.graphql({ query: mutations.updateTrip, variables: {input: updateSecondTrip, limit: 1000}})
+      .then(() => {
+        this.setState({ loading: false });
+        alert('The trips have been updated.');
+        window.location.reload();
+      });
+    }else{
+      this.setState({ loading: false });
+      alert('The trip has been updated.');
+      window.location.reload();
+    }
+    });
+  }
 
-    this.setState({ loading: false });
-    alert('The trip has been updated. ')
-    window.location.reload();
 
 
-} );
-
-}
 
 
 
@@ -686,8 +735,17 @@ render() {
 <MDBRow start>
 
   <MDBCol md="6" className='p-md-3'>
+<label className="grey-text">Appointment Date: </label>
+  <DatePicker
 
- <MDBDatepicker  id="datePicker" value={this.state.appointmentDate}  onChange={this.getPickerDateValue} />
+value={this.state.appointmentDate }
+onChange={this.getPickerDateValue }
+format="MM/DD/YYYY"
+plugins={[
+
+  <DatePanel markFocused />
+]}
+/>
 </MDBCol>
 <MDBCol md="6" className='p-md-3'>
 
