@@ -11,6 +11,7 @@ import EditTrips from './pages/editTrips';
 import Invoice from './pages/invoice';
 import Archived from './pages/archived';
 import DriverStatus from './pages/driverStatus';
+import TripCharts from './pages/tripChart';
 
 
 
@@ -36,6 +37,7 @@ class SwitchRoutes extends React.Component {
 
 
         <Route path='/driverStatus' element={<DriverStatus/>} />
+        <Route path='/tripCharts' element={<TripCharts/>} />
 
 
 
