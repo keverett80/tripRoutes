@@ -749,7 +749,7 @@ console.log(orderId)
   phoneNumber: this.state.phone,
   orderId: orderId,
   appointmentDate: new Date(this.state.appointmentDate1).toLocaleDateString(),
-  notes: this.state.notes + ' ' + this.state.address + ' ' + this.state.address2 + ' Miles ' + this.state.distance
+  notes: this.state.notes + ' ' + this.state.address + ' to ' + this.state.address2 + ' Miles ' + this.state.distance + ' Each Way'
   }
 //console.log(JSON.stringify(payload));
 //console.log(this.state.phone);
