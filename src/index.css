@@ -243,3 +243,15 @@ a {
     bottom: 0;
   }
 }
+
+@media (min-width: 1400px) {
+
+  main,
+  #main-navbar {
+    padding-left: 240px !important;
+  }
+}
+
+.dropdown-toggle:after {
+  display: none !important;
+}

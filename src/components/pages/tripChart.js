@@ -31,7 +31,7 @@ export default function App() {
   // Do something with driverColors, e.g. update state
 setDriverColors( driverColors);
       const today = new Date();
-      const weekStart = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 6);
+      const weekStart = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 30);
       const apiData = await API.graphql(graphqlOperation(listTrips, { limit: 1000 }));
       const data = apiData.data.listTrips.items.filter(trip => {
         const appointmentDate = new Date(trip.appointmentDate);
@@ -42,7 +42,7 @@ setDriverColors( driverColors);
 
 
       const days = [];
-      for (let i = 0; i < 7; i++) {
+      for (let i = 0; i <= 30; i++) {
         const date = new Date(weekStart);
         date.setDate(date.getDate() + i);
         days.push(date);
@@ -101,7 +101,7 @@ setDriverColors( driverColors);
           plugins: {
             title: {
               display: true,
-              text: 'Trips by Day for the Past 7 Days'
+              text: 'Trips by Day for the Past 30 Days'
             },
             legend: {
               position: 'bottom'

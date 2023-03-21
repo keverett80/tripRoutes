@@ -1,10 +1,10 @@
-body{
+body {
 
   padding-top: 0 !important;
 }
 
 #classicformpage .view {
-  background-image: url('../../assets/transportBG.jpg');
+
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
@@ -12,21 +12,16 @@ body{
 }
 
 #classicformpage .gradient {
-  background: -webkit-linear-gradient(
-    45deg,
-    rgba(0, 0, 0, 0.7),
-    rgba(72, 15, 144, 0.4) 100%
-  );
-  background: -webkit-gradient(
-    linear,
-    45deg,
-    from(rgba(0, 0, 0, 0.7), rgba(72, 15, 144, 0.4) 100%)
-  );
-  background: linear-gradient(
-    45deg,
-    rgba(0, 0, 0, 0.7),
+  background: -webkit-linear-gradient(45deg,
+      rgba(0, 0, 0, 0.7),
+      rgba(72, 15, 144, 0.4) 100%);
+  background: -webkit-gradient(linear,
+      45deg,
+      from(rgba(0, 0, 0, 0.7), rgba(72, 15, 144, 0.4) 100%));
+  background: linear-gradient(45deg,
+      rgba(0, 0, 0, 0.7),
 
-  );
+    );
 }
 
 #classicformpage .card {

@@ -918,9 +918,14 @@ render() {
               <strong>Customer Information</strong></h3>
              <div className="text-center p-md-3"> <MDBBtn className='p-md-3' onClick={this.toggle1}>Add Customer</MDBBtn></div>
              <MDBDatatable
-             search={true}
-  data={this.state.customers}
+  advancedSearch={(value) => {
+    const string = value.split(' in:');
+    const phrase = string[0].trim();
+    const columns = ['fname', 'lname']; // Set the specific columns to search
 
+    return { phrase, columns };
+  }}
+  data={this.state.customers}
 />
 
 

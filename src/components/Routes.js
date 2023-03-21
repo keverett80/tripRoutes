@@ -20,7 +20,7 @@ class SwitchRoutes extends React.Component {
   render() {
     return (
       <Routes>
-        <Route path='/' exact element={<Calendars/>} />
+
         <Route path='/addTrips' element={<AddTrips/>} />
         <Route path='/viewTrips' exact element={<ViewTrips/>} />
         <Route path='/archived' element={<Archived/>} />
