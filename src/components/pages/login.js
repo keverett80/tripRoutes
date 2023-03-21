@@ -4,7 +4,7 @@ import React from "react";
 
 import { MDBContainer } from 'mdb-react-ui-kit';
 import Login from "../auth/pageLogin"
-
+import { withAuthenticator } from '@aws-amplify/ui-react';
 
 
 class Logged extends React.Component {
@@ -39,4 +39,4 @@ render() {
       )
       }
     }
-      export default Logged
+      export default withAuthenticator(Logged)

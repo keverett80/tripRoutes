@@ -24,7 +24,7 @@ function TopNavigation({ signOut }) {
   const [darkCollapse1, setDarkCollapse1] = useState(false);
   const [darkCollapse4, setDarkCollapse4] = useState(false);
   const [showNavRight, setShowNavRight] = useState(false);
-  const [showSideNav, setShowSideNav] = useState(false);
+  const [showSideNav, setShowSideNav] = useState(true);
   const navRef = useRef(null);
   const handleResize = useCallback(() => {
     if (!window.matchMedia('screen and (min-width: 1000px)').matches) {
@@ -68,7 +68,7 @@ function TopNavigation({ signOut }) {
   };
 
   const handleSignOut = () => {
-    window.location.href = '/login';
+    window.location.href = '/';
   };
   const toggleSideNav = () => {
     setShowSideNav(!showSideNav);

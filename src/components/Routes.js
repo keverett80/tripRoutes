@@ -12,16 +12,18 @@ import Invoice from './pages/invoice';
 import Archived from './pages/archived';
 import DriverStatus from './pages/driverStatus';
 import TripCharts from './pages/tripChart';
-
-
-
+import Main from './pages/main';
+import RoutesLanding from './RoutesLanding';
 
 class SwitchRoutes extends React.Component {
   render() {
+    const { isLoggedIn } = this.props;
+
     return (
       <Routes>
-
-        <Route path='/addTrips' element={<AddTrips/>} />
+        {isLoggedIn ? (
+          <>
+            <Route path='/addTrips' element={<AddTrips />} />
         <Route path='/viewTrips' exact element={<ViewTrips/>} />
         <Route path='/archived' element={<Archived/>} />
         <Route path='/vehicles' element={<Vehicles/>} />
@@ -29,6 +31,7 @@ class SwitchRoutes extends React.Component {
 
 
         <Route path='/links' element={<Links/>} />
+        <Route path='/' element={<Calendars/>} />
         <Route path='/calendar' element={<Calendars/>} />
         <Route path='/editTrips' element={<EditTrips/>} />
         <Route path='/driversAssign' element={<DriversAssign/>} />
@@ -37,13 +40,23 @@ class SwitchRoutes extends React.Component {
 
 
         <Route path='/driverStatus' element={<DriverStatus/>} />
-        <Route path='/tripCharts' element={<TripCharts/>} />
+        <Route path='/tripCharts' element={<TripCharts />} />
+          </>
+        ) : (
+          <>
+            <Route path='/' element={<Main />} />
 
-
-
+          </>
+        )}
       </Routes>
     );
   }
 }
 
 export default SwitchRoutes;
+
+
+
+
+
+
