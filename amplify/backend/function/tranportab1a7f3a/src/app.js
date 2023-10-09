@@ -34,7 +34,7 @@ app.use(function(req, res, next) {
 app.get('/items', function(req, res, callback) {
 
   const accountSid = 'AC62644971876180195df4375040767915';
-  const authToken = 'a5aa0eeca15b7cc64a5025d662ce1a67';
+  const authToken = 'a789ad452f68c17a9d984a3f0b940e13';
 
   // Import Twilio's Node Helper library
   // Create an authenticated Twilio Client instance

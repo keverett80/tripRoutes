@@ -30,6 +30,7 @@ export const updateCustomer = /* GraphQL */ `
       address
       phoneNumber
       emailAddress
+      createdAt
       updatedAt
     }
   }

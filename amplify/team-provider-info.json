@@ -19,12 +19,18 @@
       "function": {
         "tranportab1a7f3a": {
           "deploymentBucketName": "amplify-tranport-dev-155233-deployment",
-          "s3Key": "amplify-builds/tranportab1a7f3a-444345757444496a6243-build.zip"
+          "s3Key": "amplify-builds/tranportab1a7f3a-4f5a5731755476545344-build.zip"
         },
         "tranport581cc7c7": {
           "deploymentBucketName": "amplify-tranport-dev-155233-deployment",
           "s3Key": "amplify-builds/tranport581cc7c7-69364d4a596172586a64-build.zip"
         }
+      },
+      "api": {
+        "api32780395": {},
+        "api77aadb89": {},
+        "myinvoice": {},
+        "tranport": {}
       }
     }
   }

@@ -43,22 +43,32 @@ class Calendars extends Component {
 
   async componentDidMount(){
 
-    let today = new Date().toLocaleDateString();
-    let currentTime = new Date().toLocaleTimeString();
+    let today = new Date();
+    let formattedToday = (today.getMonth() + 1).toString().padStart(2, '0') + '/' + today.getDate().toString().padStart(2, '0') + '/' + today.getFullYear();
+
+
 
     const apiData = await API.graphql(graphqlOperation(listTrips, { limit: 2000 }));
 
 
     var myCustomers = [];
-    //console.log(this.state.queryData)
+    //console.log(apiData)
 
     apiData.data.listTrips.items.sort(this.sortByTime).map((customer) => {
-     // console.log(customer)
+    // console.log(customer)
+    let customerDate = new Date(customer.appointmentDate);
+    today.setHours(0, 0, 0, 0);
+customerDate.setHours(0, 0, 0, 0);
+
+
 if(customer.status == 'pending' || customer.status == 'new'){
 
-  if(customer.wheelchair == 'Wheelchair' && customer.appointmentDate === today  && customer.pickupTime !== null && customer.appointmentTime === 'Will Call' )
-  {
 
+  if(customer.wheelchair == 'Wheelchair' && customerDate >= today && customer.appointmentTime === 'Will Call')
+
+
+  {
+    //console.log('Condition met for:', customer.fname);
     myCustomers.push({
 
       title: customer.fname + ' ' + customer.lname + ' ' +  customer.appointmentTime +  ' WC',
@@ -75,10 +85,8 @@ if(customer.status == 'pending' || customer.status == 'new'){
 
   }
 
-      if(customer.appointmentTime !== 'Will Call')
-{
 
-if(customer.wheelchair == 'Wheelchair')
+  if(customer.wheelchair == 'Wheelchair' && customerDate >= today && customer.appointmentTime !== 'Will Call')
       {
 
         myCustomers.push({
@@ -96,7 +104,7 @@ if(customer.wheelchair == 'Wheelchair')
 
 
       }
-      else if(customer.status == 'new')
+    if(customer.status == 'new')
       {
         this.setState({ badge:<MDBBadge color="primary">New</MDBBadge>});
         myCustomers.push({
@@ -114,7 +122,7 @@ if(customer.wheelchair == 'Wheelchair')
 
 
       }
-      else{
+ /*      else{
       myCustomers.push({
 
       title: customer.fname + ' ' + customer.lname + ' ' +  customer.appointmentTime,
@@ -127,9 +135,9 @@ if(customer.wheelchair == 'Wheelchair')
 
 
       });
-    }
+    } */
   }
-}
+
   })
   this.setState({
 
@@ -142,7 +150,7 @@ toggle = (data) => {
 
   if(data){
 
-  console.log(data)
+  //console.log(data)
   this.setState({localData:data});
 this.setState({ address: data.address});
 this.setState({ address2: data.address2});
@@ -227,24 +235,16 @@ handleChange1 = () =>{
           events={this.state.events}
           style={{ height: "100vh" }}
           eventPropGetter={(event) => {
-            let backgroundColor;
-            if(event.allday)
-            {
-             backgroundColor = 'orange';
+            let backgroundColor = ''; // initialize with an empty string or default color
+            if (event.allday === 'Will Call') {
+                backgroundColor = 'Grey';
+            } else if (event.newRequest) {
+                backgroundColor = 'red';
+            } else if (event.allday) {
+                backgroundColor = 'orange';
             }
-            if(event.newRequest)
-            {
-             backgroundColor = 'red';
-            }
-            if(event.allday === 'Will Call')
-            {
-              backgroundColor = '#50648E';
-
-            }
-
-
-            return { style: { backgroundColor } }
-          }}
+            return { style: { backgroundColor } };
+        }}
         />
 
 

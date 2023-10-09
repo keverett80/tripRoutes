@@ -107,10 +107,10 @@ this.handleRowClick = this.handleRowClick.bind(this)
     //console.log(this.state.queryData)
 
     this.state.queryData.sort(this.sortByTime).sort(this.sortByDate).map((customer) => {
-      const x = new Date(customer.appointmentDate).toLocaleDateString();
-      const y = new Date().toLocaleDateString();
+      const appointmentDate = new Date(customer.appointmentDate);
+      const currentDate = new Date();
 
-      if(x >= y){
+      if(appointmentDate.setHours(0,0,0,0) >= currentDate.setHours(0,0,0,0)){
       myCustomers.push({
       id: customer.id||'',
       fname: customer.fname||'',

@@ -153,9 +153,12 @@ this.handleChange = this.handleChange.bind(this)
     var myCustomers = [];
 
     this.state.queryData.sort(this.sortByDate).map((customer) => {
+      const appointmentDate = new Date(customer.appointmentDate);
+      const currentDate = new Date();
 
+      if(appointmentDate.setHours(0,0,0,0) >= currentDate.setHours(0,0,0,0)){
 
-      if((customer.status == 'pending' || customer.status == 'new') && customer.appointmentTime !== 'Will Call'){
+      if((customer.status == 'pending' || customer.status == 'new') ){
 //console.log(customer)
       myCustomers.push({
 
@@ -180,6 +183,7 @@ this.handleChange = this.handleChange.bind(this)
 
       });
     }
+  }
 
   })
   this.setState({
@@ -248,12 +252,12 @@ this.handleChange = this.handleChange.bind(this)
 
 
   //console.log(data)
- }, this.handleNextPrevClick(1)(2)), this.getSecondTripId();
+ }, this.handleNextPrevClick(1)(2));
 }
 
 
 
-async getSecondTripId() {
+/* async getSecondTripId() {
   try {
     const apiData = await API.graphql(graphqlOperation(listTrips, { limit: 1000 }));
     const queryData = apiData.data.listTrips.items;
@@ -269,7 +273,7 @@ async getSecondTripId() {
   } catch (error) {
     console.error(error);
   }
-}
+} */
 
 getPickerDateValue = value => {
   this.setState({ appointmentDate:value });
@@ -520,38 +524,11 @@ submitTrip = event => {
   // Update the first entry in the database
   API.graphql({ query: mutations.updateTrip, variables: {input: updateTrips, limit: 1000}})
     .then(() => {
-      // Update the second entry in the database based on the invoiceID
-      if(this.state.roundTrip === 'Roundtrip'){
-      const updateSecondTrip = {
-        id: this.state.secondId,
-        fname: this.state.fname.toUpperCase(),
-        lname: this.state.lname.toUpperCase(),
-        address: this.state.address,
-        address2: this.state.address2,
-        wheelchair: this.state.wheelchair,
-        roundtrip: this.state.roundTrip,
-        appointmentTime: 'Will Call',
-        appointmentDate: new Date(this.state.appointmentDate).toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
-        year: 'numeric'}),
-        status: this.state.status,
-        phoneNumber: this.state.phone,
-        cost: Math.round(this.state.price * 100) / 100,
-        driver: this.state.driver,
-        afterHours: this.state.weekends,
-        notes: this.state.notes,
-        distance: (this.state.roundTrip === 'Roundtrip') ? this.state.distance * 2 : this.state.distance,
-      };
-      API.graphql({ query: mutations.updateTrip, variables: {input: updateSecondTrip, limit: 1000}})
-      .then(() => {
-        this.setState({ loading: false });
-        alert('The trips have been updated.');
-        window.location.reload();
-      });
-    }else{
+
       this.setState({ loading: false });
       alert('The trip has been updated.');
       window.location.reload();
-    }
+
     });
   }
 
