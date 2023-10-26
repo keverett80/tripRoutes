@@ -144,7 +144,7 @@ this.state = {
 this.handleChange = this.handleChange.bind(this)
   }
   async componentDidMount(){
-    const apiData = await API.graphql(graphqlOperation(listTrips, { limit: 1000 }));
+    const apiData = await API.graphql(graphqlOperation(listTrips, { limit: 2000 }));
     this.state.queryData = apiData.data.listTrips.items;
 
 
