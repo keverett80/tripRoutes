@@ -179,7 +179,7 @@ return;
     };
 
 
-    API.graphql(graphqlOperation( mutations.updateTrip,{input: updateTrip, limit: 1000 })).then(( )=> {
+    API.graphql(graphqlOperation( mutations.updateTrip,{input: updateTrip, limit: 2000 })).then(( )=> {
       //alert('Trip Updated. ')
        this.setState({modal: false})
     this.setState({data: this.state.data})
