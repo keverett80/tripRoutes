@@ -32,7 +32,7 @@ export default function App() {
 setDriverColors( driverColors);
       const today = new Date();
       const weekStart = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 30);
-      const apiData = await API.graphql(graphqlOperation(listTrips, { limit: 1000 }));
+      const apiData = await API.graphql(graphqlOperation(listTrips, { limit: 2000 }));
       const data = apiData.data.listTrips.items.filter(trip => {
         const appointmentDate = new Date(trip.appointmentDate);
         const tripStatus = trip.status;

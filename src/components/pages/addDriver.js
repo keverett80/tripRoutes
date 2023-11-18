@@ -196,7 +196,7 @@ this.handleRowClick(employeePhone);
 
   handleRowClick  = (employeePhone) =>{
     const appLink = encodeURIComponent('com.fivegservices.fivegtrips://');
-    fetch(`https://vsji3ei487.execute-api.us-east-2.amazonaws.com/dev/items?recipient=${employeePhone}&textmessage=A%20new%20Five%20G%20Trip%20is%20in%20your%20portal.%20`)
+    fetch(` https://ohoe8w41ta.execute-api.us-east-2.amazonaws.com/default/items?recipient=${employeePhone}&textmessage=A%20new%20Five%20G%20Trip%20is%20in%20your%20portal.%20`)
       .then(response => {
         // handle response
         console.log(response)

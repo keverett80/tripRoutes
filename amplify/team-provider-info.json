@@ -9,28 +9,21 @@
       "UnauthRoleName": "amplify-tranport-dev-155233-unauthRole",
       "StackName": "amplify-tranport-dev-155233",
       "StackId": "arn:aws:cloudformation:us-east-2:485312755926:stack/amplify-tranport-dev-155233/ac7edcd0-ff94-11eb-861a-06b4a2e61000",
-      "AmplifyAppId": "d3qu67cs8djc1a",
-      "AuthTriggerTemplateURL": ""
+      "AmplifyAppId": "d3qu67cs8djc1a"
     },
     "categories": {
       "auth": {
         "tranport743f50b7": {}
       },
       "function": {
-        "tranportab1a7f3a": {
-          "deploymentBucketName": "amplify-tranport-dev-155233-deployment",
-          "s3Key": "amplify-builds/tranportab1a7f3a-4f5a5731755476545344-build.zip"
-        },
         "tranport581cc7c7": {
           "deploymentBucketName": "amplify-tranport-dev-155233-deployment",
-          "s3Key": "amplify-builds/tranport581cc7c7-69364d4a596172586a64-build.zip"
+          "s3Key": "amplify-builds/tranport581cc7c7-6b454258646c6d767779-build.zip"
+        },
+        "tranportab1a7f3a": {
+          "deploymentBucketName": "amplify-tranport-dev-155233-deployment",
+          "s3Key": "amplify-builds/tranportab1a7f3a-4b435254584a7a6f2f68-build.zip"
         }
-      },
-      "api": {
-        "api32780395": {},
-        "api77aadb89": {},
-        "myinvoice": {},
-        "tranport": {}
       }
     }
   }

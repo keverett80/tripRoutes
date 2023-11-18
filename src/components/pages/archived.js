@@ -122,7 +122,7 @@ this.handleRowClick = this.handleRowClick.bind(this)
 
 
 
-    const apiData = await API.graphql(graphqlOperation(listTrips, { limit: 1000 }));
+    const apiData = await API.graphql(graphqlOperation(listTrips, { limit: 2000 }));
 
 
     var myCustomers = [];
