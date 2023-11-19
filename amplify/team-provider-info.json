@@ -22,8 +22,14 @@
         },
         "tranportab1a7f3a": {
           "deploymentBucketName": "amplify-tranport-dev-155233-deployment",
-          "s3Key": "amplify-builds/tranportab1a7f3a-4b435254584a7a6f2f68-build.zip"
+          "s3Key": "amplify-builds/tranportab1a7f3a-57784e563748726a5166-build.zip"
         }
+      },
+      "api": {
+        "api32780395": {},
+        "api77aadb89": {},
+        "myinvoice": {},
+        "tranport": {}
       }
     }
   }

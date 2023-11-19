@@ -44,7 +44,6 @@ app.get('/items', function(req, res, callback) {
   client.messages.create({
     body: textmessage,
     from: '+19042986869',
-    messagingServiceSid: 'MG407e5e02565fc248e6d288727e31d14f',
     to: recipient  // Text this number
 
   })
