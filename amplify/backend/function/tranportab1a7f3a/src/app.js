@@ -53,7 +53,7 @@ app.get('/items', function(req, res, callback) {
       })
       .catch((e) => {
               // Error, return error object
-          callback(Error(e));
+          callback(Error(' A new error is here ') );
       });
 
 });

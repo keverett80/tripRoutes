@@ -874,9 +874,11 @@ createOrder = () => {
 
 
 
-sendText = _ => {
 
-  fetch(`https://vsji3ei487.execute-api.us-east-2.amazonaws.com/dev/items?recipient=${this.state.phone}&textmessage=Transportation has been scheduled with Five G Transportation. Date: ${new Date(this.state.appointmentDate1).toLocaleDateString()} Time: ${new Date(this.state.appointmentTime).toLocaleTimeString()}}`)
+  sendText  = () =>{
+
+
+  fetch(`https://vsji3ei487.execute-api.us-east-2.amazonaws.com/dev/NewTwilio?recipient=${this.state.phone}&textmessage=Transportation has been scheduled with Five G Transportation. Date: ${new Date(this.state.appointmentDate1).toLocaleDateString()} Time: ${new Date(this.state.appointmentTime).toLocaleTimeString()}}`)
   .catch(err => console.error(err))
 }
 
