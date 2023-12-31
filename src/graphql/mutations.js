@@ -15,6 +15,7 @@ export const createCustomer = /* GraphQL */ `
       emailAddress
       createdAt
       updatedAt
+      __typename
     }
   }
 `;
@@ -32,6 +33,7 @@ export const updateCustomer = /* GraphQL */ `
       emailAddress
       createdAt
       updatedAt
+      __typename
     }
   }
 `;
@@ -49,6 +51,7 @@ export const deleteCustomer = /* GraphQL */ `
       emailAddress
       createdAt
       updatedAt
+      __typename
     }
   }
 `;
@@ -67,6 +70,7 @@ export const createEmployee = /* GraphQL */ `
       location
       createdAt
       updatedAt
+      __typename
     }
   }
 `;
@@ -85,6 +89,7 @@ export const updateEmployee = /* GraphQL */ `
       location
       createdAt
       updatedAt
+      __typename
     }
   }
 `;
@@ -103,6 +108,7 @@ export const deleteEmployee = /* GraphQL */ `
       location
       createdAt
       updatedAt
+      __typename
     }
   }
 `;
@@ -119,6 +125,7 @@ export const createVehicle = /* GraphQL */ `
       tagNumber
       createdAt
       updatedAt
+      __typename
     }
   }
 `;
@@ -135,6 +142,7 @@ export const updateVehicle = /* GraphQL */ `
       tagNumber
       createdAt
       updatedAt
+      __typename
     }
   }
 `;
@@ -151,6 +159,7 @@ export const deleteVehicle = /* GraphQL */ `
       tagNumber
       createdAt
       updatedAt
+      __typename
     }
   }
 `;
@@ -183,8 +192,10 @@ export const createTrip = /* GraphQL */ `
       pickupStatusTime
       arrivedTime
       invoiceNumber
+      employeePay
       createdAt
       updatedAt
+      __typename
     }
   }
 `;
@@ -217,8 +228,10 @@ export const updateTrip = /* GraphQL */ `
       pickupStatusTime
       arrivedTime
       invoiceNumber
+      employeePay
       createdAt
       updatedAt
+      __typename
     }
   }
 `;
@@ -251,8 +264,10 @@ export const deleteTrip = /* GraphQL */ `
       pickupStatusTime
       arrivedTime
       invoiceNumber
+      employeePay
       createdAt
       updatedAt
+      __typename
     }
   }
 `;
@@ -270,6 +285,7 @@ export const createBroker = /* GraphQL */ `
       ambRate
       createdAt
       updatedAt
+      __typename
     }
   }
 `;
@@ -287,6 +303,7 @@ export const updateBroker = /* GraphQL */ `
       ambRate
       createdAt
       updatedAt
+      __typename
     }
   }
 `;
@@ -304,6 +321,7 @@ export const deleteBroker = /* GraphQL */ `
       ambRate
       createdAt
       updatedAt
+      __typename
     }
   }
 `;
@@ -318,6 +336,7 @@ export const createVehicleCheck = /* GraphQL */ `
       status
       createdAt
       updatedAt
+      __typename
     }
   }
 `;
@@ -332,6 +351,7 @@ export const updateVehicleCheck = /* GraphQL */ `
       status
       createdAt
       updatedAt
+      __typename
     }
   }
 `;
@@ -346,6 +366,7 @@ export const deleteVehicleCheck = /* GraphQL */ `
       status
       createdAt
       updatedAt
+      __typename
     }
   }
 `;
@@ -367,6 +388,7 @@ export const createInvoice = /* GraphQL */ `
       status
       createdAt
       updatedAt
+      __typename
     }
   }
 `;
@@ -388,6 +410,7 @@ export const updateInvoice = /* GraphQL */ `
       status
       createdAt
       updatedAt
+      __typename
     }
   }
 `;
@@ -409,6 +432,7 @@ export const deleteInvoice = /* GraphQL */ `
       status
       createdAt
       updatedAt
+      __typename
     }
   }
 `;

@@ -50,6 +50,7 @@ type Trip @model {
   pickupStatusTime: String
   arrivedTime: String
   invoiceNumber: String
+  employeePay: Float
 
 
 }

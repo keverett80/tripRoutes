@@ -877,8 +877,12 @@ createOrder = () => {
 
   sendText  = () =>{
 
+    const url = `https://vsji3ei487.execute-api.us-east-2.amazonaws.com/dev/NewTwilio?recipient=${encodeURIComponent(this.state.phone)}&textmessage=${encodeURIComponent(`Transportation has been scheduled with Five G Transportation. Date: ${new Date(this.state.appointmentDate1).toLocaleDateString()} Appointment Time: ${new Date(this.state.appointmentTime).toLocaleTimeString()}`)}`;
 
-  fetch(`https://vsji3ei487.execute-api.us-east-2.amazonaws.com/dev/NewTwilio?recipient=${this.state.phone}&textmessage=Transportation has been scheduled with Five G Transportation. Date: ${new Date(this.state.appointmentDate1).toLocaleDateString()} Time: ${new Date(this.state.appointmentTime).toLocaleTimeString()}}`)
+    fetch(url)
+
+
+
   .catch(err => console.error(err))
 }
 

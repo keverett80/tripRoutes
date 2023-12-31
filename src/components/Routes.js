@@ -12,8 +12,10 @@ import Invoice from './pages/invoice';
 import Archived from './pages/archived';
 import DriverStatus from './pages/driverStatus';
 import TripCharts from './pages/tripChart';
+import EmployeePay from './pages/employeePay';
 import Main from './pages/main';
 import RoutesLanding from './RoutesLanding';
+import TripsOrganizer from './pages/TripsOrganizer';
 
 class SwitchRoutes extends React.Component {
   render() {
@@ -41,6 +43,8 @@ class SwitchRoutes extends React.Component {
 
         <Route path='/driverStatus' element={<DriverStatus/>} />
         <Route path='/tripCharts' element={<TripCharts />} />
+        <Route path='/employeePay' element={<EmployeePay />} />
+        <Route path='/TripsOrganizer' element={<TripsOrganizer />} />
           </>
         ) : (
           <>

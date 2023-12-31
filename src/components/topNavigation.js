@@ -152,6 +152,7 @@ function TopNavigation({ signOut }) {
           Five G Info
         </MDBSideNavLink>
         <MDBSideNavCollapse show={darkCollapse4}>
+        <MDBSideNavLink href='/employeePay'>EmployeePay</MDBSideNavLink>
           <MDBSideNavLink href='/tripCharts'>Daily Trips</MDBSideNavLink>
           <MDBSideNavLink href='/invoice'>Invoices</MDBSideNavLink>
           <MDBSideNavLink href='/drivers'>Add Drivers</MDBSideNavLink>

@@ -245,8 +245,8 @@ return;
   }
 
   updateEmployee = async () => {
-    const updatedEmployee = {
-      id: this.state.employeeId,
+    const createdEmployee = {
+     // id: this.state.employeeId,
       firstName: this.state.fname,
       lastName: this.state.lname,
       emailAddress: this.state.email,
@@ -254,7 +254,7 @@ return;
     };
     try {
       await API.graphql(
-        graphqlOperation(mutations.updateEmployee, { input: updatedEmployee })
+        graphqlOperation(mutations.createEmployee, { input: createdEmployee })
       );
 
       const apiData = await API.graphql(graphqlOperation(listEmployees)).then(apiData => {

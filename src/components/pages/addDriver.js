@@ -17,6 +17,7 @@ class AddDriver extends React.Component {
     employeePhone:'',
     pickupTime: '',
     driver:'',
+    employeePay: '',
     queryData:'',
     queryEmployee:'',
     modal: false,
@@ -214,6 +215,7 @@ this.handleRowClick(employeePhone);
       id: this.state.localData.id,
       driver: this.state.driver,
       pickupTime: this.state.pickupTime,
+      employeePay: this.state.employeePay,
       trip: '1'
     };
 
@@ -290,6 +292,10 @@ handleChange1 = () =>{
   this.setState({ driver: value.value});
 
 };
+handlePayChange = (event) => {
+  this.setState({ employeePay: event.target.value });
+}
+
 
 sortByTime =(b, a) => {
   if (a.appointmentTime < b.appointmentTime) {
@@ -321,44 +327,41 @@ getPickerValue = value => {
   render() {
   return (
 <MDBContainer>
-    <MDBDatatable
-search
-    data={this.state.data}
-/>
+    <MDBDatatable search data={this.state.data} />
 
-     <MDBModal nonInvasive={true} staticBackdrop show={this.state.modal}>
-     <MDBModalDialog>
-          <MDBModalContent>
-       <div className='text-center'>
-       <MDBModalHeader >Assign Driver</MDBModalHeader>
-       </div>
+    <MDBModal nonInvasive={true} staticBackdrop show={this.state.modal}>
+        <MDBModalDialog>
+            <MDBModalContent>
+                <div className='text-center'>
+                    <MDBModalHeader>Assign Driver</MDBModalHeader>
+                </div>
 
-       <MDBModalBody>
+                <MDBModalBody>
+                    <div className='text-center'>
+                        <div className='text-primary'><a>Employee</a></div>
+                        <MDBSelect
+                            data={this.state.employee}
+                            selected="Assign Employee"
+                            onValueChange={this.handleAssign}
+                        />
 
+                        <div className='text-primary'><a>Pickup Time</a></div>
+                        <MDBTimepicker increment inputID="timePicker" customIconSize='2x' customIcon='fa fa-business-time' onChange={this.getPickerValue} />
 
-       <div className='text-center'>
-       <div className='text-primary'><a>Employee</a></div>
-        <MDBSelect
-          data={this.state.employee}
-          selected="Assign Employee"
+                        <div className='text-primary mt-3'><a>Employee Pay</a></div>
+                        <input type="number" className="form-control" placeholder="Enter pay" onChange={this.handlePayChange} />
+                    </div>
+                </MDBModalBody>
 
-          onValueChange={this.handleAssign}
-        />
-<div className='text-primary'><a>Pickup Time</a></div>
-
-        <MDBTimepicker  increment  inputID="timePicker" customIconSize='2x' customIcon='fa fa-business-time'  onChange={this.getPickerValue} />
-
-        </div>
-       </MDBModalBody>
-
-       <MDBModalFooter>
-         <MDBBtn rounded color="secondary" outline onClick={this.toggle}>Close</MDBBtn>
-         <MDBBtn color="primary" rounded outline onClick={this.fetchToken}>Save changes</MDBBtn>
-       </MDBModalFooter>
-       </MDBModalContent>
+                <MDBModalFooter>
+                    <MDBBtn rounded color="secondary" outline onClick={this.toggle}>Close</MDBBtn>
+                    <MDBBtn color="primary" rounded outline onClick={this.fetchToken}>Save changes</MDBBtn>
+                </MDBModalFooter>
+            </MDBModalContent>
         </MDBModalDialog>
-     </MDBModal>
-     </MDBContainer>
+    </MDBModal>
+</MDBContainer>
+
 
   );
 }

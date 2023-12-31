@@ -12,6 +12,7 @@ export const getCustomer = /* GraphQL */ `
       emailAddress
       createdAt
       updatedAt
+      __typename
     }
   }
 `;
@@ -31,8 +32,10 @@ export const listCustomers = /* GraphQL */ `
         emailAddress
         createdAt
         updatedAt
+        __typename
       }
       nextToken
+      __typename
     }
   }
 `;
@@ -48,6 +51,7 @@ export const getEmployee = /* GraphQL */ `
       location
       createdAt
       updatedAt
+      __typename
     }
   }
 `;
@@ -68,8 +72,10 @@ export const listEmployees = /* GraphQL */ `
         location
         createdAt
         updatedAt
+        __typename
       }
       nextToken
+      __typename
     }
   }
 `;
@@ -83,6 +89,7 @@ export const getVehicle = /* GraphQL */ `
       tagNumber
       createdAt
       updatedAt
+      __typename
     }
   }
 `;
@@ -101,8 +108,10 @@ export const listVehicles = /* GraphQL */ `
         tagNumber
         createdAt
         updatedAt
+        __typename
       }
       nextToken
+      __typename
     }
   }
 `;
@@ -132,8 +141,10 @@ export const getTrip = /* GraphQL */ `
       pickupStatusTime
       arrivedTime
       invoiceNumber
+      employeePay
       createdAt
       updatedAt
+      __typename
     }
   }
 `;
@@ -168,10 +179,13 @@ export const listTrips = /* GraphQL */ `
         pickupStatusTime
         arrivedTime
         invoiceNumber
+        employeePay
         createdAt
         updatedAt
+        __typename
       }
       nextToken
+      __typename
     }
   }
 `;
@@ -186,6 +200,7 @@ export const getBroker = /* GraphQL */ `
       ambRate
       createdAt
       updatedAt
+      __typename
     }
   }
 `;
@@ -205,8 +220,10 @@ export const listBrokers = /* GraphQL */ `
         ambRate
         createdAt
         updatedAt
+        __typename
       }
       nextToken
+      __typename
     }
   }
 `;
@@ -218,6 +235,7 @@ export const getVehicleCheck = /* GraphQL */ `
       status
       createdAt
       updatedAt
+      __typename
     }
   }
 `;
@@ -234,8 +252,10 @@ export const listVehicleChecks = /* GraphQL */ `
         status
         createdAt
         updatedAt
+        __typename
       }
       nextToken
+      __typename
     }
   }
 `;
@@ -254,6 +274,7 @@ export const getInvoice = /* GraphQL */ `
       status
       createdAt
       updatedAt
+      __typename
     }
   }
 `;
@@ -277,8 +298,10 @@ export const listInvoices = /* GraphQL */ `
         status
         createdAt
         updatedAt
+        __typename
       }
       nextToken
+      __typename
     }
   }
 `;

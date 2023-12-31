@@ -19,6 +19,7 @@ class Calendars extends Component {
       customer: '',
      phoneNumber:'',
      pickupTime:'',
+     driver: '',
      distance: '',
      radio: '',
      status: '',
@@ -64,7 +65,7 @@ customerDate.setHours(0, 0, 0, 0);
 if(customer.status == 'pending' || customer.status == 'new'){
 
 
-  if(customer.wheelchair == 'Wheelchair' && customerDate >= today && customer.appointmentTime === 'Will Call')
+  if(customer.wheelchair == 'Wheelchair'  && customerDate >= today && customer.appointmentTime === 'Will Call' ||customer.wheelchair == 'Ambulatory'  && customerDate >= today && customer.appointmentTime === 'Will Call')
 
 
   {
@@ -86,7 +87,7 @@ if(customer.status == 'pending' || customer.status == 'new'){
   }
 
 
-  if(customer.wheelchair == 'Wheelchair' && customerDate >= today && customer.appointmentTime !== 'Will Call')
+  if(customer.wheelchair == 'Wheelchair' && customerDate >= today && customer.appointmentTime !== 'Will Call' ||customer.wheelchair == 'Ambulatory' && customerDate >= today && customer.appointmentTime !== 'Will Call')
       {
 
         myCustomers.push({
@@ -159,6 +160,7 @@ this.setState({ customer: data.fname +  ' ' + data.lname});
 this.setState({ distance: data.distance});
 this.setState({ cost: data.cost});
 this.setState({ notes: data.notes});
+this.setState({ driver: data.driver});
 this.setState({ pickupTime: data.pickupTime});
   }
 
@@ -280,7 +282,7 @@ handleChange1 = () =>{
       <MDBTableHead>
         <tr>
           <th>#</th>
-
+          <th>Driver</th>
           <th>Pickup Time</th>
           <th>Miles</th>
           <th>Notes</th>
@@ -291,7 +293,7 @@ handleChange1 = () =>{
       <MDBTableBody>
         <tr>
           <td>1</td>
-
+          <td>{this.state.driver}</td>
           <td>{this.state.pickupTime}</td>
           <td>{this.state.distance}</td>
           <td>{this.state.notes}</td>
