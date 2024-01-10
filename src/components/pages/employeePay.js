@@ -5,13 +5,15 @@ import { MDBTable, MDBTableHead, MDBTableBody, MDBSpinner } from 'mdb-react-ui-k
 
 const getStartOfWeek = (date) => {
   const result = new Date(date);
-  result.setDate(result.getDate() - result.getDay()); // Assuming Sunday is the start of the week
+  result.setHours(0, 0, 0, 0); // Normalize time to start of the day
+  result.setDate(result.getDate() - result.getDay()); // Sunday is the start of the week
   return result;
 };
 
 const getEndOfWeek = (date) => {
   const result = getStartOfWeek(date);
-  result.setDate(result.getDate() + 6); // Get the end of the week (Saturday)
+  result.setDate(result.getDate() + 6); // Include Saturday (end of the week)
+  result.setHours(23, 59, 59, 999); // Set time to the end of the day
   return result;
 };
 
@@ -31,17 +33,19 @@ const DriverPaySummary = () => {
           weekEnd = getEndOfWeek(selectedDate);
         }
 
-        const apiData = await API.graphql(graphqlOperation(listTrips));
+        const apiData = await API.graphql(graphqlOperation(listTrips, { limit: 2000 }));
+
         const trips = apiData.data.listTrips.items;
 
         const tempDriverPays = {};
         trips.forEach(trip => {
-          const tripDate = new Date(trip.appointmentDate);
-          if (tripDate >= weekStart && tripDate <= weekEnd) {
-            // Handle missing or undefined employeePay
-            const pay = trip.employeePay ? parseFloat(trip.employeePay) : 0;
-            const driver = trip.driver;
-            tempDriverPays[driver] = (tempDriverPays[driver] || 0) + pay;
+          if (trip.status === 'complete' && trip.driver) {
+            const tripDate = new Date(trip.appointmentDate);
+            tripDate.setHours(0, 0, 0, 0); // Normalize trip date
+            if (tripDate >= weekStart && tripDate <= weekEnd) {
+              const pay = trip.employeePay ? parseFloat(trip.employeePay) : 0;
+              tempDriverPays[trip.driver] = (tempDriverPays[trip.driver] || 0) + pay;
+            }
           }
         });
 
