@@ -4,6 +4,7 @@ import moment from "moment";
 import { API,  graphqlOperation } from "aws-amplify";
 import * as mutations from '../../graphql/mutations';
 import { listTrips } from '../../graphql/queries';
+import {Legend} from './legend'
 import { MDBInput, MDBBadge, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter,MDBTable, MDBTableBody, MDBTableHead, MDBModalDialog, MDBModalContent,MDBRadio  } from 'mdb-react-ui-kit';
 
 import "./calendar.css";
@@ -44,6 +45,7 @@ class Calendars extends Component {
 
   async componentDidMount(){
 
+
     let today = new Date();
     let formattedToday = (today.getMonth() + 1).toString().padStart(2, '0') + '/' + today.getDate().toString().padStart(2, '0') + '/' + today.getFullYear();
 
@@ -62,49 +64,21 @@ class Calendars extends Component {
 customerDate.setHours(0, 0, 0, 0);
 
 
-if(customer.status == 'pending' || customer.status == 'new'){
-
-
-  if(customer.wheelchair == 'Wheelchair'  && customerDate >= today && customer.appointmentTime === 'Will Call' ||customer.wheelchair == 'Ambulatory'  && customerDate >= today && customer.appointmentTime === 'Will Call')
-
-
-  {
-    //console.log('Condition met for:', customer.fname);
-    myCustomers.push({
-
-      title: customer.fname + ' ' + customer.lname + ' ' +  customer.appointmentTime +  ' WC',
-
-      start: new Date(customer.appointmentDate.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
-      year: 'numeric'})),
-      end: new Date(customer.appointmentDate.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
-      year: 'numeric'})),
-
-      allday: 'Will Call',
-      name: customer
-      });
-
-
-  }
-
-
-  if(customer.wheelchair == 'Wheelchair' && customerDate >= today && customer.appointmentTime !== 'Will Call' ||customer.wheelchair == 'Ambulatory' && customerDate >= today && customer.appointmentTime !== 'Will Call')
-      {
-
-        myCustomers.push({
-
-          title: customer.fname + ' ' + customer.lname + ' ' +  customer.appointmentTime +  ' WC',
-
-          start: new Date(customer.appointmentDate.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
-          year: 'numeric'})),
-          end: new Date(customer.appointmentDate.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
-          year: 'numeric'})),
-
-          allday: 'yes',
-          name: customer
-          });
-
-
+if(customer.status === 'pending' || customer.status === 'new') {
+  if (['Wheelchair', 'Ambulatory', 'Stretcher'].includes(customer.wheelchair) && customerDate >= today) {
+      let titleSuffix = ' WC';
+      if (customer.wheelchair === 'Stretcher') {
+          titleSuffix = ' Stretcher';
       }
+
+      myCustomers.push({
+          title: `${customer.fname} ${customer.lname} ${customer.appointmentTime}${titleSuffix}`,
+          start: new Date(customer.appointmentDate),
+          end: new Date(customer.appointmentDate),
+          allday: customer.appointmentTime === 'Will Call' ? 'Will Call' : 'yes',
+          name: customer
+      });
+  }
     if(customer.status == 'new')
       {
         this.setState({ badge:<MDBBadge color="primary">New</MDBBadge>});
@@ -224,8 +198,28 @@ handleChange1 = () =>{
         }
 
 
+        eventPropGetter = (event) => {
+          let backgroundColor = 'grey'; // default color
+          if (event.name && event.name.wheelchair) {
+              switch(event.name.wheelchair) {
+                  case 'Stretcher':
+                      backgroundColor = 'black';
+                      break;
+                  case 'Wheelchair':
+                      backgroundColor = 'orange';
+                      break;
+                  case 'Ambulatory':
+                      backgroundColor = 'purple';
+                      break;
+                  default:
+                      backgroundColor = 'grey'; // default color for other or unknown types
+              }
+          }
+          return { style: { backgroundColor } };
+        }
 
   render() {
+
     return (
       <div className="App">
         <Calendar
@@ -235,18 +229,9 @@ handleChange1 = () =>{
           defaultView="month"
             onSelectEvent={events => this.toggle(events.name)}
           events={this.state.events}
-          style={{ height: "100vh" }}
-          eventPropGetter={(event) => {
-            let backgroundColor = ''; // initialize with an empty string or default color
-            if (event.allday === 'Will Call') {
-                backgroundColor = 'Grey';
-            } else if (event.newRequest) {
-                backgroundColor = 'red';
-            } else if (event.allday) {
-                backgroundColor = 'orange';
-            }
-            return { style: { backgroundColor } };
-        }}
+          style={{ height: "auto" }}
+          className="Calendar" // Apply the new class
+          eventPropGetter={this.eventPropGetter}
         />
 
 
@@ -258,7 +243,7 @@ handleChange1 = () =>{
          <MDBTable>
       <MDBTableHead>
         <tr>
-          <th>#</th>
+
           <th>Pickup Address</th>
           <th>Destination Address</th>
           <th>Phone Number</th>
@@ -268,7 +253,7 @@ handleChange1 = () =>{
       </MDBTableHead>
       <MDBTableBody>
         <tr>
-          <td>1</td>
+
           <td>{this.state.address}</td>
           <td>{this.state.address2}</td>
           <td>{this.state.phoneNumber}</td>
@@ -281,7 +266,7 @@ handleChange1 = () =>{
     <MDBTable>
       <MDBTableHead>
         <tr>
-          <th>#</th>
+
           <th>Driver</th>
           <th>Pickup Time</th>
           <th>Miles</th>
@@ -292,7 +277,7 @@ handleChange1 = () =>{
       </MDBTableHead>
       <MDBTableBody>
         <tr>
-          <td>1</td>
+
           <td>{this.state.driver}</td>
           <td>{this.state.pickupTime}</td>
           <td>{this.state.distance}</td>
@@ -341,6 +326,7 @@ handleChange1 = () =>{
           </MDBModalContent>
           </MDBModalDialog>
       </MDBModal>
+      <Legend />
       </div>
     );
   }

@@ -93,6 +93,10 @@ this.state = {
         text: "Ambulatory",
         value: "Ambulatory"
       },
+      {
+        text: "Stretcher",
+        value: "Stretcher"
+      },
 
     ],
   customers: {
@@ -362,6 +366,7 @@ toggle1 = () => {
   });
 }
 calcPrice = () => {
+  if (this.state.wheelchair !== 'Stretcher') {
   const isRoundTrip = this.state.roundTrip === 'Roundtrip';
   const appointmentDate = new Date(this.state.appointmentDate1);
   const appointmentTime = new Date(appointmentDate.toISOString());
@@ -375,6 +380,22 @@ calcPrice = () => {
     price,
     modal: !this.state.modal
   });
+}
+  if (this.state.wheelchair === 'Stretcher') {
+    const isRoundTrip = this.state.roundTrip === 'Roundtrip';
+    const appointmentDate = new Date(this.state.appointmentDate1);
+    const appointmentTime = new Date(appointmentDate.toISOString());
+    const isEarlyOrLate = appointmentTime.getHours() < 6 || appointmentTime.getHours() >= 19;
+    const isWeekend = [0, 6].includes(appointmentDate.getDay()) || (appointmentTime.getHours() >= 19 || appointmentTime.getHours() < 6);
+    const exceeds30Miles = this.state.distance > 30;
+    const basePrice = this.state.distance * (exceeds30Miles || isWeekend || isEarlyOrLate ? 8.25 : 4.25);
+    const price = isRoundTrip ? basePrice * 2 + (exceeds30Miles || isWeekend || isEarlyOrLate ? 330 : 250) : basePrice + (exceeds30Miles || isWeekend || isEarlyOrLate ? 165 : 125);
+
+    this.setState({
+      price: price,
+      modal: !this.state.modal
+    });
+  }
 }
 
 
