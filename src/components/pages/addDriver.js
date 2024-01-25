@@ -41,32 +41,37 @@ class AddDriver extends React.Component {
         width: 50,
       },
       {
-        label: 'Pickup Address',
+        label: 'Pickup',
         field: 'address',
-        width: 200,
+        width: 150,
+      },
+      {
+        label: 'Destination',
+        field: 'address2',
+        width: 150,
       },
 
 
       {
-        label: 'Appointment Date',
+        label: 'Appt Date',
         field: 'appointmentDate',
         sort: 'disabled',
         width: 50,
       },
       {
-        label: 'Appointment Time',
+        label: 'Appt Time',
         field: 'appointmentTime',
         sort: 'disabled',
-        width: 50,
+        width: 20,
       },
       {
         label: 'Pickup Time',
         field: 'status',
 
-        width: 100,
+        width: 20,
       },
          {
-        label: 'Assigned Driver',
+        label: 'Driver',
         field: 'driver',
 
         width: 100,
@@ -116,12 +121,12 @@ this.handleRowClick = this.handleRowClick.bind(this)
       id: customer.id||'',
       fname: customer.fname||'',
       lname: customer.lname||'',
-      address: customer.address||'',
-      address2: customer.address2||'',
+      address: <div className="wrap-text">{customer.address}</div>||'',
+      address2:  <div className="wrap-text">{customer.address2}</div>||'',
       phone: customer.phoneNumber||'',
       wheelchair: customer.wheelchair||'',
       roundtrip: customer.roundtrip||'',
-      driver: customer.driver||'',
+      driver:  <div className="wrap-text">{customer.driver}</div>||'',
       appointmentDate: customer.appointmentDate.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
       year: 'numeric'})||'',
       appointmentTime: customer.appointmentTime||'',
@@ -327,7 +332,7 @@ getPickerValue = value => {
   render() {
   return (
 <MDBContainer>
-    <MDBDatatable search data={this.state.data} />
+    <MDBDatatable className='table-responsive' search data={this.state.data} />
 
     <MDBModal nonInvasive={true} staticBackdrop show={this.state.modal}>
         <MDBModalDialog>
