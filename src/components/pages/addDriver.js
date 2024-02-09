@@ -109,21 +109,26 @@ this.handleRowClick = this.handleRowClick.bind(this)
       status: {
           eq: 'pending' // filter priority = 1
       }
-  };
+    };
 
-    const apiData = await API.graphql(graphqlOperation(listTrips,
-       { limit: 2000, filter:filter}));
+    const apiData = await API.graphql(graphqlOperation(listTrips, { limit: 2000, filter: filter }));
     this.state.queryData = apiData.data.listTrips.items;
 
     var myCustomers = [];
-    //console.log(this.state.queryData)
 
-    this.state.queryData.sort(this.sortByTime).sort(this.sortByDate).map((customer) => {
+    // Sort data by date in descending order
+    this.state.queryData.sort((a, b) => {
+      const dateA = new Date(a.appointmentDate);
+      const dateB = new Date(b.appointmentDate);
+      return dateA - dateB; // For descending order
+    });
+
+    this.state.queryData.map((customer) => {
       const appointmentDate = new Date(customer.appointmentDate);
       const currentDate = new Date();
 
       if(appointmentDate.setHours(0,0,0,0) >= currentDate.setHours(0,0,0,0)){
-      myCustomers.push({
+        myCustomers.push({
       id: customer.id||'',
       fname: customer.fname||'',
       lname: customer.lname||'',
@@ -147,10 +152,11 @@ this.handleRowClick = this.handleRowClick.bind(this)
   })
   this.setState({
     data: {
-      ...this.state.data, // merge with the original `state.items`
-      rows: this.state.data.rows.concat(myCustomers)
+      ...this.state.data,
+      rows: myCustomers
     }
   });
+
   this.getEmployee();
   }
 
