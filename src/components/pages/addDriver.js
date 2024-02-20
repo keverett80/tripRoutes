@@ -86,7 +86,8 @@ class AddDriver extends React.Component {
 
         label: 'Select',
         field: 'button'
-      }
+      },
+
     ],
     rows: [
 
@@ -143,7 +144,16 @@ this.handleRowClick = this.handleRowClick.bind(this)
       year: 'numeric'})||'',
       appointmentTime: customer.appointmentTime||'',
       status:customer.pickupTime||'',
-      button: <MDBBtn color='success' onClick={() => this.toggle(customer)} outline rounded>Assign Employee</MDBBtn>
+      button: (
+        <div>
+          <MDBBtn color='success' onClick={() => this.toggle(customer)} outline rounded>Assign Employee</MDBBtn>
+          <div style={{marginTop: '10px'}}>
+          {<div className="wrap-text">{customer.notes}</div>||''}
+          </div>
+        </div>
+      ),
+
+
 
       });
     }
@@ -345,8 +355,9 @@ getPickerValue = value => {
   render() {
   return (
 <MDBContainer>
-    <MDBDatatable className='table-responsive' search data={this.state.data} />
-
+<div style={{ overflowX: 'auto' }}>
+    <MDBDatatable className='table-responsive' maxWidth='1520px' search data={this.state.data} />
+</div>
     <MDBModal nonInvasive={true} staticBackdrop show={this.state.modal}>
         <MDBModalDialog>
             <MDBModalContent>

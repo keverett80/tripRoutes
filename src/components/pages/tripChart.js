@@ -14,7 +14,7 @@ export default function App() {
     async function fetchData() {
 
         // Fetch employee data
-  const apiDataEmployee = await API.graphql(graphqlOperation(listEmployees));
+  const apiDataEmployee = await API.graphql(graphqlOperation(listEmployees, { limit: 3000 }));
   const employeeData = apiDataEmployee.data.listEmployees.items;
 
   // Generate driver colors based on employee email addresses
@@ -32,7 +32,7 @@ export default function App() {
 setDriverColors( driverColors);
       const today = new Date();
       const weekStart = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 30);
-      const apiData = await API.graphql(graphqlOperation(listTrips, { limit: 2000 }));
+      const apiData = await API.graphql(graphqlOperation(listTrips, { limit: 3000 }));
       const data = apiData.data.listTrips.items.filter(trip => {
         const appointmentDate = new Date(trip.appointmentDate);
         const tripStatus = trip.status;
