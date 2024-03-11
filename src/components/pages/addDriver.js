@@ -80,7 +80,7 @@ class AddDriver extends React.Component {
         label: 'Pay',
         field: 'employeePay',
 
-        width: 50,
+        width: 120,
       },
       {
 
@@ -139,7 +139,14 @@ this.handleRowClick = this.handleRowClick.bind(this)
       wheelchair: customer.wheelchair||'',
       roundtrip: customer.roundtrip||'',
       driver:  <div className="wrap-text">{customer.driver}</div>||'',
-      employeePay:  <div className="wrap-text">${customer.employeePay}</div>||'',
+      employeePay: (
+        <div className="wrap-text">
+          ${customer.employeePay} <br />
+          <small style={{ color: customer.broker === 'Accepted' ? 'green' : customer.broker === 'Declined' ? 'red' : 'inherit' }}>
+            {customer.broker || 'N/A'}
+          </small>
+        </div>
+      ),
       appointmentDate: customer.appointmentDate.toLocaleString('en-US', {   month: '2-digit', day: '2-digit',
       year: 'numeric'})||'',
       appointmentTime: customer.appointmentTime||'',
