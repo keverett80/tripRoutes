@@ -82,7 +82,19 @@ class Drivers extends React.Component {
       lname: customer.lastName,
       phone: customer.phoneNumber,
       email: customer.emailAddress,
-      myButton: <MDBBtn rounded outline color='danger' onClick={this.getCellValue}>Delete</MDBBtn>
+      onClick: () => this.handleRowClick(customer.id),
+    myButton: (
+      <MDBBtn
+      rounded
+      outline
+      color='danger'
+      onClick={(e) => {
+        e.stopPropagation(); // Prevent row click when button is clicked
+        this.deleteEmployee(customer.id); // Pass the employeeId directly
+      }}>
+        Delete
+    </MDBBtn>
+    )
 
       });
 
@@ -120,26 +132,17 @@ handlePay = () => {
 
 
 
-  getCellValue =()=>{
+    deleteEmployee  = (employeeId) =>{
 
-    var myThis = this;
-        $("body").on("click", "tr", function () {
+      const isConfirmed = window.confirm("Are you sure you want to delete this employee?");
+  if (!isConfirmed) {
+    // User clicked 'Cancel', so don't proceed with deletion
+    return;
+  }
 
-
-
-          myThis.setState({ myId: $(this).children().eq(0).text()});
-
-
-
-          myThis.submit();
-        });
-
-    }
-    deleteEmployee  = () =>{
-
-
+ console.log('Id ' +  employeeId)
     const employeeDetails = {
-      id: this.state.myId,
+      id: employeeId,
     };
 
  API.graphql({ query: mutations.deleteEmployee, variables: {input: employeeDetails}}).then(()=>{
