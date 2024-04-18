@@ -156,7 +156,7 @@ this.handleChange = this.handleChange.bind(this)
       const appointmentDate = new Date(customer.appointmentDate);
       const currentDate = new Date();
 
-      if(appointmentDate.setHours(0,0,0,0) >= currentDate.setHours(0,0,0,0)){
+      //if(appointmentDate.setHours(0,0,0,0) >= currentDate.setHours(0,0,0,0)){
 
       if((customer.status == 'pending' || customer.status == 'new') ){
 //console.log(customer)
@@ -183,7 +183,7 @@ this.handleChange = this.handleChange.bind(this)
 
       });
     }
-  }
+ // }
 
   })
   this.setState({

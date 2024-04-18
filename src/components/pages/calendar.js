@@ -65,7 +65,7 @@ customerDate.setHours(0, 0, 0, 0);
 
 
 if(customer.status === 'pending' || customer.status === 'new') {
-  if (['Wheelchair', 'Ambulatory', 'Stretcher'].includes(customer.wheelchair) && customerDate >= today) {
+  if (['Wheelchair', 'Ambulatory', 'Stretcher'].includes(customer.wheelchair) ) {
       let titleSuffix = ' WC';
       if (customer.wheelchair === 'Stretcher') {
           titleSuffix = ' Stretcher';
