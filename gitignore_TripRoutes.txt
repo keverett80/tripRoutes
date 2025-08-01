@@ -1,0 +1,15 @@
+# Dependencies
+node_modules/
+.env
+.env.*
+npm-debug.log*
+
+# Amplify
+aws-exports.js
+amplifyconfiguration.json
+
+# System files
+.DS_Store
+
+# IDEs
+.vscode/
